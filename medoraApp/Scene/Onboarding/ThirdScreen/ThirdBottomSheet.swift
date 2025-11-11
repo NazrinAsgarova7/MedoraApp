@@ -32,9 +32,10 @@ class ThirdBottomSheet: BaseController {
         return l
     }()
     
-    private var nextButton: UIButton = {
+    private lazy var nextButton: UIButton = {
         let button = UIButton()
         button.setTitle("Get Started", for: .normal)
+        button.addTarget(self, action: #selector(tappedRegisterButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -88,5 +89,11 @@ class ThirdBottomSheet: BaseController {
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nextButton.bottomAnchor.constraint(equalTo: skipButton.topAnchor, constant: -8),
         ])
+    }
+    
+    @objc func tappedRegisterButton() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let delegate = windowScene.delegate as? SceneDelegate else { return }
+        delegate.registerRoot()
     }
 }

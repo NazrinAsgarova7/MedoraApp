@@ -11,6 +11,7 @@ class BaseController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         configVM()
         configUI()
         configConstraint()

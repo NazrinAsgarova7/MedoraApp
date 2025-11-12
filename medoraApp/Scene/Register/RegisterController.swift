@@ -61,7 +61,7 @@ class RegisterController: BaseController {
         i.contentMode = .scaleAspectFill
         i.tintColor = UIColor(named: "placeholderColor")
         i.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return i
     }()
     
@@ -81,7 +81,7 @@ class RegisterController: BaseController {
         t.isSecureTextEntry = true
         t.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
         t.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return t
     }()
     
@@ -112,7 +112,7 @@ class RegisterController: BaseController {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-
+    
     private lazy var checkBox: UIButton = {
         let b = UIButton()
         b.setImage(UIImage(systemName: "square"), for: .normal)
@@ -123,15 +123,21 @@ class RegisterController: BaseController {
     }()
     
     private lazy var signUpButton: UIButton = {
-        let button = UIButton()
+        let button = GradientButton()
         button.setTitle("Sign Up", for: .normal)
+        button.gradientColors = [UIColor(named: "buttonStart") ?? .gray,
+                                 UIColor(named: "buttonEnd") ?? .gray]
+        button.tintColor = .white
+        button.startPoint = CGPoint(x: 0, y: 0)
+        button.endPoint   = CGPoint(x: 1, y: 1)
+        button.corner = 30
         button.isEnabled = false
         button.alpha = 0.6
         button.addTarget(self, action: #selector(signUp), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     private lazy var questionLabel: UILabel = {
         let l = UILabel()
         l.textColor = UIColor(named: "placeholderColor")
@@ -141,7 +147,7 @@ class RegisterController: BaseController {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-
+    
     private lazy var signInButton: UIButton = {
         let b = UIButton()
         b.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
@@ -161,29 +167,16 @@ class RegisterController: BaseController {
         view.backgroundColor = .systemBackground
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let start = UIColor(named: "buttonStart")!
-        let end   = UIColor(named: "buttonEnd")!
-//        signUpButton.applyGradient(colors: [start, end],
-//                                 startPoint: CGPoint(x: 0, y: 0),
-//                                 endPoint: CGPoint(x: 1, y: 1),
-//                                 cornerRadius: 30)
-    }
-    
     override func configConstraint() {
         [usernameContainerView, emailContainerView, passwordContainerView, checkBox, privacyLabel, signUpButton, questionLabel, signInButton].forEach { view in
             self.view.addSubview(view)
         }
-        
         [usernameImage, usernameTextField].forEach { view in
             usernameContainerView.addSubview(view)
         }
-        
         [emailImage, emailTextField].forEach { view in
             emailContainerView.addSubview(view)
         }
-        
         [passwordImage, passwordTextField, visibilityButton].forEach { view in
             passwordContainerView.addSubview(view)
         }
@@ -195,19 +188,19 @@ class RegisterController: BaseController {
                                                             view.leadingAnchor,
                                                            constant: 24),
             usernameContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                       constant: -24),
+                                                            constant: -24),
             usernameContainerView.heightAnchor.constraint(equalToConstant: 56),
             
             usernameImage.centerYAnchor.constraint(equalTo: usernameContainerView.centerYAnchor),
             usernameImage.leadingAnchor.constraint(equalTo: usernameContainerView.leadingAnchor, constant: 24),
             usernameImage.widthAnchor.constraint(equalToConstant: 24),
             usernameImage.heightAnchor.constraint(equalToConstant: 24),
-
+            
             usernameTextField.centerYAnchor.constraint(equalTo: usernameContainerView.centerYAnchor),
             usernameTextField.leadingAnchor.constraint(equalTo: usernameImage.trailingAnchor, constant: 16),
             
             emailContainerView.topAnchor.constraint(equalTo: usernameContainerView.bottomAnchor,
-                                                       constant: 16),
+                                                    constant: 16),
             emailContainerView.leadingAnchor.constraint(equalTo:
                                                             usernameContainerView.leadingAnchor),
             emailContainerView.trailingAnchor.constraint(equalTo: usernameContainerView.trailingAnchor),
@@ -283,7 +276,7 @@ class RegisterController: BaseController {
         } else {
             signUpButton.isEnabled = false
             signUpButton.alpha = 0.6
-
+            
             checkBox.setImage(UIImage(systemName: "square"), for: .normal)
             checkBox.tintColor = UIColor(named: "placeholderColor")
         }

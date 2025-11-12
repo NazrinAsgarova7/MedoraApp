@@ -1,15 +1,15 @@
 //
-//  ThirdOnboardingController.swift
+//  ViewController.swift
 //  medoraApp
 //
-//  Created by Nazrin Asgarova on 09.11.25.
+//  Created by Nazrin Asgarova on 07.11.25.
 //
 
 import UIKit
 
-class ThirdOnboardingController: BaseController {
-    private var image: UIImageView = {
-        let image = UIImageView(image: UIImage(named: "onboarding3"))
+class OnboardingController: BaseController {
+    private lazy var image: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "onboarding1"))
         image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
@@ -20,15 +20,13 @@ class ThirdOnboardingController: BaseController {
         view.backgroundColor = .systemBackground
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationItem.hidesBackButton = true
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
-        let bottomSheetVC = ThirdBottomSheet()
-        bottomSheetVC.isModalInPresentation = true
+        let bottomSheetVC = BottomSheet()
         bottomSheetVC.modalPresentationStyle = .pageSheet
-        
+        bottomSheetVC.isModalInPresentation = true
+        bottomSheetVC.callbackController = { [weak self] page in
+            self?.image.image = UIImage(named: "onboarding\(page + 1)")
+        }
         if let sheet = bottomSheetVC.sheetPresentationController {
             sheet.prefersGrabberVisible = false
                sheet.preferredCornerRadius = 40
@@ -53,5 +51,6 @@ class ThirdOnboardingController: BaseController {
             image.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ])
     }
-
+    
 }
+

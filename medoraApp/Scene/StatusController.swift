@@ -45,7 +45,13 @@ class StatusController: BaseController {
     }()
     
     private lazy var button: UIButton = {
-        let button = UIButton()
+        let button = GradientButton()
+        button.gradientColors = [UIColor(named: "buttonStart") ?? .gray,
+                                 UIColor(named: "buttonEnd") ?? .gray]
+        button.tintColor = .white
+        button.startPoint = CGPoint(x: 0, y: 0)
+        button.endPoint   = CGPoint(x: 1, y: 1)
+        button.corner = 30
         button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -118,19 +124,10 @@ class StatusController: BaseController {
         view.backgroundColor = .clear
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let start = UIColor(named: "buttonStart")!
-        let end   = UIColor(named: "buttonEnd")!
-//        button.applyGradient(colors: [start, end],
-//                             startPoint: CGPoint(x: 0, y: 0),
-//                             endPoint: CGPoint(x: 1, y: 1),
-//                             cornerRadius: 30)
-    }
-    
     func configForSuccess() {
         titleLabel.text = "Success"
-        descriptionLabel.text = "Your  account  has  been  successfully  registered"
+        descriptionLabel.text = "Your account has been successfully registered"
+        descriptionLabel.set(line: 8)
         button.setTitle("Login", for: .normal)
     }
     

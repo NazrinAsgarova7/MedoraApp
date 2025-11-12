@@ -26,7 +26,7 @@ class SeondBottomSheet: BaseController {
         l.textAlignment = .center
         l.textColor = UIColor(named: "descriptionColor")
         l.numberOfLines = 0
-        l.text = "Urna amet, suspendisse ullamcorper ac elit diam facilisis cursus vestibulum."
+        l.text = "Wellness at Your Fingertips with Doctor+"
         l.set(line: 10)
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
@@ -62,10 +62,10 @@ class SeondBottomSheet: BaseController {
         super.viewDidLayoutSubviews()
         let start = UIColor(named: "buttonStart")!
         let end   = UIColor(named: "buttonEnd")!
-        nextButton.applyGradient(colors: [start, end],
-                                 startPoint: CGPoint(x: 0, y: 0),
-                                 endPoint: CGPoint(x: 1, y: 1),
-                                 cornerRadius: 30)
+//        nextButton.applyGradient(colors: [start, end],
+//                                 startPoint: CGPoint(x: 0, y: 0),
+//                                 endPoint: CGPoint(x: 1, y: 1),
+//                                 cornerRadius: 30)
     }
 
     override func configConstraint() {

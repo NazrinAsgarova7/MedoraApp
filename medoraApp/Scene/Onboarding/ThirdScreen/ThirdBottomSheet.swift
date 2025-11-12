@@ -59,10 +59,10 @@ class ThirdBottomSheet: BaseController {
         super.viewDidLayoutSubviews()
         let start = UIColor(named: "buttonStart")!
         let end   = UIColor(named: "buttonEnd")!
-        nextButton.applyGradient(colors: [start, end],
-                                 startPoint: CGPoint(x: 0, y: 0),
-                                 endPoint: CGPoint(x: 1, y: 1),
-                                 cornerRadius: 30)
+//        nextButton.applyGradient(colors: [start, end],
+//                                 startPoint: CGPoint(x: 0, y: 0),
+//                                 endPoint: CGPoint(x: 1, y: 1),
+//                                 cornerRadius: 30)
     }
 
     override func configConstraint() {

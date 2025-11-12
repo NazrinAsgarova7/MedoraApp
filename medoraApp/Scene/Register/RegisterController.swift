@@ -273,9 +273,11 @@ class RegisterController: BaseController {
     @objc func changeCheckBox() {
         checkBox.isSelected.toggle()
         if checkBox.isSelected {
-            signUpButton.isEnabled = true
-            signUpButton.alpha = 1
-
+            if ((usernameTextField.text != "") && (emailTextField.text != "") && (passwordTextField.text != "")) {
+                signUpButton.isEnabled = true
+                signUpButton.alpha = 1
+            }
+            
             checkBox.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
             checkBox.tintColor = UIColor(named: "success")
         } else {
@@ -302,20 +304,36 @@ class RegisterController: BaseController {
     }
     
     @objc func textFieldEditingChanged(_ sender: UITextField) {
+        let enabled = UIColor(named: "buttonStart")
+        let disabled = UIColor(named: "placeholderColor")
+        
         if sender.text == "" {
-            usernameImage.tintColor = UIColor(named: "placeholderColor")
-            passwordImage.tintColor = UIColor(named: "placeholderColor")
-            emailImage.tintColor = UIColor(named: "placeholderColor")
+            signUpButton.isEnabled = false
+            signUpButton.alpha = 0.6
+            switch sender {
+            case usernameTextField:
+                usernameImage.tintColor = disabled
+            case emailTextField:
+                emailImage.tintColor = disabled
+            case passwordTextField:
+                passwordImage.tintColor = disabled
+            default:
+                break
+            }
         } else {
             switch sender {
             case usernameTextField:
-                usernameImage.tintColor = UIColor(named: "buttonStart")
+                usernameImage.tintColor = enabled
             case emailTextField:
-                emailImage.tintColor = UIColor(named: "buttonStart")
+                emailImage.tintColor = enabled
             case passwordTextField:
-                passwordImage.tintColor = UIColor(named: "buttonStart")
+                passwordImage.tintColor = enabled
             default:
                 break
+            }
+            if checkBox.isSelected && !(usernameTextField.text?.isEmpty ?? true) && !(emailTextField.text?.isEmpty ?? true) && !(passwordTextField.text?.isEmpty ?? true) {
+                signUpButton.isEnabled = true
+                signUpButton.alpha = 1
             }
         }
     }

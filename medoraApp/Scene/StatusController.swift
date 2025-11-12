@@ -46,6 +46,7 @@ class StatusController: BaseController {
     
     private lazy var button: UIButton = {
         let button = UIButton()
+        button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -58,7 +59,7 @@ class StatusController: BaseController {
         return view
     }()
     
-    private let dimView: UIView = {
+    private lazy var dimView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = UIColor.black.withAlphaComponent(0.45)
@@ -67,7 +68,6 @@ class StatusController: BaseController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
     }
     
     override func configConstraint() {
@@ -88,7 +88,7 @@ class StatusController: BaseController {
             cardView.widthAnchor.constraint(equalToConstant: 327),
             cardView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             cardView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-
+            
             backgroundView.heightAnchor.constraint(equalToConstant: 102),
             backgroundView.widthAnchor.constraint(equalToConstant: 102),
             backgroundView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 60),
@@ -105,13 +105,17 @@ class StatusController: BaseController {
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             descriptionLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 18.5),
             descriptionLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -18.5),
-
+            
             button.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
             button.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             button.heightAnchor.constraint(equalToConstant: 56),
             button.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 24),
             
         ])
+    }
+    
+    override func configUI() {
+        view.backgroundColor = .clear
     }
     
     override func viewDidLayoutSubviews() {
@@ -124,11 +128,20 @@ class StatusController: BaseController {
                              cornerRadius: 30)
     }
     
-    
     func configForSuccess() {
         titleLabel.text = "Success"
         descriptionLabel.text = "Your  account  has  been  successfully  registered"
         button.setTitle("Login", for: .normal)
     }
     
+    @objc func tappedButton() {
+        switch button.titleLabel?.text {
+        case "Login":
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let delegate = scene.delegate as? SceneDelegate else { return }
+            delegate.loginRoot()
+        default:
+            dismiss(animated: true)
+        }
+    }
 }

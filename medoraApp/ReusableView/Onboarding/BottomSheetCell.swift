@@ -65,8 +65,6 @@ class BottomSheetCell: UICollectionViewCell {
         ])
     }
     
-   
-    
     func config(model: BottomSheetCellProtocol) {
         titleLabel.text = model.title
         titleLabel.set(line: 8)

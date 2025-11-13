@@ -7,6 +7,10 @@
 
 import UIKit
 
+enum Status {
+    case login, register, error
+}
+
 class StatusController: BaseController {
     private lazy var backgroundView: UIView = {
         let view = UIView()
@@ -124,19 +128,34 @@ class StatusController: BaseController {
         view.backgroundColor = .clear
     }
     
-    func configForSuccess() {
-        titleLabel.text = "Success"
-        descriptionLabel.text = "Your account has been successfully registered"
-        descriptionLabel.set(line: 8)
-        button.setTitle("Login", for: .normal)
+    func configForSuccess(status: Status) {
+        switch status {
+        case .login:
+            titleLabel.text = "Yeay! Welcome Back"
+            descriptionLabel.text = "Once again you login successfully into medora app"
+            descriptionLabel.set(line: 8)
+            button.setTitle("Go to home", for: .normal)
+        case .register:
+            titleLabel.text = "Success"
+            descriptionLabel.text = "Your account has been successfully registered"
+            descriptionLabel.set(line: 8)
+            button.setTitle("Login", for: .normal)
+        case .error:
+            break
+        }
+       
     }
-    
+
     @objc func tappedButton() {
         switch button.titleLabel?.text {
         case "Login":
+            let controller = UINavigationController(rootViewController: LoginController())
+            controller.modalPresentationStyle = .fullScreen
+            show(controller, sender: nil)
+        case "Go to home":
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let delegate = scene.delegate as? SceneDelegate else { return }
-            delegate.loginRoot()
+            delegate.tabbarRoot()
         default:
             dismiss(animated: true)
         }

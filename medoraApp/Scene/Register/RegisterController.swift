@@ -284,16 +284,16 @@ class RegisterController: BaseController {
     
     @objc func signUp() {
         let successVC = StatusController()
-        successVC.configForSuccess()
+        successVC.configForSuccess(status: .register)
         successVC.modalPresentationStyle = .overFullScreen
         successVC.modalTransitionStyle = .crossDissolve
         present(successVC, animated: true)
     }
     
     @objc func signIn() {
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let delegate = scene.delegate as? SceneDelegate else { return }
-        delegate.loginRoot()
+        let controller = UINavigationController(rootViewController: LoginController())
+        controller.modalPresentationStyle = .fullScreen
+        show(controller, sender: nil)
     }
     
     @objc func textFieldEditingChanged(_ sender: UITextField) {

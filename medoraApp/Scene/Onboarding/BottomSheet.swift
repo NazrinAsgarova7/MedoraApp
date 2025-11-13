@@ -38,6 +38,7 @@ class BottomSheet: BaseController {
         let button = UIButton()
         button.setTitle("Skip", for: .normal)
         button.setTitleColor(UIColor(named: "buttonStart"), for: .normal)
+        button.addTarget(self, action: #selector(tappedSkipButton), for: .touchUpInside)
         button.layer.cornerRadius = 28
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -56,8 +57,8 @@ class BottomSheet: BaseController {
     
     let onboardingScreens: [BottomSheetCellProtocol] = [
         BottomSheetCellModel(title: "Your Health & Wellness On-Demand", description: "Urna amet, suspendisse ullamcorper ac elit diam facilisis cursus vestibulum."),
-          BottomSheetCellModel(title: "Wellness at Your Fingertips with Doctor+", description: "Wellness at Your Fingertips with Doctor+"),
-          BottomSheetCellModel(title: "Your Health & Wellness On-Demand", description: "Urna amet, suspendisse ullamcorper ac elit diam facilisis cursus vestibulum.")]
+        BottomSheetCellModel(title: "Wellness at Your Fingertips with Doctor+", description: "Wellness at Your Fingertips with Doctor+"),
+        BottomSheetCellModel(title: "Your Health & Wellness On-Demand", description: "Urna amet, suspendisse ullamcorper ac elit diam facilisis cursus vestibulum.")]
     
     var callbackController: ((Int) -> Void)?
     
@@ -68,8 +69,8 @@ class BottomSheet: BaseController {
     
     override func configConstraint() {
         [collectionView, nextButton, skipButton, pageControl].forEach { element in
-                   view.addSubview(element)
-               }
+            view.addSubview(element)
+        }
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -94,9 +95,9 @@ class BottomSheet: BaseController {
     
     @objc func tappedNextButton() {
         if nextButton.titleLabel?.text == "Get Started" {
-            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let delegate = scene.delegate as? SceneDelegate else { return }
-            delegate.registerRoot()
+            let vc = UINavigationController(rootViewController: RegisterController())
+            vc.modalPresentationStyle = .fullScreen
+            show(vc, sender: nil)
         }
         
         pageControl.currentPage += 1
@@ -105,7 +106,13 @@ class BottomSheet: BaseController {
             skipButton.setTitle("Already Have an Account?", for: .normal)
         }
         collectionView.scrollToItem(at: IndexPath(item: pageControl.currentPage, section: 0), at: .centeredHorizontally, animated: true)
-       
+        
+    }
+    
+    @objc func tappedSkipButton() {
+        let vc = UINavigationController(rootViewController: RegisterController())
+        vc.modalPresentationStyle = .fullScreen
+        show(vc, sender: nil)
     }
 }
 
@@ -115,10 +122,10 @@ extension BottomSheet: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView,
-                           willDisplay cell: UICollectionViewCell,
-                           forItemAt indexPath: IndexPath) {
-           callbackController?(indexPath.item)
-       }
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        callbackController?(indexPath.item)
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(BottomSheetCell.self)", for: indexPath) as! BottomSheetCell

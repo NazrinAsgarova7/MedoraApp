@@ -18,19 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
-     //   window?.rootViewController = UINavigationController(rootViewController: RegisterController())
         window?.rootViewController =  OnboardingController()
-       // window?.rootViewController = OnboardingPager(pages: [FirstOnboardingController(), SecondOnboardingController()])
         window?.makeKeyAndVisible()
     }
     
-    func registerRoot() {
-        window?.rootViewController = UINavigationController(rootViewController: RegisterController())
-        window?.makeKeyAndVisible()
-    }
-    
-    func loginRoot() {
-        window?.rootViewController = UINavigationController(rootViewController: LoginController())
+    func tabbarRoot() {
+        window?.rootViewController = UINavigationController(rootViewController: TabbarController())
         window?.makeKeyAndVisible()
     }
 

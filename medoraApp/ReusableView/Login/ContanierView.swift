@@ -25,13 +25,12 @@ class ContanierView: UIView {
         return i
     }()
     
-    init(image: String, title: String) {
+    init(image: String, title: String?) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         configConstraint()
         configUI(image: image, title: title)
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -54,9 +53,8 @@ class ContanierView: UIView {
         ])
     }
     
-    func configUI(image: String, title: String) {
+    func configUI(image: String, title: String?) {
         iconImage.image = UIImage(named: image)
         titleLabel.text = title
     }
 }
-

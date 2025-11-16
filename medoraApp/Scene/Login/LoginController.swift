@@ -141,10 +141,22 @@ class LoginController: BaseController {
     
     let divider = DividerView(text: "OR")
     
+    var callback: (() ->Void)?
+    
+    var vm: LoginViewModel
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
+    init(viewModel: LoginViewModel) {
+        vm = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+     required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func configConstraint() {
         [emailContainerView, passwordContainerView, signInButton, questionLabel, signUpButton, divider, googleContainerView, appleContainerView, facebookContainerView].forEach { view in
@@ -240,6 +252,23 @@ class LoginController: BaseController {
         view.backgroundColor = .systemBackground
     }
     
+    override func configVM() {
+            let statusVc = StatusController()
+            statusVc.modalPresentationStyle = .overFullScreen
+            statusVc.modalTransitionStyle = .crossDissolve
+        vm.completion = { [weak self] viewState in
+                switch viewState {
+                case .success(let data):
+                    self?.vm.saveUser(user: data)
+                    statusVc.configForSuccess(status: .login)
+                    self?.present(statusVc, animated: true)
+                case .error(_):
+                    statusVc.configForSuccess(status: .error)
+                    self?.present(statusVc, animated: true)
+                }
+            }
+    }
+    
     @objc func textFieldEditingChanged(_ sender: UITextField) {
         let enabled = UIColor(named: "buttonStart")
         let disabled = UIColor(named: "placeholderColor")
@@ -272,15 +301,25 @@ class LoginController: BaseController {
     }
     
     @objc func signIn() {
-        let successVC = StatusController()
-        successVC.configForSuccess(status: .login)
-        successVC.modalPresentationStyle = .overFullScreen
-        successVC.modalTransitionStyle = .crossDissolve
-        present(successVC, animated: true)
+        let statusVc = StatusController()
+        statusVc.configForSuccess(status: .login)
+        statusVc.modalPresentationStyle = .overFullScreen
+        statusVc.modalTransitionStyle = .crossDissolve
+        vm.login(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
     }
     
     @objc func signUp() {
-        dismiss(animated: true)
+        if let rootPresenter = navigationController?
+            .presentingViewController?
+            .presentingViewController {
+            if navigationController?.presentingViewController is StatusController {
+                rootPresenter.dismiss(animated: true)
+            } else {
+                dismiss(animated: true)
+            }
+        } else {
+            navigationController?.dismiss(animated: true)
+        }
     }
     
     @objc func changeVisibility() {

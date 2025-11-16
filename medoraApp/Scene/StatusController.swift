@@ -20,7 +20,7 @@ class StatusController: BaseController {
         return view
     }()
     
-    private lazy var successImage: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(systemName: "checkmark")
         image.tintColor = UIColor(named: "success")
@@ -86,7 +86,7 @@ class StatusController: BaseController {
         [backgroundView, descriptionLabel, button, titleLabel].forEach { view in
             cardView.addSubview(view)
         }
-        backgroundView.addSubview(successImage)
+        backgroundView.addSubview(imageView)
         
         NSLayoutConstraint.activate([
             dimView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -104,10 +104,10 @@ class StatusController: BaseController {
             backgroundView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 60),
             backgroundView.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             
-            successImage.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
-            successImage.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
-            successImage.heightAnchor.constraint(equalToConstant: 50),
-            successImage.widthAnchor.constraint(equalToConstant: 50),
+            imageView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 50),
+            imageView.widthAnchor.constraint(equalToConstant: 50),
             
             titleLabel.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: 40),
@@ -141,15 +141,20 @@ class StatusController: BaseController {
             descriptionLabel.set(line: 8)
             button.setTitle("Login", for: .normal)
         case .error:
-            break
+            backgroundView.backgroundColor = UIColor(named: "errorBackground")
+            imageView.image = UIImage(systemName: "xmark")
+            imageView.tintColor = UIColor(named: "error")
+            titleLabel.text = "Error"
+            descriptionLabel.text = "Username or Password is incorrect"
+            descriptionLabel.set(line: 8)
+            button.setTitle("Ok", for: .normal)
         }
-       
     }
 
     @objc func tappedButton() {
         switch button.titleLabel?.text {
         case "Login":
-            let controller = UINavigationController(rootViewController: LoginController())
+            let controller = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel()))
             controller.modalPresentationStyle = .fullScreen
             show(controller, sender: nil)
         case "Go to home":

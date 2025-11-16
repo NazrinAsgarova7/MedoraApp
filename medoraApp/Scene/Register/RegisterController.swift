@@ -162,6 +162,17 @@ class RegisterController: BaseController {
         super.viewDidLoad()
     }
     
+    var viewModel: RegisterViewModel
+    
+    init(vm: RegisterViewModel) {
+        viewModel = vm
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func configUI() {
         self.title = "Sign Up"
         view.backgroundColor = .systemBackground
@@ -283,15 +294,29 @@ class RegisterController: BaseController {
     }
     
     @objc func signUp() {
-        let successVC = StatusController()
-        successVC.configForSuccess(status: .register)
-        successVC.modalPresentationStyle = .overFullScreen
-        successVC.modalTransitionStyle = .crossDissolve
-        present(successVC, animated: true)
+        viewModel.register(username: usernameTextField.text ?? "", email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+        
+    }
+    
+    override func configVM() {
+        let statusVc = StatusController()
+        statusVc.modalPresentationStyle = .overFullScreen
+        statusVc.modalTransitionStyle = .crossDissolve
+        viewModel.completion = { [weak self] viewState in
+            switch viewState {
+            case .success(let data):
+                self?.viewModel.saveUser(result: data)
+                statusVc.configForSuccess(status: .register)
+                self?.present(statusVc, animated: true)
+            case .error(_):
+                statusVc.configForSuccess(status: .error)
+                self?.present(statusVc, animated: true)
+            }
+        }
     }
     
     @objc func signIn() {
-        let controller = UINavigationController(rootViewController: LoginController())
+        let controller = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel()))
         controller.modalPresentationStyle = .fullScreen
         show(controller, sender: nil)
     }

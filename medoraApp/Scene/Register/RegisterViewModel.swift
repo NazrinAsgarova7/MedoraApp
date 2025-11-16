@@ -1,0 +1,41 @@
+//
+//  RegisterViewModel.swift
+//  medoraApp
+//
+//  Created by Nazrin Asgarova on 13.11.25.
+//
+
+import Foundation
+
+class RegisterViewModel{
+    let manager = AuthManager()
+    var completion: ((ViewState) -> Void)?
+    
+    enum ViewState{
+        case success(AuthResult)
+        case error(String)
+    }
+    
+    func register(username: String, email: String, password: String){
+        let parameters: [String: String] = [
+            "name": username,
+            "email": email,
+            "password": password
+        ]
+        manager.auth(endpoint: .register, parameters: parameters) { [weak self] data, error in
+            if let data{
+                if data.user != nil {
+                    self?.completion?(ViewState.success(data))
+                } else {
+                    self?.completion?(ViewState.error("Error"))
+                }
+            } else if let error{
+                self?.completion?(ViewState.error(error))
+            }
+        }
+    }
+    
+    func saveUser(result: AuthResult) {
+        
+    }
+}

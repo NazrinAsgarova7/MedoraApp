@@ -34,7 +34,7 @@ class BottomSheet: BaseController {
         return button
     }()
     
-    private var skipButton: UIButton = {
+    private lazy var skipButton: UIButton = {
         let button = UIButton()
         button.setTitle("Skip", for: .normal)
         button.setTitleColor(UIColor(named: "buttonStart"), for: .normal)
@@ -95,7 +95,7 @@ class BottomSheet: BaseController {
     
     @objc func tappedNextButton() {
         if nextButton.titleLabel?.text == "Get Started" {
-            let vc = UINavigationController(rootViewController: RegisterController())
+            let vc = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel()))
             vc.modalPresentationStyle = .fullScreen
             show(vc, sender: nil)
         }
@@ -110,7 +110,7 @@ class BottomSheet: BaseController {
     }
     
     @objc func tappedSkipButton() {
-        let vc = UINavigationController(rootViewController: RegisterController())
+        let vc = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel()))
         vc.modalPresentationStyle = .fullScreen
         show(vc, sender: nil)
     }

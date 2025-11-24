@@ -8,7 +8,7 @@
 import UIKit
 
 enum Status {
-    case login, register, error
+    case login, register, error, logout
 }
 
 class StatusController: BaseController {
@@ -48,7 +48,7 @@ class StatusController: BaseController {
         return label
     }()
     
-    private lazy var button: UIButton = {
+    private lazy var button: GradientButton = {
         let button = GradientButton()
         button.gradientColors = [UIColor(named: "buttonStart") ?? .gray,
                                  UIColor(named: "buttonEnd") ?? .gray]
@@ -57,6 +57,19 @@ class StatusController: BaseController {
         button.endPoint   = CGPoint(x: 1, y: 1)
         button.corner = 30
         button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .white
+        button.layer.cornerRadius = 30
+        button.setTitle("Cancel", for: .normal)
+        button.setTitleColor(UIColor(named: "buttonStart"), for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
+        button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -76,6 +89,8 @@ class StatusController: BaseController {
         return v
     }()
     
+    private var imageleadingCons: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -83,11 +98,12 @@ class StatusController: BaseController {
     override func configConstraint() {
         [dimView, cardView].forEach { view.addSubview($0) }
         
-        [backgroundView, descriptionLabel, button, titleLabel].forEach { view in
+        [backgroundView, descriptionLabel, button, titleLabel, cancelButton].forEach { view in
             cardView.addSubview(view)
         }
         backgroundView.addSubview(imageView)
-        
+        imageleadingCons = imageView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 25)
+        imageleadingCons.isActive = false
         NSLayoutConstraint.activate([
             dimView.topAnchor.constraint(equalTo: view.topAnchor),
             dimView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -108,9 +124,12 @@ class StatusController: BaseController {
             imageView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 50),
             imageView.widthAnchor.constraint(equalToConstant: 50),
+          
             
             titleLabel.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: 40),
+            titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             descriptionLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 18.5),
@@ -121,6 +140,10 @@ class StatusController: BaseController {
             button.heightAnchor.constraint(equalToConstant: 56),
             button.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 24),
             
+            cancelButton.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            cancelButton.trailingAnchor.constraint(equalTo: button.trailingAnchor),
+            cancelButton.heightAnchor.constraint(equalToConstant: 56),
+            cancelButton.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 10),
         ])
     }
     
@@ -148,9 +171,19 @@ class StatusController: BaseController {
             descriptionLabel.text = "Username or Password is incorrect"
             descriptionLabel.set(line: 8)
             button.setTitle("Ok", for: .normal)
+        case .logout:
+            imageView.image = UIImage(systemName: "rectangle.portrait.and.arrow.right")
+            imageView.tintColor = UIColor(named: "error")
+            titleLabel.text = "Are you sure to log out of your account?"
+            titleLabel.numberOfLines = 0
+            descriptionLabel.set(line: 8)
+            button.gradientColors = [UIColor(named: "error") ?? .gray,
+                                     UIColor(named: "error") ?? .gray]
+            button.setTitle("Log Out", for: .normal)
+            cancelButton.isHidden = false
         }
     }
-
+    
     @objc func tappedButton() {
         switch button.titleLabel?.text {
         case "Login":
@@ -165,4 +198,5 @@ class StatusController: BaseController {
             dismiss(animated: true)
         }
     }
+
 }

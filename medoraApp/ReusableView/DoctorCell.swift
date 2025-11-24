@@ -18,7 +18,7 @@ class DoctorCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
+    
     private lazy var nameLabel: UILabel = {
         let l = UILabel()
         l.textColor = .black
@@ -80,11 +80,14 @@ class DoctorCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configConstraint()
+        setupSkeletonViews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private lazy var containerSkeleton = createSkeleton()
     
     private func configConstraint() {
         [ containerView ].forEach { view in
@@ -108,7 +111,7 @@ class DoctorCell: UICollectionViewCell {
             specializationLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             specializationLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             specializationLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-
+            
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -136,8 +139,54 @@ class DoctorCell: UICollectionViewCell {
     }
     
     func config(doctor: Doctor?){
-        nameLabel.text = doctor?.name
-        specializationLabel.text = doctor?.specialization
-        ratingLabel.text = String(doctor?.ratingAverage ?? 0)
+        if doctor == nil {
+            showSkeleton()
+        } else {
+            hideSkeleton()
+            nameLabel.text = doctor?.name
+            specializationLabel.text = doctor?.specialization
+            ratingLabel.text = String(doctor?.ratingAverage ?? 0)
+        }
+    }
+}
+
+extension DoctorCell{
+    private func setupSkeletonViews() {
+        containerView.addSubview(containerSkeleton)
+        containerSkeleton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            containerSkeleton.topAnchor.constraint(equalTo: containerView.topAnchor),
+            containerSkeleton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            containerSkeleton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            containerSkeleton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        containerSkeleton.layer.cornerRadius = 16
+        containerSkeleton.clipsToBounds = true
+        hideSkeleton()
+    }
+    
+    private func createSkeleton() -> ShimmerView {
+        let v = ShimmerView()
+        v.isHidden = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }
+    
+    private func showSkeleton() {
+//        nameLabel.isHidden = true
+//        specializationLabel.isHidden = true
+//        ratingView.isHidden = true
+//        imageView.isHidden = true
+        containerSkeleton.isHidden = false
+        containerSkeleton.startShimmering()
+    }
+    
+    private func hideSkeleton() {
+        containerSkeleton.stopShimmering()
+        containerSkeleton.isHidden = true
+        nameLabel.isHidden = false
+        specializationLabel.isHidden = false
+        ratingView.isHidden = false
+        imageView.isHidden = false
     }
 }

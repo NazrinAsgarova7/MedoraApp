@@ -86,7 +86,11 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
         case 0:
             return 1
         case 1:
-            return vm.doctors.count
+            if vm.doctors.count == 0 {
+                return 3
+            } else{
+                return vm.doctors.count
+            }
         default:
             return vm.doctors.count
         }
@@ -99,7 +103,11 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(DoctorCell.self)", for: indexPath) as! DoctorCell
-            cell.config(doctor: vm.doctors[indexPath.row])
+            if vm.doctors.count == 0 {
+                cell.config(doctor: nil)
+            } else{
+                cell.config(doctor: vm.doctors[indexPath.row])
+            }
             return cell
         default:
             return UICollectionViewCell()

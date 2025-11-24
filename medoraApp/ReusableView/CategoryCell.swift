@@ -40,25 +40,30 @@ class CategoryCell: UICollectionViewCell {
         return l
     }()
     
+    private lazy var imageSkeleton = createSkeleton()
+    private lazy var labelSkeleton = createSkeleton()
+    private lazy var containerSkeleton = createSkeleton()
+    
     override var isSelected: Bool {
-            didSet {
-                UIView.animate(withDuration: 0.25) {
-                    if self.isSelected {
-                        self.containerView.backgroundColor = UIColor(named: "buttonStart") ?? .systemBlue
-                      //  self.titleLabel.textColor = .white
-                        self.image.tintColor = .white
-                    } else {
-                        self.containerView.backgroundColor = .white
-                      //  self.titleLabel.textColor = .label
-                        self.image.tintColor = UIColor(named: "buttonStart")
-                    }
+        didSet {
+            UIView.animate(withDuration: 0.25) {
+                if self.isSelected {
+                    self.containerView.backgroundColor = UIColor(named: "buttonStart") ?? .systemBlue
+                    //  self.titleLabel.textColor = .white
+                    self.image.tintColor = .white
+                } else {
+                    self.containerView.backgroundColor = .white
+                    //  self.titleLabel.textColor = .label
+                    self.image.tintColor = UIColor(named: "buttonStart")
                 }
             }
         }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configConstraint()
+        setupSkeletonViews()
     }
     
     required init?(coder: NSCoder) {
@@ -89,7 +94,84 @@ class CategoryCell: UICollectionViewCell {
     }
     
     func configUI(category: Category?){
-        image.image = UIImage(systemName: category?.icon ?? "")
-        nameLabel.text = category?.name
+        guard let category = category else {
+            showSkeleton()
+            return
+        }
+        hideSkeleton()
+        image.image = UIImage(systemName: category.icon ?? "")
+        nameLabel.text = category.name
+    }
+}
+
+
+extension CategoryCell{
+    private func setupSkeletonViews() {
+        containerView.addSubview(containerSkeleton)
+        containerSkeleton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            containerSkeleton.topAnchor.constraint(equalTo: containerView.topAnchor),
+            containerSkeleton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            containerSkeleton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            containerSkeleton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        containerSkeleton.layer.cornerRadius = 16
+        containerSkeleton.clipsToBounds = true
+        
+        image.addSubview(imageSkeleton)
+        imageSkeleton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageSkeleton.topAnchor.constraint(equalTo: image.topAnchor),
+            imageSkeleton.leadingAnchor.constraint(equalTo: image.leadingAnchor),
+            imageSkeleton.trailingAnchor.constraint(equalTo: image.trailingAnchor),
+            imageSkeleton.bottomAnchor.constraint(equalTo: image.bottomAnchor)
+        ])
+        imageSkeleton.layer.cornerRadius = 16
+        imageSkeleton.clipsToBounds = true
+        
+        contentView.addSubview(labelSkeleton)
+        labelSkeleton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelSkeleton.centerXAnchor.constraint(equalTo: nameLabel.centerXAnchor),
+            labelSkeleton.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
+            labelSkeleton.widthAnchor.constraint(equalToConstant: 70),
+            labelSkeleton.heightAnchor.constraint(equalToConstant: 16)
+        ])
+        labelSkeleton.layer.cornerRadius = 6
+        labelSkeleton.clipsToBounds = true
+        hideSkeleton()
+    }
+    
+    private func createSkeleton() -> ShimmerView {
+        let v = ShimmerView()
+        v.isHidden = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }
+    
+    private func showSkeleton() {
+        image.isHidden = true
+        nameLabel.isHidden = true
+        
+        imageSkeleton.isHidden = false
+        labelSkeleton.isHidden = false
+        containerSkeleton.isHidden = false
+        
+        imageSkeleton.startShimmering()
+        labelSkeleton.startShimmering()
+        containerSkeleton.startShimmering()
+    }
+    
+    private func hideSkeleton() {
+        image.isHidden = false
+        nameLabel.isHidden = false
+        
+        imageSkeleton.stopShimmering()
+        labelSkeleton.stopShimmering()
+        containerSkeleton.stopShimmering()
+        
+        imageSkeleton.isHidden = true
+        labelSkeleton.isHidden = true
+        containerSkeleton.isHidden = true
     }
 }

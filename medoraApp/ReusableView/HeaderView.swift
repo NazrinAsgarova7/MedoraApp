@@ -149,12 +149,19 @@ class HeaderView: UICollectionReusableView {
 
 extension HeaderView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return vm?.categories.count ?? 0
+        if vm?.categories.count == 0{
+            return 4
+        } else{
+            return vm?.categories.count ?? 4
+        }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryCell.self)", for: indexPath) as? CategoryCell else { return UICollectionViewCell() }
-
-        cell.configUI(category: vm?.categories[indexPath.row])
+        if vm?.categories.count == 0{
+            cell.configUI(category: nil)
+        } else{
+            cell.configUI(category: vm?.categories[indexPath.row])
+        }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

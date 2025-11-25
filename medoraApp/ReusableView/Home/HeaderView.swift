@@ -76,7 +76,6 @@ class HeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -84,13 +83,12 @@ class HeaderView: UICollectionReusableView {
         setup()
     }
     
-    
     private func setup() {
         backgroundColor = .clear
         configConstraint()
     }
     
-    func configConstraint() {
+    private func configConstraint() {
         
         [titleLabel, bellButton, searchContainerView
          , collectionView].forEach{
@@ -131,8 +129,7 @@ class HeaderView: UICollectionReusableView {
         ])
     }
     
-    
-    func configHeader(vm: HomeViewModel){
+    func configHeader(vm: HomeViewModel) {
         self.vm = vm
         self.collectionView.reloadData()
         let selectedIndex = vm.selectedCategoryId
@@ -157,9 +154,9 @@ extension HeaderView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryCell.self)", for: indexPath) as? CategoryCell else { return UICollectionViewCell() }
-        if vm?.categories.count == 0{
+        if vm?.categories.count == 0 {
             cell.configUI(category: nil)
-        } else{
+        } else {
             cell.configUI(category: vm?.categories[indexPath.row])
         }
         return cell
@@ -173,7 +170,7 @@ extension HeaderView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
 }
 
-extension HeaderView: UITextFieldDelegate{
+extension HeaderView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         let query = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if query.isEmpty {

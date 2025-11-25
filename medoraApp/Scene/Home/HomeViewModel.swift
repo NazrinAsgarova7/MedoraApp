@@ -8,7 +8,7 @@
 import Foundation
 
 class HomeViewModel {
-    enum ViewState{
+    enum ViewState {
         case success
         case error(String)
     }
@@ -23,7 +23,7 @@ class HomeViewModel {
     }
     
    //MARK: Category
-    func getCategories(){
+    func getCategories() {
         manager.getAllCategories(endpoint: .getAllCategory, parameters: nil) { [weak self] data, error in
             if let data{
                 self?.completion?(.success)
@@ -34,7 +34,7 @@ class HomeViewModel {
         }
     }
     //MARK: Doctors
-    func getAllDoctors(){
+    func getAllDoctors() {
         manager.getAllDoctors(endpoint: .doctor, parameters: nil) { [weak self] data, error in
             if let data{
                 self?.completion?(.success)
@@ -48,7 +48,7 @@ class HomeViewModel {
         if index == selectedCategoryId{
             selectedCategoryId = -1
             getAllDoctors()
-        } else{
+        } else {
             selectedCategoryId = index
             manager.getAllDoctors(endpoint: .getDoctorByCategoryId(id: id), parameters: nil) { [weak self] data, error in
                 if let data{
@@ -63,7 +63,7 @@ class HomeViewModel {
     }
     
     //MARK: Search
-    func search(query: String){
+    func search(query: String) {
         manager.getAllDoctors(endpoint: .search(query: query), parameters: nil) { [weak self] data, error in
             if let data{
                 self?.doctors = data.data ?? []

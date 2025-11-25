@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import PhotosUI
+
 
 class ProfileController: BaseController {
     
@@ -33,14 +35,43 @@ class ProfileController: BaseController {
         return table
     }()
     
+    private lazy var profileImage: UIImageView = {
+        let img = UIImageView(image: UIImage(systemName: "person.circle"))
+        img.contentMode = .scaleAspectFill
+        img.tintColor = .white
+        img.clipsToBounds = true
+        img.layer.cornerRadius = 60
+        img.translatesAutoresizingMaskIntoConstraints = false
+        return img
+    }()
+    
+    private lazy var editButton: UIButton  = {
+        let btn = UIButton(type: .system)
+        btn.setImage(UIImage(systemName: "pencil"), for: .normal)
+        btn.tintColor = .buttonStart
+        btn.addTarget(self, action: #selector(selectPhotoTapped), for: .touchUpInside)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
+    private lazy var backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 15
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.masksToBounds = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "buttonStart")
     }
     
     override func configConstraint() {
-        [image, bottomView].forEach { view.addSubview($0) }
+        [image, bottomView, profileImage, backgroundView].forEach { view.addSubview($0) }
         bottomView.addSubview(tableView)
+        backgroundView.addSubview(editButton)
         
         NSLayoutConstraint.activate([
             image.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -55,7 +86,31 @@ class ProfileController: BaseController {
             tableView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor),
             tableView.topAnchor.constraint(equalTo: bottomView.topAnchor,constant: 30),
+            
+            profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileImage.widthAnchor.constraint(equalToConstant: 120),
+            profileImage.heightAnchor.constraint(equalToConstant: 120),
+            profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            
+            backgroundView.widthAnchor.constraint(equalToConstant: 30),
+            backgroundView.heightAnchor.constraint(equalToConstant: 30),
+            backgroundView.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -7),
+            backgroundView.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: -7),
+            
+            editButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            editButton.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
+            editButton.widthAnchor.constraint(equalToConstant: 22),
+            editButton.heightAnchor.constraint(equalToConstant: 22),
         ])
+    }
+    
+    @objc func selectPhotoTapped(){
+            var config = PHPickerConfiguration()
+            config.selectionLimit = 1
+            config.filter = .images
+            let picker = PHPickerViewController(configuration: config)
+            picker.delegate = self
+            present(picker, animated: true)
     }
 }
 
@@ -84,4 +139,23 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
             self.present(statusVc, animated: true)
         }
     }
+}
+
+extension ProfileController: PHPickerViewControllerDelegate{
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        dismiss(animated: true)
+
+        guard let provider = results.first?.itemProvider,
+              provider.canLoadObject(ofClass: UIImage.self) else { return }
+
+        provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+            guard let self,
+                  let uiImage = image as? UIImage else { return }
+
+            DispatchQueue.main.async {
+                self.profileImage.image = uiImage
+            }
+        }
+    }
+
 }

@@ -120,11 +120,20 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
             withReuseIdentifier: "HeaderView",
             for: indexPath
         ) as! HeaderView
-        
-        header.configHeader(vm: vm)
+        header.callback = { [weak self] method in
+            switch method {
+            case .getAllDoctor:
+                self?.vm.getAllDoctors()
+            case .search(let query):
+                self?.vm.search(query: query)
+            case .getDoctorByCategoryId(id: let id, index: let index):
+                self?.vm.getDoctorByCategoryId(id: id, index: index)
+            }
+        }
+        header.configHeader(categories: vm.categories,
+                            selectedId: vm.selectedCategoryId)
         header.isHidden = indexPath.section == 1
         return header
-        
     }
     
     func collectionView(_ collectionView: UICollectionView,

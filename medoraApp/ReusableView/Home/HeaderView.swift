@@ -7,6 +7,12 @@
 import UIKit
 
 class HeaderView: UICollectionReusableView {
+    enum Function {
+        case getAllDoctor
+        case getDoctorByCategoryId(id: String, index: Int)
+        case search(query: String)
+    }
+    
     private lazy var titleLabel: UILabel = {
         let l = UILabel()
         l.numberOfLines = 2
@@ -41,8 +47,9 @@ class HeaderView: UICollectionReusableView {
     private lazy var searchTextField: UITextField = {
         let t = UITextField()
         t.placeholder = "Search doctor, drugs, articles..."
-        t.returnKeyType = .search
+        //t.returnKeyType = .search
         t.delegate = self
+        t.addTarget(self, action: #selector(searchTyping), for: .editingChanged)
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
@@ -71,7 +78,9 @@ class HeaderView: UICollectionReusableView {
         return cv
     }()
     
-    private var vm: HomeViewModel?
+  //  private var vm: HomeViewModel?
+    private  var categories: [Category]?
+    var callback: ((Function) -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -85,13 +94,13 @@ class HeaderView: UICollectionReusableView {
     
     private func setup() {
         backgroundColor = .clear
+//        searchTextField.delegate = self
+//        searchTextField
         configConstraint()
     }
     
     private func configConstraint() {
-        
-        [titleLabel, bellButton, searchContainerView
-         , collectionView].forEach{
+        [titleLabel, bellButton, searchContainerView, collectionView].forEach {
             self.addSubview($0)
         }
         [searchImage, searchTextField].forEach {
@@ -127,37 +136,49 @@ class HeaderView: UICollectionReusableView {
             collectionView.leadingAnchor.constraint(equalTo: searchContainerView.leadingAnchor, constant: 4),
             collectionView.trailingAnchor.constraint(equalTo: searchContainerView.trailingAnchor, constant: -4),
         ])
+        
+//        searchTextField.backgroundColor = .red
     }
     
-    func configHeader(vm: HomeViewModel) {
-        self.vm = vm
+    func configHeader(categories: [Category]?, selectedId: Int) {
+        self.categories = categories
         self.collectionView.reloadData()
-        let selectedIndex = vm.selectedCategoryId
-            let indexPath = IndexPath(item: selectedIndex, section: 0)
-            if selectedIndex < (vm.categories.count) {
+        let selectedIndex = selectedId
+        let indexPath = IndexPath(item: selectedIndex, section: 0)
+        if selectedIndex < (categories?.count ?? 0) {
                 collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-            }
+        }
     }
     
     @objc private func searchTapped() {
         searchTextField.becomeFirstResponder()
     }
+    
+    @objc private func searchTyping() {
+        let query = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        if query.isEmpty {
+            callback?(.getAllDoctor)
+        } else {
+            callback?(.search(query: query))
+        }
+    }
 }
 
 extension HeaderView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if vm?.categories.count == 0{
+        if categories?.count == 0 {
             return 4
-        } else{
-            return vm?.categories.count ?? 4
+        } else {
+            return categories?.count ?? 4
         }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryCell.self)", for: indexPath) as? CategoryCell else { return UICollectionViewCell() }
-        if vm?.categories.count == 0 {
+        if categories?.count == 0 {
             cell.configUI(category: nil)
         } else {
-            cell.configUI(category: vm?.categories[indexPath.row])
+            cell.configUI(category: categories?[indexPath.row])
         }
         return cell
     }
@@ -166,19 +187,27 @@ extension HeaderView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        vm?.getDoctorByCategoryId(id: vm?.categories[indexPath.row].id ?? "", index: indexPath.row)
+        callback?(.getDoctorByCategoryId(id: categories?[indexPath.row].id ?? "", index: indexPath.row))
+      //  vm?.getDoctorByCategoryId(id: vm?.categories[indexPath.row].id ?? "", index: indexPath.row)
+        
     }
 }
 
 extension HeaderView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let query = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        if query.isEmpty {
-            vm?.getAllDoctors()
-        } else {
-            vm?.search(query: query)
-        }
+//        let query = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+//        if query.isEmpty {
+//            callback?(.getAllDoctor)
+//          //  vm?.getAllDoctors()
+//        } else {
+//            callback?(.search(query: query))
+//        //    vm?.search(query: query)
+//        }
+//        print(query)
+////        searchTextField.text = ""
+////        searchTextField.text = query
         textField.resignFirstResponder()
         return true
     }
+
 }

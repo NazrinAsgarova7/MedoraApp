@@ -36,10 +36,10 @@ class HomeViewModel {
     //MARK: Doctors
     func getAllDoctors() {
         manager.getAllDoctors(endpoint: .doctor, parameters: nil) { [weak self] data, error in
-            if let data{
+            if let data {
                 self?.completion?(.success)
                 self?.doctors = data.data ?? []
-            }else if let error{
+            } else if let error {
                 self?.completion?(.error(error))
             }
         }

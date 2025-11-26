@@ -13,8 +13,8 @@ class HomeViewModel {
         case error(String)
     }
     let manager: HomeUseCase
-    var categories = [Category]()
-    var doctors = [Doctor]()
+    var categories: [Category]?
+    var doctors: [Doctor]?
     var completion: ((ViewState) -> Void)?
     var selectedCategoryId = -1
     

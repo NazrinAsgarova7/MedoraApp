@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import UIKit
 
-enum UserDefaultEnum: String{
-   case token, email, name, id
+enum UserDefaultEnum: String, CaseIterable {
+   case token, email, name, id, profile
 }
 
 class UserDefaultManager {
@@ -24,5 +25,26 @@ class UserDefaultManager {
     
     func isLogged() -> Bool {
         return UserDefaults.standard.string(forKey: UserDefaultEnum.id.rawValue) != nil
+    }
+    
+    func removeAll() {
+        UserDefaultEnum.allCases.forEach {
+            if $0 != .profile {
+                UserDefaults.standard.removeObject(forKey: $0.rawValue)
+            }
+        }
+    }
+    
+    func getData(key: UserDefaultEnum) -> String {
+        return UserDefaults.standard.string(forKey: key.rawValue) ?? ""
+    }
+    
+    func saveProfileImage(_ image: UIImage) {
+           guard let data = image.jpegData(compressionQuality: 0.8) else { return }
+        UserDefaults.standard.set(data, forKey: UserDefaultEnum.profile.rawValue)
+       }
+    
+    func getImage() -> Data {
+        return UserDefaults.standard.data(forKey: UserDefaultEnum.profile.rawValue) ?? Data()
     }
 }

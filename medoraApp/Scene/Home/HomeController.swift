@@ -86,9 +86,12 @@ class HomeController: BaseController {
     }
     
     override func configUI() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        
     }
+    
     @objc private func searchTyping() {
         let query = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
@@ -98,7 +101,6 @@ class HomeController: BaseController {
             vm.search(query: query)
         }
     }
-    
     
     override func configConstraint() {
         [collectionView, searchContainerView, titleLabel, bellButton].forEach { view.addSubview($0) }
@@ -147,6 +149,10 @@ class HomeController: BaseController {
                 print(error)
             }
         }
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 

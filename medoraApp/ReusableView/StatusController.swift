@@ -68,7 +68,7 @@ class StatusController: BaseController {
         button.setTitle("Cancel", for: .normal)
         button.setTitleColor(UIColor(named: "buttonStart"), for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
-        button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tappedCancelButton), for: .touchUpInside)
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -88,9 +88,7 @@ class StatusController: BaseController {
         v.backgroundColor = UIColor.black.withAlphaComponent(0.45)
         return v
     }()
-    
-    private var imageleadingCons: NSLayoutConstraint!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -102,8 +100,26 @@ class StatusController: BaseController {
             cardView.addSubview(view)
         }
         backgroundView.addSubview(imageView)
-        imageleadingCons = imageView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 25)
-        imageleadingCons.isActive = false
+        
+        let imageleadingCons = imageView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 30)
+        let imageCenterXCons = imageView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor)
+        
+        let buttonNormal = button.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 24)
+        let buttonForLogout = button.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 14)
+        
+        
+        if cancelButton.isHidden {
+            imageleadingCons.isActive = false
+            imageCenterXCons.isActive = true
+            buttonNormal.isActive = true
+            buttonForLogout.isActive = false
+        } else {
+            imageleadingCons.isActive = true
+            imageCenterXCons.isActive = false
+            buttonNormal.isActive = false
+            buttonForLogout.isActive = true
+        }
+        
         NSLayoutConstraint.activate([
             dimView.topAnchor.constraint(equalTo: view.topAnchor),
             dimView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -120,7 +136,7 @@ class StatusController: BaseController {
             backgroundView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 60),
             backgroundView.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             
-            imageView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+         
             imageView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 50),
             imageView.widthAnchor.constraint(equalToConstant: 50),
@@ -138,7 +154,7 @@ class StatusController: BaseController {
             button.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
             button.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             button.heightAnchor.constraint(equalToConstant: 56),
-            button.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 24),
+            
             
             cancelButton.leadingAnchor.constraint(equalTo: button.leadingAnchor),
             cancelButton.trailingAnchor.constraint(equalTo: button.trailingAnchor),
@@ -194,9 +210,17 @@ class StatusController: BaseController {
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let delegate = scene.delegate as? SceneDelegate else { return }
             delegate.tabbarRoot()
+        case "Log Out":
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let delegate = scene.delegate as? SceneDelegate else { return }
+            delegate.onboardingRoot()
         default:
             dismiss(animated: true)
         }
+    }
+    
+    @objc func tappedCancelButton() {
+        dismiss(animated: true)
     }
 
 }

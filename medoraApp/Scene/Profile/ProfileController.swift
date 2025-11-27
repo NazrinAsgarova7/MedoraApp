@@ -63,13 +63,41 @@ class ProfileController: BaseController {
         return view
     }()
     
+    private lazy var nameLabel: UILabel = {
+        let l = UILabel()
+        l.font = .systemFont(ofSize: 16, weight: .regular)
+        l.textColor = .white
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
+    
+    private lazy var emailLabel: UILabel = {
+        let l = UILabel()
+        l.font = .systemFont(ofSize: 16, weight: .regular)
+        l.alpha = 0.8
+        l.textColor = .white
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
+    
+    private var vm: ProfileViewModel
+    
+    init(vm: ProfileViewModel) {
+        self.vm = vm
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "buttonStart")
     }
     
     override func configConstraint() {
-        [image, bottomView, profileImage, backgroundView].forEach { view.addSubview($0) }
+        [image, bottomView, profileImage, backgroundView, nameLabel, emailLabel].forEach { view.addSubview($0) }
         bottomView.addSubview(tableView)
         backgroundView.addSubview(editButton)
         
@@ -101,9 +129,22 @@ class ProfileController: BaseController {
             editButton.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 22),
             editButton.heightAnchor.constraint(equalToConstant: 22),
+            
+            
+            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            nameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 16),
+            
+            emailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2),
         ])
     }
     
+    override func configUI() {
+        nameLabel.text = vm.getUserData(key: .name)
+        emailLabel.text = vm.getUserData(key: .email)
+        loadProfileImage()
+    }
+
     @objc func selectPhotoTapped(){
             var config = PHPickerConfiguration()
             config.selectionLimit = 1
@@ -111,6 +152,13 @@ class ProfileController: BaseController {
             let picker = PHPickerViewController(configuration: config)
             picker.delegate = self
             present(picker, animated: true)
+    }
+   
+    private func loadProfileImage() {
+        let data = vm.getProfileImage()
+        if let image = UIImage(data: data) {
+            profileImage.image = image
+        }
     }
 }
 
@@ -155,6 +203,7 @@ extension ProfileController: PHPickerViewControllerDelegate{
             DispatchQueue.main.async {
                 self.profileImage.image = uiImage
             }
+            vm.saveProfilePhoto(image: uiImage)
         }
     }
 

@@ -12,7 +12,7 @@ class TabbarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let homevc = UINavigationController(rootViewController: HomeController(vm: HomeViewModel()))
-        let profileVC = UINavigationController(rootViewController: ProfileController())
+        let profileVC = UINavigationController(rootViewController: ProfileController(vm: ProfileViewModel()))
         
         homevc.tabBarItem = .init(title: nil, image: UIImage(systemName: "house.fill"), tag: 0)
         profileVC.tabBarItem = .init(title: nil, image: UIImage(systemName: "person.fill"), tag: 1)

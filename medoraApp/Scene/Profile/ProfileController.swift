@@ -179,6 +179,23 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        if indexPath.row == 2 {
+            let bottomSheetVC = HelpBottomSHeet()
+            bottomSheetVC.modalPresentationStyle = .pageSheet
+            bottomSheetVC.isModalInPresentation = false
+            if let sheet = bottomSheetVC.sheetPresentationController {
+                sheet.prefersGrabberVisible = true
+                sheet.preferredCornerRadius = 40
+                let customDetent = UISheetPresentationController.Detent.custom(
+                    identifier: .init("seventyPercent")
+                ) { context in
+                    context.maximumDetentValue * 0.30
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+            }
+            present(bottomSheetVC, animated: true)
+        }
         if indexPath.row == 3 {
             let statusVc = StatusController()
             statusVc.modalPresentationStyle = .overFullScreen

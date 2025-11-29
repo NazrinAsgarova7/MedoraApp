@@ -8,7 +8,6 @@
 import UIKit
 
 class ContanierView: UIView {
-    
     private lazy var titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 16, weight: .semibold)

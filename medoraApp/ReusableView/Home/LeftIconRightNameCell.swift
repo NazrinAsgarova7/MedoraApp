@@ -14,6 +14,11 @@ class LeftIconRightNameCell: UITableViewCell {
                  ("questionmark", "Help & Support"),
                  ("rectangle.portrait.and.arrow.right", "Logout")]
     
+    let iconsForHelp = [
+        ("envelope","medora@gmail.com"),
+        ("phone","012-789-98-98")
+    ]
+    
     private lazy var icon: UIImageView = {
         let icon = UIImageView()
         icon.image = UIImage(systemName: "heart")
@@ -68,12 +73,17 @@ class LeftIconRightNameCell: UITableViewCell {
         ])
     }
     
-    func configScreen(index: Int){
+    func configScreen(index: Int) {
         icon.image = UIImage(systemName: icons[index].0)
         nameLabel.text = icons[index].1
         if index == icons.count - 1{
             icon.tintColor = UIColor(named: "error")
             nameLabel.textColor = UIColor(named: "error")
         }
+    }
+    
+    func configForHelp(index: Int) {
+        icon.image = UIImage(systemName: iconsForHelp[index].0)
+        nameLabel.text = iconsForHelp[index].1
     }
 }

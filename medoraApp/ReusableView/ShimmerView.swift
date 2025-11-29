@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 class ShimmerView: UIView {
-    
     private var gradientLayer: CAGradientLayer!
     private var shimmerLayer: CAGradientLayer!
     

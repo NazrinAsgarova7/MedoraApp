@@ -76,7 +76,7 @@ class LeftIconRightNameCell: UITableViewCell {
     func configScreen(index: Int) {
         icon.image = UIImage(systemName: icons[index].0)
         nameLabel.text = icons[index].1
-        if index == icons.count - 1{
+        if index == icons.count - 1 {
             icon.tintColor = UIColor(named: "error")
             nameLabel.textColor = UIColor(named: "error")
         }

@@ -222,7 +222,11 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
         default:
             return .init(width: 165, height: 241)
         }
-        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let controller = DoctorDetailController(vm: DoctorViewModel(doctorId: vm.doctors?[indexPath.row].id ?? ""))
+        show(controller, sender: nil)
     }
 }
 

@@ -54,4 +54,16 @@ class NetworkingAdapter {
             }
         }
     }
+    
+    func request<T: Codable>(url: String,
+                             model: T.Type,
+                             method: HTTPMethod,
+                             parameters: Parameters? = nil,
+                             encoding: ParameterEncoding = URLEncoding.default,
+                             header: HTTPHeaders? = NetworkingHelper.shared.headers) async throws -> T? {
+        return try await AF.request(url,
+                                     method: method,
+                                     parameters: parameters,
+                                     encoding: encoding, headers: header).serializingDecodable( T.self).value
+    }
 }

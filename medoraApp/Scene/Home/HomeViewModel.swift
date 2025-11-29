@@ -44,14 +44,15 @@ class HomeViewModel {
             }
         }
     }
+    
     func getDoctorByCategoryId(id: String, index: Int) {
-        if index == selectedCategoryId{
+        if index == selectedCategoryId {
             selectedCategoryId = -1
             getAllDoctors()
         } else {
             selectedCategoryId = index
             manager.getAllDoctors(endpoint: .getDoctorByCategoryId(id: id), parameters: nil) { [weak self] data, error in
-                if let data{
+                if let data {
                     self?.completion?(.success)
                     self?.doctors = data.data ?? []
                 } else if let error {
@@ -65,10 +66,10 @@ class HomeViewModel {
     //MARK: Search
     func search(query: String) {
         manager.getAllDoctors(endpoint: .search(query: query), parameters: nil) { [weak self] data, error in
-            if let data{
+            if let data {
                 self?.doctors = data.data ?? []
                 self?.completion?(.success)
-            }else if let error{
+            } else if let error {
                 self?.completion?(.error(error))
             }
         }

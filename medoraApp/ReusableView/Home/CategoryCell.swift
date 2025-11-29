@@ -49,11 +49,9 @@ class CategoryCell: UICollectionViewCell {
             UIView.animate(withDuration: 0.25) {
                 if self.isSelected {
                     self.containerView.backgroundColor = UIColor(named: "buttonStart") ?? .systemBlue
-                    //  self.titleLabel.textColor = .white
                     self.image.tintColor = .white
                 } else {
                     self.containerView.backgroundColor = .white
-                    //  self.titleLabel.textColor = .label
                     self.image.tintColor = UIColor(named: "buttonStart")
                 }
             }
@@ -93,7 +91,7 @@ class CategoryCell: UICollectionViewCell {
         ])
     }
     
-    func configUI(category: Category?){
+    func configUI(category: Category?) {
         guard let category = category else {
             showSkeleton()
             return

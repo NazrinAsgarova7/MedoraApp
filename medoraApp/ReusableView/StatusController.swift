@@ -203,9 +203,8 @@ class StatusController: BaseController {
     @objc func tappedButton() {
         switch button.titleLabel?.text {
         case "Login":
-            let controller = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel()))
-            controller.modalPresentationStyle = .fullScreen
-            show(controller, sender: nil)
+            let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController())
+            coordinator.start()
         case "Go to home":
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let delegate = scene.delegate as? SceneDelegate else { return }

@@ -95,9 +95,8 @@ class BottomSheet: BaseController {
     
     @objc func tappedNextButton() {
         if nextButton.titleLabel?.text == "Get Started" {
-            let vc = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel()))
-            vc.modalPresentationStyle = .fullScreen
-            show(vc, sender: nil)
+            let coordinator = RegsisterCoordinator(navigationController: self.navigationController ?? UINavigationController())
+            coordinator.start()
         }
         
         pageControl.currentPage += 1
@@ -110,9 +109,8 @@ class BottomSheet: BaseController {
     }
     
     @objc func tappedSkipButton() {
-        let vc = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel()))
-        vc.modalPresentationStyle = .fullScreen
-        show(vc, sender: nil)
+        let coordinator = RegsisterCoordinator(navigationController: self.navigationController ?? UINavigationController())
+        coordinator.start()
     }
 }
 

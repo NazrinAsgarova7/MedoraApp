@@ -70,13 +70,12 @@ class HomeController: BaseController {
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
+    private let vm: HomeViewModel
+    private let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
-    private let vm: HomeViewModel
-    private let refreshControl = UIRefreshControl()
     
     init(vm: HomeViewModel) {
         self.vm = vm

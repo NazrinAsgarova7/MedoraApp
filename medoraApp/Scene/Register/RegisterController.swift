@@ -303,7 +303,7 @@ class RegisterController: BaseController {
         statusVc.modalTransitionStyle = .crossDissolve
         viewModel.completion = { [weak self] viewState in
             switch viewState {
-            case .success(let data):
+            case .success(_):
                 statusVc.configForSuccess(status: .register)
                 self?.present(statusVc, animated: true)
             case .error(_):
@@ -314,9 +314,8 @@ class RegisterController: BaseController {
     }
     
     @objc func signIn() {
-        let controller = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel()))
-        controller.modalPresentationStyle = .fullScreen
-        show(controller, sender: nil)
+        let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController())
+        coordinator.start()
     }
     
     @objc func textFieldEditingChanged(_ sender: UITextField) {

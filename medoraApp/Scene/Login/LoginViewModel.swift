@@ -8,12 +8,16 @@
 import Foundation
 
 class LoginViewModel {
-    let manager = AuthManager()
+    let manager: AuthUseCase
     var completion: ((ViewState) -> Void)?
 
     enum ViewState{
         case success(AuthResult)
         case error(String)
+    }
+    
+    init(manager: AuthUseCase) {
+        self.manager = manager
     }
     
     func login(email: String, password: String){

@@ -8,8 +8,12 @@
 import Foundation
 
 class RegisterViewModel{
-    let manager = AuthManager()
+    let manager: AuthUseCase
     var completion: ((ViewState) -> Void)?
+
+    init(manager: AuthUseCase) {
+        self.manager = manager
+    }
     
     enum ViewState{
         case success(AuthResult)

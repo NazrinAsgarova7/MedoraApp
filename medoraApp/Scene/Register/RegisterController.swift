@@ -61,7 +61,6 @@ class RegisterController: BaseController {
         i.contentMode = .scaleAspectFill
         i.tintColor = UIColor(named: "placeholderColor")
         i.translatesAutoresizingMaskIntoConstraints = false
-        
         return i
     }()
     
@@ -158,11 +157,11 @@ class RegisterController: BaseController {
         return b
     }()
     
+    private let viewModel: RegisterViewModel
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
-    var viewModel: RegisterViewModel
     
     init(vm: RegisterViewModel) {
         viewModel = vm
@@ -305,7 +304,6 @@ class RegisterController: BaseController {
         viewModel.completion = { [weak self] viewState in
             switch viewState {
             case .success(let data):
-                self?.viewModel.saveUser(result: data)
                 statusVc.configForSuccess(status: .register)
                 self?.present(statusVc, animated: true)
             case .error(_):

@@ -13,14 +13,15 @@ class DoctorViewModel {
         case success
         case error(error: String)
     }
-    let manager = DoctorDetailManager()
+    let manager: DoctorDetailUseCase
     var doctorImage: UIImageView?
     var doctorDetail: DoctorResult?
     var completion: ((ViewState) -> Void)?
     var id: String
     
-    init(doctorId: String) {
+    init(doctorId: String, manager: DoctorDetailUseCase) {
         id = doctorId
+        self.manager = manager
     }
     
     func getDoctorDetail() async {

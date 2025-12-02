@@ -8,7 +8,6 @@
 import UIKit
 
 extension UIButton {
-    
     func applyGradient(to view: UIView,
                                colors: [UIColor],
                                start: CGPoint,

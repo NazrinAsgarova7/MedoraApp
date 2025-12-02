@@ -90,7 +90,7 @@ class DoctorCell: UICollectionViewCell {
     private lazy var containerSkeleton = createSkeleton()
     
     private func configConstraint() {
-        [ containerView ].forEach { view in
+        [containerView ].forEach { view in
             addSubview(view)
         }
         

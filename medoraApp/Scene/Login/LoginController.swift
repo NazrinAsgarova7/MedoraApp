@@ -18,7 +18,7 @@ class LoginController: BaseController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private lazy var emailTextField: UITextField = {
         let t = UITextField()
         t.placeholder = "Enter your email"
@@ -113,7 +113,7 @@ class LoginController: BaseController {
     }()
     
     private lazy var appleContainerView: ContanierView = {
-        let appleContainerView = ContanierView(image: "ios", title: "Sign in with Apple")
+        let appleContainerView = ContanierView(image: "ios", title: "Sign in with Apple", configForScreen: .login)
         appleContainerView.layer.cornerRadius = 24
         appleContainerView.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
         appleContainerView.layer.borderWidth = 1
@@ -122,7 +122,7 @@ class LoginController: BaseController {
     }()
     
     private lazy var googleContainerView: ContanierView = {
-        let googleContainerView = ContanierView(image: "google", title: "Sign in with Google")
+        let googleContainerView = ContanierView(image: "google", title: "Sign in with Google", configForScreen: .login)
         googleContainerView.layer.cornerRadius = 24
         googleContainerView.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
         googleContainerView.layer.borderWidth = 1
@@ -131,7 +131,7 @@ class LoginController: BaseController {
     }()
     
     private lazy var facebookContainerView: ContanierView = {
-        let googleContainerView = ContanierView(image: "facebook", title: "Sign in with Apple")
+        let googleContainerView = ContanierView(image: "facebook", title: "Sign in with Apple", configForScreen: .login)
         googleContainerView.layer.cornerRadius = 24
         googleContainerView.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
         googleContainerView.layer.borderWidth = 1
@@ -139,11 +139,11 @@ class LoginController: BaseController {
         return googleContainerView
     }()
     
-    let divider = DividerView(text: "OR")
+    private let divider = DividerView(text: "OR")
     
     var callback: (() ->Void)?
     
-    var vm: LoginViewModel
+    private let vm: LoginViewModel
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -242,8 +242,6 @@ class LoginController: BaseController {
             facebookContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.87),
             facebookContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             facebookContainerView.heightAnchor.constraint(equalToConstant: 56),
-            
-
         ])
     }
 

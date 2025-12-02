@@ -50,6 +50,7 @@ class HomeController: BaseController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "\(HeaderView.self)"
         )
+        cv.allowsSelection = false
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
@@ -74,7 +75,8 @@ class HomeController: BaseController {
         super.viewDidLoad()
     }
     
-    let vm: HomeViewModel
+    private let vm: HomeViewModel
+    private let refreshControl = UIRefreshControl()
     
     init(vm: HomeViewModel) {
         self.vm = vm
@@ -86,15 +88,23 @@ class HomeController: BaseController {
     }
     
     override func configUI() {
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
+    @objc private func pullToRefresh() {
+       // vm.removeAllData()
+        collectionView.reloadData()
+        vm.getCategories()
+        vm.getAllDoctors()
+    }
+    
     @objc private func searchTyping() {
         let query = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        
         if query.isEmpty {
             vm.getAllDoctors()
         } else {
@@ -144,6 +154,8 @@ class HomeController: BaseController {
         vm.completion = { [weak self] viewState in
             switch viewState {
             case .success:
+                self?.refreshControl.endRefreshing()
+                self?.collectionView.allowsSelection = true
                 self?.collectionView.reloadData()
             case .error(let error):
                 print(error)
@@ -225,8 +237,8 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let controller = DoctorDetailController(vm: DoctorViewModel(doctorId: vm.doctors?[indexPath.row].id ?? ""))
-        show(controller, sender: nil)
+        let coordinator = DoctorDetailCoordinator(navigationController: self.navigationController ?? UINavigationController(), vm: DoctorViewModel(doctorId: vm.doctors?[indexPath.row].id ?? "", manager: DoctorDetailManager()))
+        coordinator.start()
     }
 }
 

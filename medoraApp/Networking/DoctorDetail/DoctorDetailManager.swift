@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class DoctorDetailManager {
+class DoctorDetailManager: DoctorDetailUseCase {
     let adapter = NetworkingAdapter()
     
     func getDoctorDetail(endpoint: DoctorEndpoint, parameters: Parameters?) async throws -> DoctorDetailResult? {

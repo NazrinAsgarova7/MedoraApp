@@ -15,7 +15,8 @@ struct DoctorDetailResult: Codable {
 struct DoctorResult: Codable {
     let id, name, specialization: String?
     let photoURL: String?
-    let experienceYrs, patientsCount, feeCents, ratingAverage: Int?
+    let experienceYrs, patientsCount, feeCents: Int?
+    let ratingAverage: Double?
     let ratingCount, distanceM: Int?
     let categoryID, availableSlots: String?
     let category: Category?

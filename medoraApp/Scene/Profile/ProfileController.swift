@@ -80,7 +80,7 @@ class ProfileController: BaseController {
         return l
     }()
     
-    private var vm: ProfileViewModel
+    private let vm: ProfileViewModel
     
     init(vm: ProfileViewModel) {
         self.vm = vm

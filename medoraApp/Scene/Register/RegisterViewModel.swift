@@ -34,8 +34,4 @@ class RegisterViewModel{
             }
         }
     }
-    
-    func saveUser(result: AuthResult) {
-        
-    }
 }

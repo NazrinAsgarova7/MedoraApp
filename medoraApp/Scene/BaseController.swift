@@ -7,10 +7,11 @@
 
 import UIKit
 
-class BaseController: UIViewController {
+class BaseController: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
         view.backgroundColor = .systemBackground
         configVM()
         configUI()

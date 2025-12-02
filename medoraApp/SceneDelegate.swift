@@ -21,8 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if UserDefaultManager.shared.isLogged() {
             tabbarRoot()
         } else {
-            window?.rootViewController =  OnboardingController()
-            window?.makeKeyAndVisible()
+            onboardingRoot()
         }
         print("willConnectTo")
        

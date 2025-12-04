@@ -8,7 +8,8 @@
 import UIKit
 
 enum Status {
-    case login, register, error, logout
+    case login, register, logout
+    case error(error: String)
 }
 
 class StatusController: BaseController {
@@ -88,7 +89,7 @@ class StatusController: BaseController {
         v.backgroundColor = UIColor.black.withAlphaComponent(0.45)
         return v
     }()
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -136,11 +137,11 @@ class StatusController: BaseController {
             backgroundView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 60),
             backgroundView.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             
-         
+            
             imageView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 50),
             imageView.widthAnchor.constraint(equalToConstant: 50),
-          
+            
             
             titleLabel.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: 40),
@@ -171,26 +172,29 @@ class StatusController: BaseController {
         switch status {
         case .login:
             titleLabel.text = "Yeay! Welcome Back"
+            imageView.image = UIImage(systemName: "checkmark")
+            imageView.tintColor = UIColor(named: "success")
             descriptionLabel.text = "Once again you login successfully into medora app"
             descriptionLabel.set(line: 8)
             button.setTitle("Go to home", for: .normal)
         case .register:
             titleLabel.text = "Success"
+            imageView.image = UIImage(systemName: "checkmark")
+            imageView.tintColor = UIColor(named: "success")
             descriptionLabel.text = "Your account has been successfully registered"
             descriptionLabel.set(line: 8)
             button.setTitle("Login", for: .normal)
-        case .error:
-            backgroundView.backgroundColor = UIColor(named: "errorBackground")
+        case .error(let error):
+            titleLabel.text = "Error"
             imageView.image = UIImage(systemName: "xmark")
             imageView.tintColor = UIColor(named: "error")
-            titleLabel.text = "Error"
-            descriptionLabel.text = "Username or Password is incorrect"
+            descriptionLabel.text = error
             descriptionLabel.set(line: 8)
             button.setTitle("Ok", for: .normal)
         case .logout:
+            titleLabel.text = "Are you sure to log out of your account?"
             imageView.image = UIImage(systemName: "rectangle.portrait.and.arrow.right")
             imageView.tintColor = UIColor(named: "error")
-            titleLabel.text = "Are you sure to log out of your account?"
             titleLabel.numberOfLines = 0
             descriptionLabel.set(line: 8)
             button.gradientColors = [UIColor(named: "error") ?? .gray,
@@ -203,7 +207,7 @@ class StatusController: BaseController {
     @objc func tappedButton() {
         switch button.titleLabel?.text {
         case "Login":
-            let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController())
+            let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
             coordinator.start()
         case "Go to home":
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -221,5 +225,4 @@ class StatusController: BaseController {
     @objc func tappedCancelButton() {
         dismiss(animated: true)
     }
-
 }

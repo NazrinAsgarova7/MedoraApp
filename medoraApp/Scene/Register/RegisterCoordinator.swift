@@ -8,16 +8,18 @@
 import Foundation
 import UIKit
 
-class RegsisterCoordinator: Coordinator {
+class RegisterCoordinator: Coordinator {
     var navigationController: UINavigationController
+    var viewController: UIViewController
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, vc: UIViewController) {
         self.navigationController = navigationController
+        self.viewController = vc
     }
     
     func start() {
         let vc = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel(manager: AuthManager())))
         vc.modalPresentationStyle = .fullScreen
-        navigationController.show(vc, sender: nil)
+        viewController.show(vc, sender: nil)
     }
 }

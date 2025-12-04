@@ -11,14 +11,15 @@ class BaseController: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
         view.backgroundColor = .systemBackground
         configVM()
         configUI()
         configConstraint()
     }
     
-    func configUI() {}
+    func configUI() {
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
     
     func configConstraint() {}
     

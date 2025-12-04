@@ -9,11 +9,10 @@ import Foundation
 import Alamofire
 
 class NetworkingHelper {
-    private let baseUrl = "https://medico-backend-2vci.onrender.com"
     let headers: HTTPHeaders = [
         "Content-Type": "application/json"
     ]
-    
+    private let baseUrl = "https://medico-backend-2vci.onrender.com"
     static let shared = NetworkingHelper()
     
     private init() {}

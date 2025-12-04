@@ -34,7 +34,13 @@ class RegisterViewModel{
                     self?.completion?(ViewState.error("Error"))
                 }
             } else if let error{
-                self?.completion?(ViewState.error(error))
+                if let err = error.error {
+                    self?.completion?(ViewState.error(err))
+                } else if let _ = error.fieldErrors?.email {
+                    self?.completion?(ViewState.error("Invalid email"))
+                } else if let _ = error.fieldErrors?.password {
+                    self?.completion?(ViewState.error("Password must contain at least 6 character"))
+                }
             }
         }
     }

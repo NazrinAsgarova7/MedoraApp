@@ -197,11 +197,8 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
             present(bottomSheetVC, animated: true)
         }
         if indexPath.row == 3 {
-            let statusVc = StatusController()
-            statusVc.modalPresentationStyle = .overFullScreen
-            statusVc.modalTransitionStyle = .crossDissolve
-            statusVc.configForSuccess(status: .logout)
-            self.present(statusVc, animated: true)
+            let coordinator = StatusCoordinator(navigationController: self.navigationController ?? UINavigationController(), configFor: .logout)
+            coordinator.start()
         }
     }
 }

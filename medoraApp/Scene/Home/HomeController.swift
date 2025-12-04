@@ -87,6 +87,7 @@ class HomeController: BaseController {
     }
     
     override func configUI() {
+        navigationController?.config()
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))

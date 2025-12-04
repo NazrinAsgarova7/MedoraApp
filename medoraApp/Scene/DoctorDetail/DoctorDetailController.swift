@@ -192,6 +192,7 @@ class DoctorDetailController: BaseController {
         b.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         b.backgroundColor = .buttonStart
         b.layer.cornerRadius = 24
+        b.addTarget(self, action: #selector(tappedSeeAllButton), for: .touchUpInside)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
@@ -330,6 +331,8 @@ class DoctorDetailController: BaseController {
     }
     
     override func configUI() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.config()
         doctorName.text = vm.doctorDetail?.name
         ratingView.configUI(image: "Star", title: String(vm.doctorDetail?.ratingAverage ?? 0))
         locationView.configUI(image: "Location", title: String(vm.doctorDetail?.distanceM ?? 0) + "m")
@@ -338,5 +341,10 @@ class DoctorDetailController: BaseController {
         patientsLabel.text = String(vm.doctorDetail?.patientsCount ?? 0) + "+"
         yearsLabel.text = String(vm.doctorDetail?.experienceYrs ?? 0 ) + "+"
         ratingLabel.text = String(vm.doctorDetail?.ratingCount ?? 0)
+    }
+    
+    @objc private func tappedSeeAllButton() {
+        let coordinator = ReviewCoordinator(navigationController: self.navigationController ?? UINavigationController(), id: vm.id)
+        coordinator.start()
     }
 }

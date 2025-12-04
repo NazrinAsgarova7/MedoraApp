@@ -28,10 +28,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func tabbarRoot() {
-        window?.rootViewController = UINavigationController(rootViewController: TabbarController())
+        window?.rootViewController = TabbarController()
         window?.makeKeyAndVisible()
     }
-    
+    func registerRoot() {
+        window?.rootViewController = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel(manager: AuthManager())))
+        window?.makeKeyAndVisible()
+    }
+    func loginRoot() {
+        window?.rootViewController = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel(manager: AuthManager())))
+        window?.makeKeyAndVisible()
+    }
     func onboardingRoot() {
         UserDefaultManager.shared.removeAll()
         window?.rootViewController =  OnboardingController()

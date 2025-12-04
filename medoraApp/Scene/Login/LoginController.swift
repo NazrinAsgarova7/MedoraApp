@@ -251,18 +251,17 @@ class LoginController: BaseController {
     }
     
     override func configVM() {
-            let statusVc = StatusController()
-            statusVc.modalPresentationStyle = .overFullScreen
-            statusVc.modalTransitionStyle = .crossDissolve
+        let coordinator = StatusCoordinator(navigationController: self.navigationController ?? UINavigationController(), configFor: .login)
         vm.completion = { [weak self] viewState in
                 switch viewState {
                 case .success(let data):
                     self?.vm.saveUser(user: data)
-                    statusVc.configForSuccess(status: .login)
-                    self?.present(statusVc, animated: true)
-                case .error(_):
-                    statusVc.configForSuccess(status: .error)
-                    self?.present(statusVc, animated: true)
+                    coordinator.configFor = Status.login
+                    coordinator.start()
+                case .error(let error):
+                    print(error)
+                    coordinator.configFor = Status.error(error: error)
+                    coordinator.start()
                 }
             }
     }
@@ -299,11 +298,10 @@ class LoginController: BaseController {
     }
     
     @objc func signIn() {
-        let statusVc = StatusController()
-        statusVc.configForSuccess(status: .login)
-        statusVc.modalPresentationStyle = .overFullScreen
-        statusVc.modalTransitionStyle = .crossDissolve
         vm.login(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+//        let coordinator = StatusCoordinator(navigationController: self.navigationController ?? UINavigationController(), configFor: .login)
+//        coordinator.start()
+        
     }
     
     @objc func signUp() {
@@ -312,6 +310,9 @@ class LoginController: BaseController {
             .presentingViewController {
             if navigationController?.presentingViewController is StatusController {
                 rootPresenter.dismiss(animated: true)
+            } else if navigationController?.presentingViewController is BottomSheet {
+                let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
+                coordinator.start()
             } else {
                 dismiss(animated: true)
             }

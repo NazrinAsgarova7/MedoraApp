@@ -95,7 +95,7 @@ class BottomSheet: BaseController {
     
     @objc func tappedNextButton() {
         if nextButton.titleLabel?.text == "Get Started" {
-            let coordinator = RegsisterCoordinator(navigationController: self.navigationController ?? UINavigationController())
+            let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
             coordinator.start()
         }
         
@@ -109,8 +109,13 @@ class BottomSheet: BaseController {
     }
     
     @objc func tappedSkipButton() {
-        let coordinator = RegsisterCoordinator(navigationController: self.navigationController ?? UINavigationController())
-        coordinator.start()
+        if skipButton.titleLabel?.text == "Already Have an Account?" {
+            let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
+            coordinator.start()
+        } else {
+            let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
+            coordinator.start()
+        }
     }
 }
 

@@ -8,7 +8,7 @@
 import UIKit
 
 class RegisterController: BaseController {
-    
+
     private lazy var usernameContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(named: "textBackground")
@@ -298,23 +298,21 @@ class RegisterController: BaseController {
     }
     
     override func configVM() {
-        let statusVc = StatusController()
-        statusVc.modalPresentationStyle = .overFullScreen
-        statusVc.modalTransitionStyle = .crossDissolve
         viewModel.completion = { [weak self] viewState in
             switch viewState {
             case .success(_):
-                statusVc.configForSuccess(status: .register)
-                self?.present(statusVc, animated: true)
-            case .error(_):
-                statusVc.configForSuccess(status: .error)
-                self?.present(statusVc, animated: true)
+                let coordinator = StatusCoordinator(navigationController: self?.navigationController ?? UINavigationController(), configFor: .register)
+                coordinator.start()
+            case .error(let error):
+                print(error)
+                let coordinator = StatusCoordinator(navigationController: self?.navigationController ?? UINavigationController(), configFor: .error(error: error))
+                coordinator.start()
             }
         }
     }
     
     @objc func signIn() {
-        let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController())
+        let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
         coordinator.start()
     }
     

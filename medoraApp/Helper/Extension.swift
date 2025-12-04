@@ -8,7 +8,7 @@
 import UIKit
 
 extension UILabel {
-    func set( line: CGFloat = 0) {
+    func set(line: CGFloat = 0) {
         let p = NSMutableParagraphStyle()
         p.lineSpacing = line
         p.alignment = self.textAlignment
@@ -24,8 +24,38 @@ extension UILabel {
         self.attributedText = attr
         self.numberOfLines = 0
     }
+    
 }
 
+extension String {
+    func timeAgo() -> String {
+        let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let formattedDate = formatter.date(from: self)
+      
+        guard let date = formattedDate else { return "" }
+            let now = Date()
+            let calendar = Calendar.current
+            
+            let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date, to: now)
+            
+            if let year = components.year, year > 0 {
+                return "\(year) years ago"
+            } else if let month = components.month, month > 0 {
+                return "\(month) months ago"
+            } else if let day = components.day, day > 0 {
+                return "\(day) days ago"
+            } else if let hour = components.hour, hour > 0 {
+                return "\(hour) hours ago"
+            } else if let minute = components.minute, minute > 0 {
+                return "\(minute) min ago"
+            } else {
+                return "now"
+            }
+        }
+      
+
+}
 
 extension UINavigationController {
     func config() {
@@ -33,6 +63,4 @@ extension UINavigationController {
         topViewController?.navigationItem.backButtonDisplayMode = .minimal
         navigationBar.tintColor = .black
     }
-    
-    
 }

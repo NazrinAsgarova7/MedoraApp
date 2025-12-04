@@ -224,7 +224,7 @@ class LoginController: BaseController {
             divider.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 41),
             divider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             divider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            divider.heightAnchor.constraint(equalToConstant: 20), // kifayət edir
+            divider.heightAnchor.constraint(equalToConstant: 20),
             
             
             googleContainerView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 28),

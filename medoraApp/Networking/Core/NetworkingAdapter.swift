@@ -16,7 +16,6 @@ class NetworkingAdapter {
                              encoding: ParameterEncoding = URLEncoding.default,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers,
                              completion:  @escaping ((CoreModel<T>?, String?)-> Void)) {
-        
         AF.request(url,
                    method: method,
                    parameters: parameters,

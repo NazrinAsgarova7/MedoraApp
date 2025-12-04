@@ -21,7 +21,7 @@
                             </imageView>
                             <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o3j-Bh-x7E">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <color key="backgroundColor" red="0.42352941176470588" green="0.36470588235294116" blue="0.82745098039215681" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.61960784313725492" green="0.7803921568627451" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="EmU-rT-uvR">
                                 <rect key="frame" x="105.00000000000001" y="323.33333333333331" width="183.33333333333337" height="205.33333333333331"/>

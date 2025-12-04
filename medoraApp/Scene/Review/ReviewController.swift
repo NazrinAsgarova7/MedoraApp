@@ -18,6 +18,7 @@ class ReviewController: BaseController {
         return table
     }()
     
+    private let refreshControl = UIRefreshControl()
     private var vm: ReviewViewModel
     
     init(vm: ReviewViewModel) {
@@ -36,10 +37,29 @@ class ReviewController: BaseController {
     }
     
     override func configUI() {
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        tableView.refreshControl = refreshControl
         navigationController?.setNavigationBarHidden(false, animated: false)
         self.title = "Reviews"
+        let rightBarButton: UIBarButtonItem = .init(image: UIImage(systemName: "plus"), style: .done, target: self, action: #selector(tappedAddReviewButton))
+        navigationItem.rightBarButtonItem = rightBarButton
+    }
+    
+    override func configVM() {
+        vm.getDoctorReviews()
+        vm.completion = { [weak self] viewState in
+            switch viewState {
+            case .success:
+                self?.refreshControl.endRefreshing()
+                self?.tableView.reloadData()
+            case .error(let error):
+                print(error)
+            }
+        }
+    }
+    
+    override func configConstraint() {
         view.addSubview(tableView)
-        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -48,19 +68,16 @@ class ReviewController: BaseController {
         ])
     }
     
-    override func configVM() {
-        vm.getReviews()
-        vm.completion = { [weak self] viewState in
-            switch viewState {
-            case .success:
-                self?.tableView.reloadData()
-            case .error(let error):
-                print(error)
-            }
+    @objc func tappedAddReviewButton() {
+        showRatingAlert { [weak self] rating, comment in
+            self?.vm.postReview(rate: rating, comment: comment ?? "")
         }
     }
-
-
+    @objc private func pullToRefresh() {
+       // vm.removeAllData()
+        tableView.reloadData()
+        vm.getDoctorReviews()
+    }
 }
 
 extension ReviewController: UITableViewDelegate, UITableViewDataSource {

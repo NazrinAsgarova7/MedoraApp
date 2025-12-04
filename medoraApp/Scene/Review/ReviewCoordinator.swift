@@ -21,6 +21,4 @@ class ReviewCoordinator: Coordinator {
         let controller = ReviewController(vm: ReviewViewModel(manager: ReviewManager(), id: id))
         navigationController.show(controller, sender: nil)
     }
-    
-    
 }

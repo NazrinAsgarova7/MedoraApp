@@ -22,12 +22,29 @@ class ReviewViewModel {
         self.id = id
     }
     
-    func getReviews() {
+    func getDoctorReviews() {
         manager.getReviews(endpoint: .getReviews(doctorId: id)) { [weak self] data, error in
             if let data {
                 self?.reviews = data.data
                 self?.completion?(.success)
 
+            } else if let error {
+                self?.completion?(.error(error))
+            }
+        }
+    }
+    
+    func postReview(rate: Int, comment: String) {
+        let parameters: [String: Any] = [
+            "rating": rate,
+            "comment": comment,
+            "userId": UserDefaultManager.shared.getData(key: .id)
+        ]
+        
+        manager.postReview(endpoint: .getReviews(doctorId: id), parameters: parameters) { [weak self] data, error in
+            if let data {
+                self?.getDoctorReviews()
+             //   self?.completion?(.success)
             } else if let error {
                 self?.completion?(.error(error))
             }

@@ -41,6 +41,7 @@ class ReviewCell: UITableViewCell {
     private lazy var reviewLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 14, weight: .regular)
+        l.numberOfLines = 0
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -82,11 +83,11 @@ class ReviewCell: UITableViewCell {
             ratingView.heightAnchor.constraint(equalToConstant: 20),
             ratingView.widthAnchor.constraint(equalToConstant: 30),
             
-            createdDateLabel.leadingAnchor.constraint(equalTo: ratingView.trailingAnchor, constant: 20),
-            createdDateLabel.centerYAnchor.constraint(equalTo: ratingView.centerYAnchor),
+            createdDateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            createdDateLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
             
             reviewLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            reviewLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 16),
+            reviewLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             reviewLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 12),
             
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -100,7 +101,7 @@ class ReviewCell: UITableViewCell {
     func configUI(review: Review?) {
         usernameLabel.text = review?.user?.name
         ratingView.configUI(image: "Star", title: String(review?.rating ?? 0))
-        createdDateLabel.text = "2 day ago"
+        createdDateLabel.text = review?.createdAt?.timeAgo()
         reviewLabel.text = review?.comment
         profileImage.image = UIImage(named: "doctor")
     }

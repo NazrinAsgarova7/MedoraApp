@@ -8,5 +8,5 @@
 import Foundation
 
 struct CoreModel<T: Codable>: Codable {
-    let data: [T]?
+    let data: T?
 }

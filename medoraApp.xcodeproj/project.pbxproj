@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FF6103E32EC60CBD00A81139 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF6103E22EC60CBD00A81139 /* Alamofire */; };
+		FF6B00B52EE1977F0068540D /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = FF6B00B42EE1977F0068540D /* Cosmos */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF6B00B52EE1977F0068540D /* Cosmos in Frameworks */,
 				FF6103E32EC60CBD00A81139 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +86,7 @@
 			name = medoraApp;
 			packageProductDependencies = (
 				FF6103E22EC60CBD00A81139 /* Alamofire */,
+				FF6B00B42EE1977F0068540D /* Cosmos */,
 			);
 			productName = medoraApp;
 			productReference = FF70C36F2EBE190C004CFC77 /* medoraApp.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				FF6103E12EC60CBD00A81139 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				FF6B00B32EE1977F0068540D /* XCRemoteSwiftPackageReference "Cosmos" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FF70C3702EBE190C004CFC77 /* Products */;
@@ -350,6 +354,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		FF6B00B32EE1977F0068540D /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -357,6 +369,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF6103E12EC60CBD00A81139 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		FF6B00B42EE1977F0068540D /* Cosmos */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF6B00B32EE1977F0068540D /* XCRemoteSwiftPackageReference "Cosmos" */;
+			productName = Cosmos;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

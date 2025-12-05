@@ -94,6 +94,7 @@ class DoctorDetailController: BaseController {
         b.setImage(UIImage(systemName: "calendar"), for: .normal)
         b.tintColor = .white
         b.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        b.addTarget(self, action: #selector(tappedBookButton), for: .touchUpInside)
         b.backgroundColor = .buttonStart
         b.layer.cornerRadius = 24
         b.semanticContentAttribute = .forceRightToLeft
@@ -254,7 +255,7 @@ class DoctorDetailController: BaseController {
             specializationView.centerYAnchor.constraint(equalTo: ratingView.centerYAnchor),
             specializationView.trailingAnchor.constraint(equalTo: doctorDetailContainerView.trailingAnchor, constant: -34),
             specializationView.heightAnchor.constraint(equalToConstant: 22),
-            specializationView.widthAnchor.constraint(equalToConstant: 93),
+            specializationView.widthAnchor.constraint(equalToConstant: 112),
             
             bookContainerView.leadingAnchor.constraint(equalTo: doctorDetailContainerView.leadingAnchor),
             bookContainerView.trailingAnchor.constraint(equalTo: doctorDetailContainerView.trailingAnchor),
@@ -346,5 +347,10 @@ class DoctorDetailController: BaseController {
     @objc private func tappedSeeAllButton() {
         let coordinator = ReviewCoordinator(navigationController: self.navigationController ?? UINavigationController(), id: vm.id)
         coordinator.start()
+    }
+    
+    @objc private func tappedBookButton() {
+        let controller = FirstBookingController()
+        show(controller, sender: nil)
     }
 }

@@ -15,7 +15,7 @@ class DoctorViewModel {
     }
     let manager: DoctorDetailUseCase
     var doctorImage: UIImageView?
-    var doctorDetail: DoctorResult?
+    var doctorDetail: Doctor?
     var completion: ((ViewState) -> Void)?
     var id: String
     

@@ -8,22 +8,17 @@
 import Foundation
 import UIKit
 
+
+enum KeyboardType {
+    case text, digital
+}
+
 class ContanierTextField: UIView {
     
-//    private lazy var textFieldContainerView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = UIColor(named: "textBackground")
-//        view.layer.cornerRadius = 24
-//        view.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
-//        view.layer.borderWidth = 1
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
-//    
     private lazy var textField: UITextField = {
         let t = UITextField()
         t.placeholder = "Enter your name"
-      //  t.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+        t.delegate = self
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
@@ -37,6 +32,8 @@ class ContanierTextField: UIView {
         return i
     }()
     
+    var callback: (() -> Void)?
+    
     init() {
         super.init(frame: .zero)
         configConstraint()
@@ -46,7 +43,13 @@ class ContanierTextField: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configUI(image: String, placeholder: String?) {
+    func configUI(image: String, placeholder: String?, keyboardType: KeyboardType = .text) {
+        switch keyboardType {
+        case .text:
+            textField.keyboardType = .default
+        case .digital:
+            textField.keyboardType = .phonePad
+        }
         iconImage.image = UIImage(systemName: image)
         textField.placeholder = placeholder
     }
@@ -61,7 +64,34 @@ class ContanierTextField: UIView {
             
             textField.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             textField.leadingAnchor.constraint(equalTo: iconImage.trailingAnchor, constant: 16),
+            textField.trailingAnchor.constraint(equalTo: trailingAnchor),
+            textField.topAnchor.constraint(equalTo: topAnchor),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
      
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+            return true
+        }
+
+        override func becomeFirstResponder() -> Bool {
+            return textField.becomeFirstResponder()
+        }
+
+        override var isFirstResponder: Bool {
+            return textField.isFirstResponder
+        }
+
+        override func resignFirstResponder() -> Bool {
+            return textField.resignFirstResponder()
+        }
+    
+}
+
+extension ContanierTextField: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        callback?()
+        return true
     }
 }

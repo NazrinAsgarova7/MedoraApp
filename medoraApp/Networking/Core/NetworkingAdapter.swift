@@ -9,6 +9,7 @@ import Foundation
 import Alamofire
 
 class NetworkingAdapter {
+    
     func request<T: Codable>(url: String,
                              model: T.Type,
                              method: HTTPMethod,
@@ -16,6 +17,11 @@ class NetworkingAdapter {
                              encoding: ParameterEncoding = URLEncoding.default,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers,
                              completion:  @escaping ((CoreModel<T>?, String?)-> Void)) {
+        Task {
+            if await !NetworkingHelper.shared.hasInternet() {
+                return
+            }
+        }
         AF.request(url,
                    method: method,
                    parameters: parameters,
@@ -23,7 +29,6 @@ class NetworkingAdapter {
             switch response.result {
             case .success(let data):
                 completion(data, nil)
-//                (response.response?.statusCode == 201 || response.response?.statusCode == 200)  ? completion(data, nil) : completion(nil, "Server error (\(response.response?.statusCode))")
             case .failure(let error):
                 completion(nil, error.localizedDescription)
             }
@@ -38,6 +43,11 @@ class NetworkingAdapter {
                                          encoding: ParameterEncoding = URLEncoding.default,
                                          header: HTTPHeaders? = NetworkingHelper.shared.headers,
                                          completion:  @escaping ((T?,Y?)-> Void)) {
+        Task {
+            if await !NetworkingHelper.shared.hasInternet() {
+                return
+            }
+        }
         AF.request(url,
                    method: method,
                    parameters: parameters,
@@ -49,7 +59,6 @@ class NetworkingAdapter {
                         let decoded = try JSONDecoder().decode(T.self, from: data)
                         completion(decoded, nil)
                     } catch {
-                        print("Decode xətası (success): \(error)")
                         completion(nil, nil)
                     }
                     
@@ -77,10 +86,16 @@ class NetworkingAdapter {
                              method: HTTPMethod,
                              parameters: Parameters? = nil,
                              encoding: ParameterEncoding = URLEncoding.default,
-                             header: HTTPHeaders? = NetworkingHelper.shared.headers) async throws -> T? {
+                             header: HTTPHeaders? = NetworkingHelper.shared.headers) async throws -> CoreModel<T>?{
+        Task {
+            if await !NetworkingHelper.shared.hasInternet() {
+                return
+            }
+        }
         return try await AF.request(url,
                                     method: method,
                                     parameters: parameters,
-                                    encoding: encoding, headers: header).serializingDecodable( T.self).value
+                                    encoding: encoding, headers: header).serializingDecodable(CoreModel<T>.self).value
     }
+    
 }

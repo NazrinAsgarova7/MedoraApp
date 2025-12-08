@@ -8,9 +8,9 @@
 import UIKit
 
 class FirstBookingController: BaseController {
-
-    private lazy var doctorDetailContainerView: UIView = {
-        let view = UIView()
+    
+    private lazy var doctorDetailContainerView: DetailView = {
+        let view = DetailView()
         view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 16
         view.layer.shadowColor = UIColor.black.cgColor
@@ -52,90 +52,6 @@ class FirstBookingController: BaseController {
         return phoneView
     }()
     
-   /* private lazy var fullnameContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(named: "textBackground")
-        view.layer.cornerRadius = 24
-        view.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
-        view.layer.borderWidth = 1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private lazy var fullnameTextField: UITextField = {
-        let t = UITextField()
-        t.placeholder = "Enter your name"
-      //  t.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        return t
-    }()
-    
-    private lazy var fullnameImage: UIImageView = {
-        let i = UIImageView()
-        i.image = UIImage(systemName: "person")
-        i.tintColor = UIColor(named: "placeholderColor")
-        i.contentMode = .scaleAspectFill
-        i.translatesAutoresizingMaskIntoConstraints = false
-        return i
-    }()
-    
-    private lazy var emailContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(named: "textBackground")
-        view.layer.cornerRadius = 24
-        view.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
-        view.layer.borderWidth = 1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private lazy var emailTextField: UITextField = {
-        let t = UITextField()
-        t.placeholder = "Enter your email"
-        t.keyboardType = .emailAddress
-        //t.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        return t
-    }()
-    
-    private lazy var emailImage: UIImageView = {
-        let i = UIImageView()
-        i.image = UIImage(systemName: "envelope")
-        i.contentMode = .scaleAspectFill
-        i.tintColor = UIColor(named: "placeholderColor")
-        i.translatesAutoresizingMaskIntoConstraints = false
-        return i
-    }()
-    
-    private lazy var phoneContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(named: "textBackground")
-        view.layer.cornerRadius = 24
-        view.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
-        view.layer.borderWidth = 1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private lazy var phoneTextField: UITextField = {
-        let t = UITextField()
-        t.placeholder = "Enter your password"
-        t.isSecureTextEntry = true
-       // t.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
-        t.translatesAutoresizingMaskIntoConstraints = false
-        
-        return t
-    }()
-    
-    private lazy var phoneImage: UIImageView = {
-        let i = UIImageView()
-        i.image = UIImage(systemName: "phone")
-        i.contentMode = .scaleAspectFill
-        i.tintColor = UIColor(named: "placeholderColor")
-        i.translatesAutoresizingMaskIntoConstraints = false
-        return i
-    }() */
-    
     private lazy var personalBioLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 16, weight: .medium)
@@ -143,13 +59,37 @@ class FirstBookingController: BaseController {
         return l
     }()
     
+    private lazy var continueButton: UIButton = {
+        let button = GradientButton()
+        button.setTitle("Continue", for: .normal)
+        button.gradientColors = [UIColor(named: "buttonStart") ?? .gray,
+                                 UIColor(named: "buttonEnd") ?? .gray]
+        button.tintColor = .white
+        button.startPoint = CGPoint(x: 0, y: 0)
+        button.endPoint   = CGPoint(x: 1, y: 1)
+        button.corner = 30
+        //   button.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    let viewModel: BookingViewModel
+    
+    init(viewModel: BookingViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
     
     override func configConstraint() {
-        [doctorDetailContainerView, fullnameTextFieldView, personalBioLabel].forEach { view.addSubview($0) }
+        [doctorDetailContainerView, fullnameTextFieldView, phoneTextFieldView, emailTextFieldView, personalBioLabel, continueButton].forEach { view.addSubview($0) }
         
         NSLayoutConstraint.activate([
             doctorDetailContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.914),
@@ -164,12 +104,51 @@ class FirstBookingController: BaseController {
             fullnameTextFieldView.topAnchor.constraint(equalTo: personalBioLabel.bottomAnchor,  constant: 24),
             fullnameTextFieldView.leadingAnchor.constraint(equalTo: doctorDetailContainerView.leadingAnchor),
             fullnameTextFieldView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            fullnameTextFieldView.heightAnchor.constraint(equalToConstant: 60)
+            fullnameTextFieldView.heightAnchor.constraint(equalToConstant: 60),
+            
+            emailTextFieldView.topAnchor.constraint(equalTo: fullnameTextFieldView.bottomAnchor, constant: 24),
+            emailTextFieldView.leadingAnchor.constraint(equalTo: fullnameTextFieldView.leadingAnchor),
+            emailTextFieldView.trailingAnchor.constraint(equalTo: fullnameTextFieldView.trailingAnchor),
+            emailTextFieldView.heightAnchor.constraint(equalToConstant: 60),
+            
+            phoneTextFieldView.topAnchor.constraint(equalTo: emailTextFieldView.bottomAnchor, constant: 24),
+            phoneTextFieldView.leadingAnchor.constraint(equalTo: fullnameTextFieldView.leadingAnchor),
+            phoneTextFieldView.trailingAnchor.constraint(equalTo: fullnameTextFieldView.trailingAnchor),
+            phoneTextFieldView.heightAnchor.constraint(equalToConstant: 60),
+            
+            continueButton.heightAnchor.constraint(equalToConstant: 56),
+            continueButton.topAnchor.constraint(equalTo: phoneTextFieldView.bottomAnchor, constant: 32),
+            continueButton.leadingAnchor.constraint(equalTo: phoneTextFieldView.leadingAnchor),
+            continueButton.trailingAnchor.constraint(equalTo: phoneTextFieldView.trailingAnchor)
+            
+            
         ])
     }
     
     override func configUI() {
-        fullnameTextFieldView.configUI(image: "person.fill", placeholder: "Please enter fullname")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        self.title = "Doctor Booking"
+        personalBioLabel.text = "Personal Bio"
+        fullnameTextFieldView.configUI(image: "person.fill", placeholder: "Enter fullname")
+        emailTextFieldView.configUI(image: "envelope.fill", placeholder: "Enter email")
+        phoneTextFieldView.configUI(image: "phone.fill", placeholder: "Enter phone", keyboardType: .digital)
         
+        fullnameTextFieldView.callback = { [weak self] in
+            self?.emailTextFieldView.becomeFirstResponder()
+        }
+        emailTextFieldView.callback = { [weak self] in
+            self?.phoneTextFieldView.becomeFirstResponder()
+            
+        }
+        phoneTextFieldView.callback = { [weak self] in
+            self?.view.endEditing(true)
+        }
+        doctorDetailContainerView.configUI(doctor: viewModel.doctor)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

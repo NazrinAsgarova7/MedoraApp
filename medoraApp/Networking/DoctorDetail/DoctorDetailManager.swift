@@ -11,8 +11,8 @@ import Alamofire
 class DoctorDetailManager: DoctorDetailUseCase {
     let adapter = NetworkingAdapter()
     
-    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: Parameters?) async throws -> DoctorDetailResult? {
-        return try await adapter.request(url: endpoint.path, model: DoctorDetailResult.self, method: .get)
+    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: Parameters?) async throws -> CoreModel<Doctor>? {
+        return try await adapter.request(url: endpoint.path, model: Doctor.self, method: .get)
     }
     
 }

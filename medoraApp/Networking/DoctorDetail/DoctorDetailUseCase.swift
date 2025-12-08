@@ -8,5 +8,5 @@
 import Alamofire
 
 protocol DoctorDetailUseCase {
-    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: Parameters?) async throws -> DoctorDetailResult?
+    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: Parameters?) async throws -> CoreModel<Doctor>?
 }

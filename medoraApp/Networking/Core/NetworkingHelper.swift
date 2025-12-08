@@ -20,4 +20,16 @@ class NetworkingHelper {
     func configUrl(endpoint: String) -> String {
         baseUrl + endpoint
     }
+    
+    func hasInternet() async -> Bool {
+        guard let url = URL(string: "https://www.google.com/generate_204") else { return false }
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 6)
+        request.httpMethod = "HEAD"
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            return (response as? HTTPURLResponse)?.statusCode == 204
+        } catch {
+            return false
+        }
+    }
 }

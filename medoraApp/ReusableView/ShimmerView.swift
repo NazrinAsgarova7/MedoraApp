@@ -39,7 +39,7 @@ class ShimmerView: UIView {
         
         let animation = CABasicAnimation(keyPath: "locations")
         animation.fromValue = [-0.6, -0.3, 0.0]
-        animation.toValue   = [1.0, 1.3, 1.6]
+        animation.toValue = [1.0, 1.3, 1.6]
         animation.duration = 1.3
         animation.repeatCount = .infinity
         gradientLayer.add(animation, forKey: "shimmerAnimation")

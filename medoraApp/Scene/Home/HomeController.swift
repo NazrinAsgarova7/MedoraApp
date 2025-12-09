@@ -176,6 +176,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section{
         case 0:
+            print(view.frame.height, view.frame.width)
             return 1
         case 1:
             return vm.doctors?.count ?? 4
@@ -229,10 +230,10 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
         case 0:
             return .init(width: view.frame.size.width * 0.89, height: 135)
         case 1:
-            return .init(width: 165, height: 241)
+            return .init(width: view.frame.width * 0.41, height: view.frame.height * 0.275)
             
         default:
-            return .init(width: 165, height: 241)
+            return .init(width: view.frame.width * 0.41, height: view.frame.height * 0.275)
         }
     }
     

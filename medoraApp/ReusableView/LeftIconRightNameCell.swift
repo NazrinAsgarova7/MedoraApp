@@ -9,17 +9,9 @@ import UIKit
 
 class LeftIconRightNameCell: UITableViewCell {
 
-    let icons = [("text.document", "Appointments"),
-                 ("shield", "Privacy & Security"),
-                 ("questionmark", "Help & Support"),
-                 ("rectangle.portrait.and.arrow.right", "Logout")]
+ 
     
-    let iconsForHelp = [
-        ("envelope","medora@gmail.com"),
-        ("phone","012-789-98-98")
-    ]
-    
-    private lazy var icon: UIImageView = {
+    private lazy var iconImageView: UIImageView = {
         let icon = UIImageView()
         icon.image = UIImage(systemName: "heart")
         icon.tintColor = UIColor(named: "buttonStart")
@@ -55,7 +47,7 @@ class LeftIconRightNameCell: UITableViewCell {
     
     private func configConstraint() {
         [nameLabel, iconContainerView].forEach { contentView.addSubview($0) }
-        iconContainerView.addSubview(icon)
+        iconContainerView.addSubview(iconImageView)
         
         NSLayoutConstraint.activate([
             iconContainerView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -63,27 +55,27 @@ class LeftIconRightNameCell: UITableViewCell {
             iconContainerView.heightAnchor.constraint(equalToConstant: 43),
             iconContainerView.widthAnchor.constraint(equalToConstant: 43),
             
-            icon.centerYAnchor.constraint(equalTo:iconContainerView.centerYAnchor),
-            icon.centerXAnchor.constraint(equalTo: iconContainerView.centerXAnchor),
-            icon.heightAnchor.constraint(equalToConstant: 24),
-            icon.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.centerYAnchor.constraint(equalTo:iconContainerView.centerYAnchor),
+            iconImageView.centerXAnchor.constraint(equalTo: iconContainerView.centerXAnchor),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
             
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: 18)
+            nameLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 18)
         ])
     }
     
-    func configScreen(index: Int) {
-        icon.image = UIImage(systemName: icons[index].0)
-        nameLabel.text = icons[index].1
-        if index == icons.count - 1 {
-            icon.tintColor = UIColor(named: "error")
+    func configScreen(icon: (String, String)) {
+        iconImageView.image = UIImage(systemName: icon.0)
+        nameLabel.text = icon.1
+        if icon.1 == "Logout" {
+            iconImageView.tintColor = UIColor(named: "error")
             nameLabel.textColor = UIColor(named: "error")
         }
     }
     
-    func configForHelp(index: Int) {
-        icon.image = UIImage(systemName: iconsForHelp[index].0)
-        nameLabel.text = iconsForHelp[index].1
+    func configForHelp(icon: (String, String)) {
+        iconImageView.image = UIImage(systemName: icon.0)
+        nameLabel.text = icon.1
     }
 }

@@ -27,7 +27,7 @@ class BottomSheet: BaseController {
                                  UIColor(named: "buttonEnd") ?? .gray]
         button.tintColor = .white
         button.startPoint = CGPoint(x: 0, y: 0)
-        button.endPoint   = CGPoint(x: 1, y: 1)
+        button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
         button.addTarget(self, action: #selector(tappedNextButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +55,7 @@ class BottomSheet: BaseController {
         return pageControl
     }()
     
-    let onboardingScreens: [BottomSheetCellProtocol] = [
+    let onboardingScreens: [BottomSheetCellModel] = [
         BottomSheetCellModel(title: "Your Health & Wellness On-Demand", description: "Urna amet, suspendisse ullamcorper ac elit diam facilisis cursus vestibulum."),
         BottomSheetCellModel(title: "Wellness at Your Fingertips with Doctor+", description: "Wellness at Your Fingertips with Doctor+"),
         BottomSheetCellModel(title: "Your Health & Wellness On-Demand", description: "Urna amet, suspendisse ullamcorper ac elit diam facilisis cursus vestibulum.")]

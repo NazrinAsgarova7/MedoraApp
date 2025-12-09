@@ -45,7 +45,7 @@ class ProfileController: BaseController {
         return img
     }()
     
-    private lazy var editButton: UIButton  = {
+    private lazy var editButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(UIImage(systemName: "pencil"), for: .normal)
         btn.tintColor = .buttonStart
@@ -166,7 +166,7 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LeftIconRightNameCell") as? LeftIconRightNameCell else { return UITableViewCell() }
         cell.selectionStyle = .none
-        cell.configScreen(index: indexPath.row)
+        cell.configScreen(icon: vm.icons[indexPath.row])
         return cell
     }
     
@@ -180,7 +180,7 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         if indexPath.row == 2 {
-            let bottomSheetVC = HelpBottomSHeet()
+            let bottomSheetVC = HelpBottomSheet(vm: self.vm)
             bottomSheetVC.modalPresentationStyle = .pageSheet
             bottomSheetVC.isModalInPresentation = false
             if let sheet = bottomSheetVC.sheetPresentationController {

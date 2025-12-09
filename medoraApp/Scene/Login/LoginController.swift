@@ -83,7 +83,7 @@ class LoginController: BaseController {
                                  UIColor(named: "buttonEnd") ?? .gray]
         button.tintColor = .white
         button.startPoint = CGPoint(x: 0, y: 0)
-        button.endPoint   = CGPoint(x: 1, y: 1)
+        button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
         button.isEnabled = false
         button.alpha = 0.6
@@ -298,10 +298,14 @@ class LoginController: BaseController {
     }
     
     @objc func signIn() {
-        vm.login(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
-//        let coordinator = StatusCoordinator(navigationController: self.navigationController ?? UINavigationController(), configFor: .login)
-//        coordinator.start()
-        
+        let email = (emailTextField.text ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        let password = (passwordTextField.text ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        vm.login(email: email, password: password)
     }
     
     @objc func signUp() {

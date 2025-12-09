@@ -41,7 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     func onboardingRoot() {
         UserDefaultManager.shared.removeAll()
-        window?.rootViewController =  OnboardingController()
+        window?.rootViewController = OnboardingController()
         window?.makeKeyAndVisible()
     }
     

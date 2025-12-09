@@ -55,7 +55,7 @@ class StatusController: BaseController {
                                  UIColor(named: "buttonEnd") ?? .gray]
         button.tintColor = .white
         button.startPoint = CGPoint(x: 0, y: 0)
-        button.endPoint   = CGPoint(x: 1, y: 1)
+        button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
         button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

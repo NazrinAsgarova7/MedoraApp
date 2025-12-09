@@ -44,19 +44,15 @@ class ContanierView: UIView {
     func configConstraint() {
         [titleLabel, iconImage].forEach { self.addSubview($0) }
         
-        let iconImageWidth =        iconImage.widthAnchor.constraint(equalToConstant: 24)
-        let iconImageHeight =
-        iconImage.heightAnchor.constraint(equalToConstant: 24)
-        let iconImageLeading =
-        iconImage.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 24)
-        let titleLabelCenterX =             titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+        let iconImageWidth = iconImage.widthAnchor.constraint(equalToConstant: 24)
+        let iconImageHeight = iconImage.heightAnchor.constraint(equalToConstant: 24)
+        let iconImageLeading = iconImage.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 24)
+        let titleLabelCenterX = titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         
-        let iconImageWidthForDetail =        iconImage.widthAnchor.constraint(equalToConstant: 20)
-        let iconImageHeightForDetail =
-        iconImage.heightAnchor.constraint(equalToConstant: 20)
-        let iconImageLeadingForDetail =
-        iconImage.leadingAnchor.constraint(equalTo: self.leadingAnchor)
-        let titleLabelLeading =             titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26)
+        let iconImageWidthForDetail = iconImage.widthAnchor.constraint(equalToConstant: 20)
+        let iconImageHeightForDetail = iconImage.heightAnchor.constraint(equalToConstant: 20)
+        let iconImageLeadingForDetail = iconImage.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        let titleLabelLeading = titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26)
         
         switch configForScreen {
         case .doctorDetail:

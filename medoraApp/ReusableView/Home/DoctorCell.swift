@@ -35,7 +35,7 @@ class DoctorCell: UICollectionViewCell {
         i.image = UIImage(systemName: "person.circle")
         i.tintColor = UIColor.gray
         i.layer.masksToBounds = true
-        i.layer.cornerRadius = 50
+      //  i.layer.cornerRadius = 50
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
@@ -97,10 +97,9 @@ class DoctorCell: UICollectionViewCell {
         [nameLabel, ratingView, imageView, specializationLabel].forEach { containerView.addSubview($0) }
         
         [starImageView, ratingLabel].forEach { ratingView.addSubview($0) }
-        
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: 100),
-            imageView.heightAnchor.constraint(equalToConstant: 100),
+            imageView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.606),
+            imageView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.414),
             imageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 28),
             imageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             
@@ -136,6 +135,8 @@ class DoctorCell: UICollectionViewCell {
         layer.shadowRadius = 8
         layer.shadowOffset = CGSize(width: 0, height: 4)
         layer.masksToBounds = false
+        print(containerView.frame.height, containerView.frame.width)
+
     }
     
     func config(doctor: Doctor?){
@@ -147,6 +148,7 @@ class DoctorCell: UICollectionViewCell {
             specializationLabel.text = doctor?.specialization
             ratingLabel.text = String(doctor?.ratingAverage ?? 0)
         }
+        imageView.layer.cornerRadius = imageView.frame.height / 2
     }
 }
 
@@ -173,10 +175,6 @@ extension DoctorCell{
     }
     
     private func showSkeleton() {
-//        nameLabel.isHidden = true
-//        specializationLabel.isHidden = true
-//        ratingView.isHidden = true
-//        imageView.isHidden = true
         containerSkeleton.isHidden = false
         containerSkeleton.startShimmering()
     }

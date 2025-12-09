@@ -16,6 +16,6 @@ class ReviewManager: ReviewUseCase {
     }
     
     func postReview(endpoint: ReviewEndpoint, parameters: Parameters, completion: @escaping ((CoreModel<Review>?, String?) -> Void)) {
-        adapter.request(url: endpoint.path, model: Review.self, method: .post, parameters: parameters, encoding: JSONEncoding(), completion: completion)
+        adapter.request(url: endpoint.path, model: Review.self, method: .post, parameters: parameters, encoding: .json, completion: completion)
     }
 }

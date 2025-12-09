@@ -8,13 +8,17 @@
 import Foundation
 import Alamofire
 
+enum Encoding {
+    case url, json
+}
+
 class NetworkingAdapter {
     
     func request<T: Codable>(url: String,
                              model: T.Type,
                              method: HTTPMethod,
                              parameters: Parameters? = nil,
-                             encoding: ParameterEncoding = URLEncoding.default,
+                             encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers,
                              completion:  @escaping ((CoreModel<T>?, String?)-> Void)) {
         Task {
@@ -25,7 +29,7 @@ class NetworkingAdapter {
         AF.request(url,
                    method: method,
                    parameters: parameters,
-                   encoding: encoding, headers: header).validate(statusCode: 200..<300).responseDecodable(of: CoreModel<T>.self) { response in
+                   encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header).validate(statusCode: 200..<300).responseDecodable(of: CoreModel<T>.self) { response in
             switch response.result {
             case .success(let data):
                 completion(data, nil)
@@ -40,7 +44,7 @@ class NetworkingAdapter {
                                          errorModel: Y.Type,
                                          method: HTTPMethod,
                                          parameters: Parameters? = nil,
-                                         encoding: ParameterEncoding = URLEncoding.default,
+                                         encoding: Encoding = .url,
                                          header: HTTPHeaders? = NetworkingHelper.shared.headers,
                                          completion:  @escaping ((T?,Y?)-> Void)) {
         Task {
@@ -51,7 +55,7 @@ class NetworkingAdapter {
         AF.request(url,
                    method: method,
                    parameters: parameters,
-                   encoding: encoding, headers: header).responseData{ response in
+                   encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header).responseData{ response in
             switch response.result {
             case .success(let data):
                 if  (response.response?.statusCode == 201 || response.response?.statusCode == 200) {
@@ -85,7 +89,7 @@ class NetworkingAdapter {
                              model: T.Type,
                              method: HTTPMethod,
                              parameters: Parameters? = nil,
-                             encoding: ParameterEncoding = URLEncoding.default,
+                             encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers) async throws -> CoreModel<T>?{
         Task {
             if await !NetworkingHelper.shared.hasInternet() {
@@ -95,7 +99,7 @@ class NetworkingAdapter {
         return try await AF.request(url,
                                     method: method,
                                     parameters: parameters,
-                                    encoding: encoding, headers: header).serializingDecodable(CoreModel<T>.self).value
+                                    encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header).serializingDecodable(CoreModel<T>.self).value
     }
     
 }

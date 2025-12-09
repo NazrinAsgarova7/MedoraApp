@@ -26,7 +26,7 @@ class ReviewCell: UITableViewCell {
     
     private lazy var ratingView: ContanierView = {
         let contanierView = ContanierView(image: "star.fill", title: "5", configForScreen: .doctorDetail)
-        contanierView.translatesAutoresizingMaskIntoConstraints  = false
+        contanierView.translatesAutoresizingMaskIntoConstraints = false
         return contanierView
     }()
     

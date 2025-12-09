@@ -9,6 +9,15 @@ import Foundation
 import UIKit
 
 class ProfileViewModel {
+    let icons = [("text.document", "Appointments"),
+                 ("shield", "Privacy & Security"),
+                 ("questionmark", "Help & Support"),
+                 ("rectangle.portrait.and.arrow.right", "Logout")]
+    
+    let iconsForHelp = [
+        ("envelope","medora@gmail.com"),
+        ("phone","012-789-98-98")
+    ]
     func getUserData(key: UserDefaultEnum) -> String {
         UserDefaultManager.shared.getData(key: key)
     }

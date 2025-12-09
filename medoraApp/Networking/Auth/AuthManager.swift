@@ -12,6 +12,6 @@ class AuthManager: AuthUseCase{
     let adapter = NetworkingAdapter()
     
     func auth(endpoint: AuthEndpoint, parameters: Parameters ,completion: @escaping ((AuthResult?, Error?) -> Void)) {
-        adapter.request(url: endpoint.path, successModel: AuthResult.self, errorModel: Error.self, method: .post, parameters: parameters, encoding: JSONEncoding(), completion: completion)
+        adapter.request(url: endpoint.path, successModel: AuthResult.self, errorModel: Error.self, method: .post, parameters: parameters, encoding: .json, completion: completion)
     }
 }

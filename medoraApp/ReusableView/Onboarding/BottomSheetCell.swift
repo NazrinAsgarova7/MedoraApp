@@ -7,14 +7,9 @@
 
 import UIKit
 
-struct BottomSheetCellModel: BottomSheetCellProtocol {
+struct BottomSheetCellModel {
     var title: String
     var description: String
-}
-
-protocol BottomSheetCellProtocol {
-    var title: String { get }
-    var description: String { get }
 }
 
 class BottomSheetCell: UICollectionViewCell {
@@ -65,7 +60,7 @@ class BottomSheetCell: UICollectionViewCell {
         ])
     }
     
-    func config(model: BottomSheetCellProtocol) {
+    func config(model: BottomSheetCellModel) {
         titleLabel.text = model.title
         titleLabel.set(line: 8)
         descriptionLabel.text = model.description

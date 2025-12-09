@@ -293,8 +293,16 @@ class RegisterController: BaseController {
     }
     
     @objc func signUp() {
-        viewModel.register(username: usernameTextField.text ?? "", email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+        let username = (usernameTextField.text ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+        let email = (emailTextField.text ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+        let password = (passwordTextField.text ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
         
+        viewModel.register(username: username, email: email, password: password)
     }
     
     override func configVM() {

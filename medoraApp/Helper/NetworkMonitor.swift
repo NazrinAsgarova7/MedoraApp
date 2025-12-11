@@ -15,7 +15,7 @@ final class NetworkMonitor {
     private let queue = DispatchQueue(label: "NetworkMonitor")
     
     var isConnected: Bool = false
-    var isExpensive: Bool = false // WiFi yoxsa Mobile Data
+    var isExpensive: Bool = false
     
     private init() {
         startMonitoring()
@@ -26,24 +26,13 @@ final class NetworkMonitor {
             self?.isConnected = path.status == .satisfied
             self?.isExpensive = path.isExpensive
             
-            // UI-ı yeniləmək üçün Main thread-ə keç
-            DispatchQueue.main.async {
                 if path.status == .satisfied {
                     print("Internet var")
-                    // Burada internet varsa nəsə et
                 } else {
                     print("Internet yoxdur")
-                    // Burada internet yoxdursa xəbərdarlıq göstər və s.
-                 //   self?.showNoInternetAlert()
                 }
-            }
         }
-        
         monitor.start(queue: queue)
-    }
-    
-    func stopMonitoring() {
-        monitor.cancel()
     }
 }
 

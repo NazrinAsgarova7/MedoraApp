@@ -13,7 +13,6 @@ enum Encoding {
 }
 
 class NetworkingAdapter {
-    
     func request<T: Codable>(url: String,
                              model: T.Type,
                              method: HTTPMethod,
@@ -21,11 +20,15 @@ class NetworkingAdapter {
                              encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers,
                              completion:  @escaping ((CoreModel<T>?, String?)-> Void)) {
-        Task {
-            if await !NetworkingHelper.shared.hasInternet() {
-                return
-            }
+        
+        if NetworkMonitor.shared.isConnected {
+            print("Internet var, API çağrısı edə bilərsən")
+        } else {
+            print("Internet yoxdur")
+            completion(nil, nil)
+            return
         }
+        
         AF.request(url,
                    method: method,
                    parameters: parameters,
@@ -47,10 +50,12 @@ class NetworkingAdapter {
                                          encoding: Encoding = .url,
                                          header: HTTPHeaders? = NetworkingHelper.shared.headers,
                                          completion:  @escaping ((T?,Y?)-> Void)) {
-        Task {
-            if await !NetworkingHelper.shared.hasInternet() {
-                return
-            }
+        if NetworkMonitor.shared.isConnected {
+            print("Internet var, API çağrısı edə bilərsən")
+        } else {
+            print("Internet yoxdur")
+            completion(nil, nil)
+            return
         }
         AF.request(url,
                    method: method,
@@ -91,10 +96,11 @@ class NetworkingAdapter {
                              parameters: Parameters? = nil,
                              encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers) async throws -> CoreModel<T>?{
-        Task {
-            if await !NetworkingHelper.shared.hasInternet() {
-                return
-            }
+        if NetworkMonitor.shared.isConnected {
+            print("Internet var, API çağrısı edə bilərsən")
+        } else {
+            print("Internet yoxdur")
+            return nil
         }
         return try await AF.request(url,
                                     method: method,

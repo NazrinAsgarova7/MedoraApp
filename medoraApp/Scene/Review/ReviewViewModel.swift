@@ -44,9 +44,10 @@ class ReviewViewModel {
         manager.postReview(endpoint: .getReviews(doctorId: id), parameters: parameters) { [weak self] data, error in
             if let data {
                 self?.getDoctorReviews()
-             //   self?.completion?(.success)
             } else if let error {
                 self?.completion?(.error(error))
+            } else {
+                self?.completion?(.error("Internet Error"))
             }
         }
     }

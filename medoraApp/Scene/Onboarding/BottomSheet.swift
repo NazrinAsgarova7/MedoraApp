@@ -95,8 +95,9 @@ class BottomSheet: BaseController {
     
     @objc func tappedNextButton() {
         if nextButton.titleLabel?.text == "Get Started" {
-            let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
-            coordinator.start()
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let delegate = scene.delegate as? SceneDelegate else { return }
+            delegate.registerRoot()
         }
         
         pageControl.currentPage += 1
@@ -110,11 +111,13 @@ class BottomSheet: BaseController {
     
     @objc func tappedSkipButton() {
         if skipButton.titleLabel?.text == "Already Have an Account?" {
-            let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
-            coordinator.start()
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let delegate = scene.delegate as? SceneDelegate else { return }
+            delegate.loginRoot()
         } else {
-            let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
-            coordinator.start()
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let delegate = scene.delegate as? SceneDelegate else { return }
+            delegate.registerRoot()
         }
     }
 }

@@ -27,13 +27,13 @@ class RegisterViewModel{
             "password": password
         ]
         manager.auth(endpoint: .register, parameters: parameters) { [weak self] data, error in
-            if let data{
+            if let data {
                 if data.user != nil {
                     self?.completion?(ViewState.success(data))
                 } else {
                     self?.completion?(ViewState.error("Error"))
                 }
-            } else if let error{
+            } else if let error {
                 if let err = error.error {
                     self?.completion?(ViewState.error(err))
                 } else if let _ = error.fieldErrors?.email {
@@ -41,6 +41,8 @@ class RegisterViewModel{
                 } else if let _ = error.fieldErrors?.password {
                     self?.completion?(ViewState.error("Password must contain at least 6 character"))
                 }
+            } else {
+                self?.completion?(.error("Internet Error"))
             }
         }
     }

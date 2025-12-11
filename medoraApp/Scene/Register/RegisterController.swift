@@ -206,8 +206,11 @@ class RegisterController: BaseController {
             usernameImage.widthAnchor.constraint(equalToConstant: 24),
             usernameImage.heightAnchor.constraint(equalToConstant: 24),
             
-            usernameTextField.centerYAnchor.constraint(equalTo: usernameContainerView.centerYAnchor),
             usernameTextField.leadingAnchor.constraint(equalTo: usernameImage.trailingAnchor, constant: 16),
+            usernameTextField.leadingAnchor.constraint(equalTo: usernameContainerView.trailingAnchor, constant: 16),
+            usernameTextField.topAnchor.constraint(equalTo: usernameContainerView.topAnchor),
+            usernameTextField.bottomAnchor.constraint(equalTo: usernameContainerView.bottomAnchor),
+            usernameTextField.trailingAnchor.constraint(equalTo: usernameContainerView.trailingAnchor, constant: -8),
             
             emailContainerView.topAnchor.constraint(equalTo: usernameContainerView.bottomAnchor,
                                                     constant: 16),
@@ -221,8 +224,10 @@ class RegisterController: BaseController {
             emailImage.widthAnchor.constraint(equalToConstant: 24),
             emailImage.heightAnchor.constraint(equalToConstant: 24),
             
-            emailTextField.centerYAnchor.constraint(equalTo: emailContainerView.centerYAnchor),
             emailTextField.leadingAnchor.constraint(equalTo: emailImage.trailingAnchor, constant: 16),
+            emailTextField.topAnchor.constraint(equalTo: emailContainerView.topAnchor),
+            emailTextField.bottomAnchor.constraint(equalTo: emailContainerView.bottomAnchor),
+            emailTextField.trailingAnchor.constraint(equalTo: emailContainerView.trailingAnchor, constant: -8),
             
             passwordContainerView.topAnchor.constraint(equalTo: emailContainerView.bottomAnchor,
                                                        constant: 16),
@@ -241,8 +246,10 @@ class RegisterController: BaseController {
             visibilityButton.widthAnchor.constraint(equalToConstant: 24),
             visibilityButton.heightAnchor.constraint(equalToConstant: 24),
             
-            passwordTextField.centerYAnchor.constraint(equalTo: passwordContainerView.centerYAnchor),
             passwordTextField.leadingAnchor.constraint(equalTo: passwordImage.trailingAnchor, constant: 16),
+            passwordTextField.topAnchor.constraint(equalTo: passwordContainerView.topAnchor),
+            passwordTextField.bottomAnchor.constraint(equalTo: passwordContainerView.bottomAnchor),
+            passwordTextField.trailingAnchor.constraint(equalTo: visibilityButton.leadingAnchor, constant: -8),
             
             checkBox.leadingAnchor.constraint(equalTo: passwordContainerView.leadingAnchor),
             checkBox.topAnchor.constraint(equalTo: passwordContainerView.bottomAnchor, constant: 16),
@@ -312,7 +319,6 @@ class RegisterController: BaseController {
                 let coordinator = StatusCoordinator(navigationController: self?.navigationController ?? UINavigationController(), configFor: .register)
                 coordinator.start()
             case .error(let error):
-                print(error)
                 let coordinator = StatusCoordinator(navigationController: self?.navigationController ?? UINavigationController(), configFor: .error(error: error))
                 coordinator.start()
             }
@@ -320,7 +326,7 @@ class RegisterController: BaseController {
     }
     
     @objc func signIn() {
-        let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
+        let coordinator = LoginCoordinator(navigationController: self.navigationController ?? UINavigationController())
         coordinator.start()
     }
     

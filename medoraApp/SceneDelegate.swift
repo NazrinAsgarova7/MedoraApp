@@ -10,7 +10,6 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -32,12 +31,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
     func registerRoot() {
-        window?.rootViewController = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel(manager: AuthManager())))
-        window?.makeKeyAndVisible()
+        guard let window = window else { return }
+        
+        let loginNav = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel(manager: AuthManager())))
+        
+        UIView.transition(with: window,
+                          duration: 0.4,
+                          options: .transitionCrossDissolve,
+                          animations: {
+            window.rootViewController = loginNav
+            window.makeKeyAndVisible()
+        },
+        completion: nil)
     }
+    
     func loginRoot() {
-        window?.rootViewController = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel(manager: AuthManager())))
-        window?.makeKeyAndVisible()
+        guard let window = window else { return }
+        
+        let loginNav = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel(manager: AuthManager())))
+        
+        UIView.transition(with: window,
+                          duration: 0.4,
+                          options: .transitionCrossDissolve,
+                          animations: {
+            window.rootViewController = loginNav
+            window.makeKeyAndVisible()
+        },
+        completion: nil)
     }
     func onboardingRoot() {
         UserDefaultManager.shared.removeAll()

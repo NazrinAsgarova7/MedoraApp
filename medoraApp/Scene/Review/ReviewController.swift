@@ -51,7 +51,9 @@ class ReviewController: BaseController {
                 self?.refreshControl.endRefreshing()
                 self?.tableView.reloadData()
             case .error(let error):
-                print(error)
+                self?.showAlert(title: "Error", message: error, okTitle: "Ok", onOk: {
+                    self?.refreshControl.endRefreshing()
+                })
             }
         }
     }
@@ -72,7 +74,7 @@ class ReviewController: BaseController {
         }
     }
     @objc private func pullToRefresh() {
-       // vm.removeAllData()
+        // vm.removeAllData()
         tableView.reloadData()
         vm.getDoctorReviews()
     }

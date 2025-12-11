@@ -51,6 +51,5 @@ class OnboardingController: BaseController {
             image.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ])
     }
-    
 }
 

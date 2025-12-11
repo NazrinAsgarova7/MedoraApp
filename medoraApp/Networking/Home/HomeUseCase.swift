@@ -9,6 +9,6 @@ import Foundation
 import Alamofire
 
 protocol HomeUseCase{
-    func getAllCategories(endpoint: HomeEndpoint, parameters: Parameters? ,completion: @escaping ((CoreModel<[Category]>?, String?) -> Void))
+    func getAllCategories(endpoint: HomeEndpoint,completion: @escaping ((CoreModel<[Category]>?, String?) -> Void))
     func getAllDoctors(endpoint: HomeEndpoint, parameters: Parameters? ,completion: @escaping ((CoreModel<[Doctor]>?, String?) -> Void))
 }

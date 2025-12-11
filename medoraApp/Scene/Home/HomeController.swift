@@ -118,7 +118,7 @@ class HomeController: BaseController {
             searchContainerView.addSubview($0)
         }
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 72),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -2),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             
             bellButton.heightAnchor.constraint(equalToConstant: 24),
@@ -158,7 +158,9 @@ class HomeController: BaseController {
                 self?.collectionView.allowsSelection = true
                 self?.collectionView.reloadData()
             case .error(let error):
-                print(error)
+                self?.showAlert(title: "Error", message: error, okTitle: "Ok", onOk: {
+                    self?.refreshControl.endRefreshing()
+                })
             }
         }
     }

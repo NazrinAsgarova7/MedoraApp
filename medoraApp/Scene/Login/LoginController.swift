@@ -185,8 +185,10 @@ class LoginController: BaseController {
             emailImage.widthAnchor.constraint(equalToConstant: 24),
             emailImage.heightAnchor.constraint(equalToConstant: 24),
             
-            emailTextField.centerYAnchor.constraint(equalTo: emailContainerView.centerYAnchor),
             emailTextField.leadingAnchor.constraint(equalTo: emailImage.trailingAnchor, constant: 16),
+            emailTextField.topAnchor.constraint(equalTo: emailContainerView.topAnchor),
+            emailTextField.bottomAnchor.constraint(equalTo: emailContainerView.bottomAnchor),
+            emailTextField.trailingAnchor.constraint(equalTo: emailContainerView.trailingAnchor, constant: -8),
             
             passwordContainerView.topAnchor.constraint(equalTo: emailContainerView.bottomAnchor,
                                                        constant: 16),
@@ -205,9 +207,10 @@ class LoginController: BaseController {
             visibilityButton.widthAnchor.constraint(equalToConstant: 24),
             visibilityButton.heightAnchor.constraint(equalToConstant: 24),
             
-            passwordTextField.centerYAnchor.constraint(equalTo: passwordContainerView.centerYAnchor),
             passwordTextField.leadingAnchor.constraint(equalTo: passwordImage.trailingAnchor, constant: 16),
-           
+            passwordTextField.topAnchor.constraint(equalTo: passwordContainerView.topAnchor),
+            passwordTextField.bottomAnchor.constraint(equalTo: passwordContainerView.bottomAnchor),
+            passwordTextField.trailingAnchor.constraint(equalTo: visibilityButton.leadingAnchor, constant: -8),
             
             signInButton.leadingAnchor.constraint(equalTo: passwordContainerView.leadingAnchor),
             signInButton.trailingAnchor.constraint(equalTo: passwordContainerView.trailingAnchor),
@@ -226,7 +229,6 @@ class LoginController: BaseController {
             divider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             divider.heightAnchor.constraint(equalToConstant: 20),
             
-            
             googleContainerView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 28),
             googleContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.87),
             googleContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -236,7 +238,6 @@ class LoginController: BaseController {
             appleContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.87),
             appleContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             appleContainerView.heightAnchor.constraint(equalToConstant: 56),
-            
             
             facebookContainerView.topAnchor.constraint(equalTo: appleContainerView.bottomAnchor, constant: 16),
             facebookContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.87),
@@ -259,7 +260,6 @@ class LoginController: BaseController {
                     coordinator.configFor = Status.login
                     coordinator.start()
                 case .error(let error):
-                    print(error)
                     coordinator.configFor = Status.error(error: error)
                     coordinator.start()
                 }
@@ -309,20 +309,8 @@ class LoginController: BaseController {
     }
     
     @objc func signUp() {
-        if let rootPresenter = navigationController?
-            .presentingViewController?
-            .presentingViewController {
-            if navigationController?.presentingViewController is StatusController {
-                rootPresenter.dismiss(animated: true)
-            } else if navigationController?.presentingViewController is BottomSheet {
-                let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController(), vc: self)
-                coordinator.start()
-            } else {
-                dismiss(animated: true)
-            }
-        } else {
-            navigationController?.dismiss(animated: true)
-        }
+        let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController())
+        coordinator.start()
     }
     
     @objc func changeVisibility() {

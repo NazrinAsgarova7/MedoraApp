@@ -322,10 +322,9 @@ class DoctorDetailController: BaseController {
             case .success:
                 self?.configUI()
             case .error(error: let error):
-                print(error)
+                self?.showAlert(title: "Error",message: error)
             }
         }
-        
         Task {
             await vm.getDoctorDetail()
         }

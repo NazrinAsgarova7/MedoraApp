@@ -12,8 +12,8 @@ class HomeManager: HomeUseCase {
     let adapter = NetworkingAdapter()
     
     // MARK: Category
-    func getAllCategories(endpoint: HomeEndpoint, parameters: Parameters? ,completion: @escaping ((CoreModel<[Category]>?, String?) -> Void)) {
-        adapter.request(url: endpoint.path, model: [Category].self, method: .get, parameters: parameters, encoding: .json, completion:  completion)
+    func getAllCategories(endpoint: HomeEndpoint, completion: @escaping ((CoreModel<[Category]>?, String?) -> Void)) {
+        adapter.request(url: endpoint.path, model: [Category].self, method: .get, encoding: .json, completion:  completion)
     }
     
     // MARK: Doctor

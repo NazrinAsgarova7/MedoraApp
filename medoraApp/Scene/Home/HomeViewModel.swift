@@ -24,12 +24,14 @@ class HomeViewModel {
     
    //MARK: Category
     func getCategories() {
-        manager.getAllCategories(endpoint: .getAllCategory, parameters: nil) { [weak self] data, error in
+        manager.getAllCategories(endpoint: .getAllCategory) { [weak self] data, error in
             if let data{
                 self?.completion?(.success)
                 self?.categories = data.data ?? []
             } else if let error {
                 self?.completion?(.error(error))
+            } else {
+                self?.completion?(.error("Internet Error"))
             }
         }
     }
@@ -41,6 +43,8 @@ class HomeViewModel {
                 self?.doctors = data.data ?? []
             } else if let error {
                 self?.completion?(.error(error))
+            } else {
+                self?.completion?(.error("Internet Error"))
             }
         }
     }
@@ -57,6 +61,8 @@ class HomeViewModel {
                     self?.doctors = data.data ?? []
                 } else if let error {
                     self?.completion?(.error(error))
+                } else {
+                    self?.completion?(.error("Internet Error"))
                 }
             }
         }
@@ -71,6 +77,8 @@ class HomeViewModel {
                 self?.completion?(.success)
             } else if let error {
                 self?.completion?(.error(error))
+            } else {
+                self?.completion?(.error("Internet Error"))
             }
         }
     }

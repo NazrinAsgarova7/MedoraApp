@@ -10,16 +10,14 @@ import UIKit
 
 class LoginCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var viewController: UIViewController
     
-    init(navigationController: UINavigationController, vc: UIViewController) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.viewController = vc
     }
     
     func start() {
-        let controller = UINavigationController(rootViewController: LoginController(viewModel: LoginViewModel(manager: AuthManager())))
+        let controller = LoginController(viewModel: LoginViewModel(manager: AuthManager()))
         controller.modalPresentationStyle = .fullScreen
-        viewController.show(controller, sender: nil)
+        navigationController.show(controller, sender: nil)
     }
 }

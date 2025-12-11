@@ -28,8 +28,10 @@ class LoginViewModel {
         manager.auth(endpoint: .login, parameters: parameters) { [weak self] data, error in
             if let data {
                 self?.completion?(ViewState.success(data))
-            } else {
+            } else if let error {
                 self?.completion?(ViewState.error("Incorrect usename or password"))
+            } else {
+                self?.completion?(.error("Internet Error"))
             }
         }
     }

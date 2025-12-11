@@ -10,16 +10,14 @@ import UIKit
 
 class RegisterCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var viewController: UIViewController
     
-    init(navigationController: UINavigationController, vc: UIViewController) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.viewController = vc
     }
     
     func start() {
-        let vc = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel(manager: AuthManager())))
+        let vc = RegisterController(vm: RegisterViewModel(manager: AuthManager()))
         vc.modalPresentationStyle = .fullScreen
-        viewController.show(vc, sender: nil)
+        navigationController.show(vc, sender: nil)
     }
 }

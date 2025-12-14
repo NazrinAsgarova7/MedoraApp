@@ -8,6 +8,19 @@
 import UIKit
 
 class SecondBookingController: BaseController {
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.showsVerticalScrollIndicator = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var doctorDetailContainerView: DetailView = {
         let view = DetailView()
         view.backgroundColor = .systemGray6
@@ -51,7 +64,7 @@ class SecondBookingController: BaseController {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-
+    
     private lazy var continueButton: UIButton = {
         let button = GradientButton()
         button.setTitle("Continue", for: .normal)
@@ -61,7 +74,7 @@ class SecondBookingController: BaseController {
         button.startPoint = CGPoint(x: 0, y: 0)
         button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
-        //   button.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tappedContinueButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -130,8 +143,6 @@ class SecondBookingController: BaseController {
         return picker
     }()
     
-    private var containerBottomConstraint: NSLayoutConstraint!
-    
     private lazy var additionalInfoTextView: UITextView = {
         let text = UITextView()
         text.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
@@ -160,7 +171,7 @@ class SecondBookingController: BaseController {
     
     private let vm: BookingViewModel
     private let builder: BookingBuilder
-
+    private var containerBottomConstraint: NSLayoutConstraint!
     
     init(viewModel: BookingViewModel, builder: BookingBuilder) {
         vm = viewModel
@@ -177,15 +188,32 @@ class SecondBookingController: BaseController {
     }
     
     override func configConstraint() {
-        [doctorDetailContainerView, physicalInformationLabel, genderLabel, continueButton, maleButton, femaleButton, birthdayButton, textFieldContainerView, birthdayLabel,
-         pickerContainer, mainComplaintLabel].forEach { view.addSubview($0) }
+        view.addSubview(scrollView)
+        view.addSubview(pickerContainer)
+        
+        scrollView.addSubview(contentView)
+        
+        [doctorDetailContainerView, physicalInformationLabel, genderLabel, continueButton, maleButton, femaleButton, birthdayButton, textFieldContainerView, birthdayLabel, mainComplaintLabel].forEach { contentView.addSubview($0) }
         
         textFieldContainerView.addSubview(additionalInfoTextView)
         [datePicker, doneButton].forEach { pickerContainer.addSubview($0) }
-
+        
         containerBottomConstraint = pickerContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 350)
         
         NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            
+            
             pickerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pickerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             containerBottomConstraint,
@@ -201,8 +229,8 @@ class SecondBookingController: BaseController {
             
             doctorDetailContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.914),
             doctorDetailContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.128),
-            doctorDetailContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            doctorDetailContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            doctorDetailContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            doctorDetailContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
             
             physicalInformationLabel.topAnchor.constraint(equalTo: doctorDetailContainerView.bottomAnchor, constant: 32),
             physicalInformationLabel.leadingAnchor.constraint(equalTo: doctorDetailContainerView.leadingAnchor),
@@ -245,7 +273,9 @@ class SecondBookingController: BaseController {
             continueButton.heightAnchor.constraint(equalToConstant: 56),
             continueButton.topAnchor.constraint(equalTo: additionalInfoTextView.bottomAnchor, constant: 32),
             continueButton.leadingAnchor.constraint(equalTo: additionalInfoTextView.leadingAnchor),
-            continueButton.trailingAnchor.constraint(equalTo: additionalInfoTextView.trailingAnchor)
+            continueButton.trailingAnchor.constraint(equalTo: additionalInfoTextView.trailingAnchor),
+            
+            contentView.heightAnchor.constraint(equalToConstant: 750)
         ])
     }
     
@@ -275,9 +305,10 @@ class SecondBookingController: BaseController {
             self.view.layoutIfNeeded()
         }
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy"
+        formatter.dateFormat = "yyyy-MM-dd"
         let selectedDate = formatter.string(from: datePicker.date)
         birthdayButton.setTitle(selectedDate, for: .normal)
+        builder.setBirthday(selectedDate)
     }
     
     @objc private func tappedGenderButton(_ sender: UIButton) {
@@ -303,7 +334,13 @@ class SecondBookingController: BaseController {
             sender.layer.borderColor = UIColor(named: "buttonStart")?.cgColor
             sender.backgroundColor = .informationViewBg
             sender.setTitleColor(.buttonStart, for: .normal)
+            sender.titleLabel?.text == " Male" ? builder.setGender(.male) : builder.setGender(.female)
         }
+        
+    }
+    
+    @objc private func tappedContinueButton() {
+        print(builder.build())
     }
 }
 
@@ -315,8 +352,10 @@ extension SecondBookingController: UITextViewDelegate {
     ) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
+            builder.setComment(textView.text)
             return false
         }
+        builder.setComment(textView.text)
         return textView.text.count + text.count - range.length <= 200
     }
 }

@@ -6,13 +6,15 @@
 //
 
 import Foundation
-
+enum Gender: String {
+    case male, female
+}
 class BookingBuilder {
     private var gender: String?
     private var fullname: String?
     private var email: String?
     private var phoneNumber: String?
-    private var dateOfBirht: Date?
+    private var dateOfBirht: String?
     private var additionalComment: String?
     private var rezervDate: Date?
     
@@ -22,9 +24,15 @@ class BookingBuilder {
         self.phoneNumber = phoneNumber
     }
     
-    func setGenderAndComments(gender: String?, birthdate: Date?, comment: String) {
-        self.gender = gender
-        self.dateOfBirht = birthdate
+    func setGender(_ gender: Gender) {
+        self.gender = gender.rawValue
+    }
+    
+    func setBirthday(_ birthDate: String) {
+        self.dateOfBirht = birthDate
+    }
+    
+    func setComment(_ comment: String) {
         self.additionalComment = comment
     }
     
@@ -33,13 +41,13 @@ class BookingBuilder {
     }
     
     func build() -> [String: Any] {
-        guard let date = rezervDate,
-              let comment = additionalComment,
+      //  guard let date = rezervDate,
+              guard      let comment = additionalComment,
               let gender = gender,
               let birthDate = dateOfBirht
         else { return [:]}
         return [ "userId":  UserDefaultManager.shared.getData(key: .id),
-                 "date": date,
+            //     "date": date,
                  "notes": comment,
                  "gender": gender,
                  "birthDate": birthDate]

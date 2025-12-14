@@ -97,7 +97,7 @@ class LoginController: BaseController {
         l.textColor = UIColor(named: "placeholderColor")
         l.numberOfLines = 0
         l.font = .systemFont(ofSize: 15, weight: .regular)
-        l.text = "Don’t have an account?"
+       // l.text = "Don’t have an account?"
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -105,9 +105,9 @@ class LoginController: BaseController {
     private lazy var signUpButton: UIButton = {
         let b = UIButton()
         b.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
-        b.setTitle("Sign Up", for: .normal)
+      //  b.setTitle("Sign Up", for: .normal)
         b.addTarget(self, action: #selector(signUp), for: .touchUpInside)
-        b.setTitleColor(UIColor(named: "buttonStart"), for: .normal)
+      //  b.setTitleColor(UIColor(named: "buttonStart"), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()

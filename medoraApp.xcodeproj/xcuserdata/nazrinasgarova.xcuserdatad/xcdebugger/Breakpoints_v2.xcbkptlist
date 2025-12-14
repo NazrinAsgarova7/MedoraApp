@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "80910704-A382-4513-B57C-11492158D125"
+            uuid = "622591A1-D104-4229-AD8F-7BD14C432299"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "medoraApp/Networking/Core/NetworkingAdapter.swift"
+            filePath = "medoraApp/Scene/Onboarding/BottomSheet.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "request(url:model:method:parameters:encoding:header:completion:)"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "configConstraint()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

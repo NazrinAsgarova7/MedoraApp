@@ -68,7 +68,7 @@ class FirstBookingController: BaseController {
         button.startPoint = CGPoint(x: 0, y: 0)
         button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
-        //   button.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tappedContinueButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -95,7 +95,7 @@ class FirstBookingController: BaseController {
             doctorDetailContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.914),
             doctorDetailContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.128),
             doctorDetailContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            doctorDetailContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 78),
+            doctorDetailContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             
             personalBioLabel.topAnchor.constraint(equalTo: doctorDetailContainerView.bottomAnchor, constant: 32),
             personalBioLabel.leadingAnchor.constraint(equalTo: doctorDetailContainerView.leadingAnchor),
@@ -126,6 +126,8 @@ class FirstBookingController: BaseController {
     }
     
     override func configUI() {
+        navigationController?.config()
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -150,5 +152,13 @@ class FirstBookingController: BaseController {
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    @objc private func tappedContinueButton() {
+//        let coordinator = BookingCoordinator(navigationController: self.navigationController ?? UINavigationController(), builder: BookingBuilder(), controller: <#UIViewController#>)
+//        coordinator.start()
+        
+        let controller = SecondBookingController(viewModel: viewModel, builder: BookingBuilder())
+        show(controller, sender: nil)
     }
 }

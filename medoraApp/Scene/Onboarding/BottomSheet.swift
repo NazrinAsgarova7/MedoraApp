@@ -71,7 +71,16 @@ class BottomSheet: BaseController {
         [collectionView, nextButton, skipButton, pageControl].forEach { element in
             view.addSubview(element)
         }
-        
+        let nextButtonConstraint = nextButton.bottomAnchor.constraint(equalTo: skipButton.topAnchor, constant: -8)
+        let getStartedConstraint = nextButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -68 )
+        if nextButton.titleLabel?.text == "Get Started" {
+            getStartedConstraint.isActive = true
+            nextButtonConstraint.isActive = false
+        } else {
+            nextButtonConstraint.isActive = true
+            getStartedConstraint.isActive = false
+
+        }
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: pageControl.topAnchor, constant: 28),
@@ -86,7 +95,6 @@ class BottomSheet: BaseController {
             nextButton.widthAnchor.constraint(equalToConstant: 327),
             nextButton.heightAnchor.constraint(equalToConstant: 56),
             nextButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            nextButton.bottomAnchor.constraint(equalTo: skipButton.topAnchor, constant: -8),
             
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             pageControl.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -28)
@@ -103,22 +111,16 @@ class BottomSheet: BaseController {
         pageControl.currentPage += 1
         if pageControl.currentPage + 1 == onboardingScreens.count {
             nextButton.setTitle("Get Started", for: .normal)
-            skipButton.setTitle("Already Have an Account?", for: .normal)
+            skipButton.isHidden = true
+            configConstraint()
         }
         collectionView.scrollToItem(at: IndexPath(item: pageControl.currentPage, section: 0), at: .centeredHorizontally, animated: true)
-        
     }
     
     @objc func tappedSkipButton() {
-        if skipButton.titleLabel?.text == "Already Have an Account?" {
-            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let delegate = scene.delegate as? SceneDelegate else { return }
-            delegate.loginRoot()
-        } else {
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let delegate = scene.delegate as? SceneDelegate else { return }
             delegate.registerRoot()
-        }
     }
 }
 

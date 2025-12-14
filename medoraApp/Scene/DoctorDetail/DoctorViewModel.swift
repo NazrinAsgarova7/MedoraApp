@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 class DoctorViewModel {
     enum ViewState {
@@ -14,7 +13,6 @@ class DoctorViewModel {
         case error(error: String)
     }
     let manager: DoctorDetailUseCase
-    var doctorImage: UIImageView?
     var doctorDetail: Doctor?
     var completion: ((ViewState) -> Void)?
     var id: String

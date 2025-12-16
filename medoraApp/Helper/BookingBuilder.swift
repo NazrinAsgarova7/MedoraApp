@@ -16,7 +16,7 @@ class BookingBuilder {
     private var phoneNumber: String?
     private var dateOfBirht: String?
     private var additionalComment: String?
-    private var rezervDate: Date?
+    private var rezervDate: String?
     
     func setUser(fullname: String?, email: String?, phoneNumber: String?) {
         self.fullname = fullname
@@ -36,18 +36,18 @@ class BookingBuilder {
         self.additionalComment = comment
     }
     
-    func setReservDate(day: String, time: String) {
-    
+    func setReservDate(date: String) {
+        self.rezervDate = date
     }
     
     func build() -> [String: Any] {
-      //  guard let date = rezervDate,
-              guard      let comment = additionalComment,
+        guard let date = rezervDate,
+              let comment = additionalComment,
               let gender = gender,
               let birthDate = dateOfBirht
         else { return [:]}
         return [ "userId":  UserDefaultManager.shared.getData(key: .id),
-            //     "date": date,
+                 "date": date,
                  "notes": comment,
                  "gender": gender,
                  "birthDate": birthDate]

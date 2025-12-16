@@ -349,7 +349,7 @@ class DoctorDetailController: BaseController {
     }
     
     @objc private func tappedBookButton() {
-        let controller = FirstBookingController(viewModel: BookingViewModel(doctor: vm.doctorDetail))
+        let controller = FirstBookingController(viewModel: BookingViewModel(doctor: vm.doctorDetail, manager: BookingManager(), builder: BookingBuilder()))
         show(controller, sender: nil)
     }
 }

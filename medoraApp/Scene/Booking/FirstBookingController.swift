@@ -155,10 +155,7 @@ class FirstBookingController: BaseController {
     }
     
     @objc private func tappedContinueButton() {
-//        let coordinator = BookingCoordinator(navigationController: self.navigationController ?? UINavigationController(), builder: BookingBuilder(), controller: <#UIViewController#>)
-//        coordinator.start()
-        
-        let controller = SecondBookingController(viewModel: viewModel, builder: BookingBuilder())
+        let controller = SecondBookingController(viewModel: viewModel)
         show(controller, sender: nil)
     }
 }

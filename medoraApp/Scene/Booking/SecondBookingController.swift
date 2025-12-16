@@ -8,13 +8,14 @@
 import UIKit
 
 class SecondBookingController: BaseController {
+    
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private lazy var contentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -126,7 +127,7 @@ class SecondBookingController: BaseController {
     private lazy var pickerContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -170,12 +171,10 @@ class SecondBookingController: BaseController {
     }()
     
     private let vm: BookingViewModel
-    private let builder: BookingBuilder
     private var containerBottomConstraint: NSLayoutConstraint!
     
-    init(viewModel: BookingViewModel, builder: BookingBuilder) {
+    init(viewModel: BookingViewModel) {
         vm = viewModel
-        self.builder = builder
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -210,9 +209,7 @@ class SecondBookingController: BaseController {
             contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            
             
             pickerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pickerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -280,6 +277,7 @@ class SecondBookingController: BaseController {
     }
     
     override func configUI() {
+        navigationController?.config()
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -308,7 +306,7 @@ class SecondBookingController: BaseController {
         formatter.dateFormat = "yyyy-MM-dd"
         let selectedDate = formatter.string(from: datePicker.date)
         birthdayButton.setTitle(selectedDate, for: .normal)
-        builder.setBirthday(selectedDate)
+        vm.builder.setBirthday(selectedDate)
     }
     
     @objc private func tappedGenderButton(_ sender: UIButton) {
@@ -334,13 +332,14 @@ class SecondBookingController: BaseController {
             sender.layer.borderColor = UIColor(named: "buttonStart")?.cgColor
             sender.backgroundColor = .informationViewBg
             sender.setTitleColor(.buttonStart, for: .normal)
-            sender.titleLabel?.text == " Male" ? builder.setGender(.male) : builder.setGender(.female)
+            sender.titleLabel?.text == " Male" ? vm.builder.setGender(.male) : vm.builder.setGender(.female)
         }
         
     }
     
     @objc private func tappedContinueButton() {
-        print(builder.build())
+        let controller = ThirdBookingController(viewModel: vm)
+        show(controller, sender: nil)
     }
 }
 
@@ -352,10 +351,10 @@ extension SecondBookingController: UITextViewDelegate {
     ) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
-            builder.setComment(textView.text)
+            vm.builder.setComment(textView.text)
             return false
         }
-        builder.setComment(textView.text)
+        vm.builder.setComment(textView.text)
         return textView.text.count + text.count - range.length <= 200
     }
 }

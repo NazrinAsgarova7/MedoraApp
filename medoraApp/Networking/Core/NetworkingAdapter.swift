@@ -44,7 +44,7 @@ class NetworkingAdapter {
     
     func request<T: Codable, Y: Codable>(url: String,
                                          successModel: T.Type,
-                                         errorModel: Y.Type,
+                                         errorModel: Y.Type?,
                                          method: HTTPMethod,
                                          parameters: Parameters? = nil,
                                          encoding: Encoding = .url,
@@ -105,7 +105,8 @@ class NetworkingAdapter {
         return try await AF.request(url,
                                     method: method,
                                     parameters: parameters,
-                                    encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header).serializingDecodable(CoreModel<T>.self).value
+                                    encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header).cURLDescription { print($0) }
+.serializingDecodable(CoreModel<T>.self).value
     }
     
 }

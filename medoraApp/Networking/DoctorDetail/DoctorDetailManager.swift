@@ -14,5 +14,4 @@ class DoctorDetailManager: DoctorDetailUseCase {
     func getDoctorDetail(endpoint: DoctorEndpoint, parameters: Parameters?) async throws -> CoreModel<Doctor>? {
         return try await adapter.request(url: endpoint.path, model: Doctor.self, method: .get)
     }
-    
 }

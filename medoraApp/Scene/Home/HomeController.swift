@@ -75,6 +75,8 @@ class HomeController: BaseController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(UserDefaultManager.shared.getData(key: .id))
     }
     
     init(vm: HomeViewModel) {

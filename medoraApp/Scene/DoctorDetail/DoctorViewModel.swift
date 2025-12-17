@@ -12,12 +12,14 @@ class DoctorViewModel {
         case success
         case error(error: String)
     }
+    let coordinator: DoctorDetailCoordinator
     let manager: DoctorDetailUseCase
     var doctorDetail: Doctor?
     var completion: ((ViewState) -> Void)?
     var id: String
     
-    init(doctorId: String, manager: DoctorDetailUseCase) {
+    init(manager: DoctorDetailUseCase, doctorId: String, coordinator: DoctorDetailCoordinator) {
+        self.coordinator = coordinator
         id = doctorId
         self.manager = manager
     }

@@ -8,6 +8,6 @@
 import Foundation
 import Alamofire
 
-protocol AuthUseCase{
+protocol AuthUseCase {
     func auth(endpoint: AuthEndpoint, parameters: Parameters ,completion: @escaping ((AuthResult?, Error?) -> Void))
 }

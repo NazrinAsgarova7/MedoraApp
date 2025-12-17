@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SecondBookingController: BaseController {
+class BookingPhysicalInfoController: BaseController {
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -170,11 +170,15 @@ class SecondBookingController: BaseController {
         return b
     }()
     
-    private let vm: BookingViewModel
+    private let coordinator: DoctorDetailCoordinator
+    private let doctor: Doctor
+    private let builder: BookingBuilder
     private var containerBottomConstraint: NSLayoutConstraint!
     
-    init(viewModel: BookingViewModel) {
-        vm = viewModel
+    init(coordinator: DoctorDetailCoordinator, builder: BookingBuilder, doctor: Doctor) {
+        self.coordinator = coordinator
+        self.doctor = doctor
+        self.builder = builder
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -187,9 +191,7 @@ class SecondBookingController: BaseController {
     }
     
     override func configConstraint() {
-        view.addSubview(scrollView)
-        view.addSubview(pickerContainer)
-        
+        [scrollView, pickerContainer].forEach { view.addSubview($0) }
         scrollView.addSubview(contentView)
         
         [doctorDetailContainerView, physicalInformationLabel, genderLabel, continueButton, maleButton, femaleButton, birthdayButton, textFieldContainerView, birthdayLabel, mainComplaintLabel].forEach { contentView.addSubview($0) }
@@ -268,11 +270,10 @@ class SecondBookingController: BaseController {
             additionalInfoTextView.topAnchor.constraint(equalTo: textFieldContainerView.topAnchor),
             
             continueButton.heightAnchor.constraint(equalToConstant: 56),
-            continueButton.topAnchor.constraint(equalTo: additionalInfoTextView.bottomAnchor, constant: 32),
+           continueButton.topAnchor.constraint(equalTo: additionalInfoTextView.bottomAnchor, constant: 32),
             continueButton.leadingAnchor.constraint(equalTo: additionalInfoTextView.leadingAnchor),
             continueButton.trailingAnchor.constraint(equalTo: additionalInfoTextView.trailingAnchor),
-            
-            contentView.heightAnchor.constraint(equalToConstant: 750)
+            continueButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100)
         ])
     }
     
@@ -283,7 +284,7 @@ class SecondBookingController: BaseController {
         view.addGestureRecognizer(tap)
         self.title = "Doctor Booking"
         physicalInformationLabel.text = "Physical Information"
-        doctorDetailContainerView.configUI(doctor: vm.doctor)
+        doctorDetailContainerView.configUI(doctor: doctor)
     }
     
     @objc private func dismissKeyboard() {
@@ -306,7 +307,7 @@ class SecondBookingController: BaseController {
         formatter.dateFormat = "yyyy-MM-dd"
         let selectedDate = formatter.string(from: datePicker.date)
         birthdayButton.setTitle(selectedDate, for: .normal)
-        vm.builder.setBirthday(selectedDate)
+        builder.setBirthday(selectedDate)
     }
     
     @objc private func tappedGenderButton(_ sender: UIButton) {
@@ -332,18 +333,17 @@ class SecondBookingController: BaseController {
             sender.layer.borderColor = UIColor(named: "buttonStart")?.cgColor
             sender.backgroundColor = .informationViewBg
             sender.setTitleColor(.buttonStart, for: .normal)
-            sender.titleLabel?.text == " Male" ? vm.builder.setGender(.male) : vm.builder.setGender(.female)
+            sender.titleLabel?.text == " Male" ? builder.setGender(.male) : builder.setGender(.female)
         }
         
     }
     
     @objc private func tappedContinueButton() {
-        let controller = ThirdBookingController(viewModel: vm)
-        show(controller, sender: nil)
+        coordinator.showCalendarScreen()
     }
 }
 
-extension SecondBookingController: UITextViewDelegate {
+extension BookingPhysicalInfoController: UITextViewDelegate {
     func textView(
         _ textView: UITextView,
         shouldChangeTextIn range: NSRange,
@@ -351,10 +351,10 @@ extension SecondBookingController: UITextViewDelegate {
     ) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
-            vm.builder.setComment(textView.text)
+            builder.setComment(textView.text)
             return false
         }
-        vm.builder.setComment(textView.text)
+        builder.setComment(textView.text)
         return textView.text.count + text.count - range.length <= 200
     }
 }

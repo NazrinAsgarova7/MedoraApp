@@ -75,8 +75,10 @@ class HomeController: BaseController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(UserDefaultManager.shared.getData(key: .id))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     init(vm: HomeViewModel) {
@@ -180,7 +182,6 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section{
         case 0:
-            print(view.frame.height, view.frame.width)
             return 1
         case 1:
             return vm.doctors?.count ?? 4
@@ -242,7 +243,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let coordinator = DoctorDetailCoordinator(navigationController: self.navigationController ?? UINavigationController(), vm: DoctorViewModel(doctorId: vm.doctors?[indexPath.row].id ?? "", manager: DoctorDetailManager()))
+        let coordinator = DoctorDetailCoordinator(navigationController: self.navigationController ?? UINavigationController(), doctor: (vm.doctors?[indexPath.row])!, builder: BookingBuilder())
         coordinator.start()
     }
 }

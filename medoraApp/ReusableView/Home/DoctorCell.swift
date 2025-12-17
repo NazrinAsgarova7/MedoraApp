@@ -135,8 +135,6 @@ class DoctorCell: UICollectionViewCell {
         layer.shadowRadius = 8
         layer.shadowOffset = CGSize(width: 0, height: 4)
         layer.masksToBounds = false
-        print(containerView.frame.height, containerView.frame.width)
-
     }
     
     func config(doctor: Doctor?){

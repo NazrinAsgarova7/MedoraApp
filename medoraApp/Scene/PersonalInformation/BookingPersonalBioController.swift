@@ -7,7 +7,20 @@
 
 import UIKit
 
-class FirstBookingController: BaseController {
+class BookingPersonalBioController: BaseController {
+    
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.showsVerticalScrollIndicator = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private lazy var doctorDetailContainerView: DetailView = {
         let view = DetailView()
@@ -73,10 +86,12 @@ class FirstBookingController: BaseController {
         return button
     }()
     
-    let viewModel: BookingViewModel
+    let coordinator: DoctorDetailCoordinator
+    let doctor: Doctor
     
-    init(viewModel: BookingViewModel) {
-        self.viewModel = viewModel
+    init(coordinator: DoctorDetailCoordinator, doctor: Doctor) {
+        self.coordinator = coordinator
+        self.doctor = doctor
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -89,13 +104,26 @@ class FirstBookingController: BaseController {
     }
     
     override func configConstraint() {
-        [doctorDetailContainerView, fullnameTextFieldView, phoneTextFieldView, emailTextFieldView, personalBioLabel, continueButton].forEach { view.addSubview($0) }
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [doctorDetailContainerView, fullnameTextFieldView, phoneTextFieldView, emailTextFieldView, personalBioLabel, continueButton].forEach { contentView.addSubview($0) }
         
         NSLayoutConstraint.activate([
-            doctorDetailContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.914),
-            doctorDetailContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.128),
-            doctorDetailContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            doctorDetailContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            
+            doctorDetailContainerView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.914),
+            doctorDetailContainerView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.128),
+            doctorDetailContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            doctorDetailContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
             
             personalBioLabel.topAnchor.constraint(equalTo: doctorDetailContainerView.bottomAnchor, constant: 32),
             personalBioLabel.leadingAnchor.constraint(equalTo: doctorDetailContainerView.leadingAnchor),
@@ -119,9 +147,8 @@ class FirstBookingController: BaseController {
             continueButton.heightAnchor.constraint(equalToConstant: 56),
             continueButton.topAnchor.constraint(equalTo: phoneTextFieldView.bottomAnchor, constant: 32),
             continueButton.leadingAnchor.constraint(equalTo: phoneTextFieldView.leadingAnchor),
-            continueButton.trailingAnchor.constraint(equalTo: phoneTextFieldView.trailingAnchor)
-            
-            
+            continueButton.trailingAnchor.constraint(equalTo: phoneTextFieldView.trailingAnchor),
+            continueButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -300)
         ])
     }
     
@@ -147,7 +174,7 @@ class FirstBookingController: BaseController {
         phoneTextFieldView.callback = { [weak self] in
             self?.view.endEditing(true)
         }
-        doctorDetailContainerView.configUI(doctor: viewModel.doctor)
+        doctorDetailContainerView.configUI(doctor: doctor)
     }
     
     @objc private func dismissKeyboard() {
@@ -155,7 +182,6 @@ class FirstBookingController: BaseController {
     }
     
     @objc private func tappedContinueButton() {
-        let controller = SecondBookingController(viewModel: viewModel)
-        show(controller, sender: nil)
+        coordinator.showPyhsicalInformationScreen()
     }
 }

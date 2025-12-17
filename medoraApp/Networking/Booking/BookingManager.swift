@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class BookingManager {
+class BookingManager: BookingUseCase {
     let adapter = NetworkingAdapter()
     
     func checkAvailability(endpoint: BookingEndpoint, completion: @escaping ((AvailabilityModel?, Error?) -> Void)) {

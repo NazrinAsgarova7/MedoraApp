@@ -25,12 +25,6 @@ final class NetworkMonitor {
         monitor.pathUpdateHandler = { [weak self] path in
             self?.isConnected = path.status == .satisfied
             self?.isExpensive = path.isExpensive
-            
-                if path.status == .satisfied {
-                    print("Internet var")
-                } else {
-                    print("Internet yoxdur")
-                }
         }
         monitor.start(queue: queue)
     }

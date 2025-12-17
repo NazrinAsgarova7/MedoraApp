@@ -8,7 +8,7 @@
 import UIKit
 
 enum Status {
-    case login, register, logout
+    case login, register, logout, success
     case error(error: String)
 }
 
@@ -201,6 +201,13 @@ class StatusController: BaseController {
                                      UIColor(named: "error") ?? .gray]
             button.setTitle("Log Out", for: .normal)
             cancelButton.isHidden = false
+        case .success:
+            titleLabel.text = "Yeay! Successfully Booked "
+            imageView.image = UIImage(systemName: "checkmark")
+            imageView.tintColor = UIColor(named: "success")
+            descriptionLabel.text = "Ugurla rezerv edildi! Rezerv saatini qacirtmayin!"
+            descriptionLabel.set(line: 8)
+            button.setTitle("Ok", for: .normal)
         }
     }
     
@@ -217,6 +224,10 @@ class StatusController: BaseController {
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let delegate = scene.delegate as? SceneDelegate else { return }
             delegate.onboardingRoot()
+        case "Ok":
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let delegate = scene.delegate as? SceneDelegate else { return }
+            delegate.tabbarRoot()
         default:
             dismiss(animated: true)
         }

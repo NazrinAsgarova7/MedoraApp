@@ -9,6 +9,19 @@ import UIKit
 
 class DoctorDetailController: BaseController {
 
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.showsVerticalScrollIndicator = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var doctorImage: UIImageView = {
         var img = UIImageView()
         img.contentMode = .scaleAspectFill
@@ -215,7 +228,10 @@ class DoctorDetailController: BaseController {
     }
     
     override func configConstraint() {
-        [doctorImage, doctorDetailContainerView, bookContainerView, yearsContainerView, patientsContainerView, experienceTitleLabel, ratingContainerView, seeAllButton].forEach { view.addSubview($0) }
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        [doctorImage, doctorDetailContainerView, bookContainerView, yearsContainerView, patientsContainerView, experienceTitleLabel, ratingContainerView, seeAllButton].forEach { contentView.addSubview($0) }
         
         [ratingView, doctorName, locationView, specializationView].forEach { doctorDetailContainerView.addSubview($0) }
         
@@ -229,14 +245,26 @@ class DoctorDetailController: BaseController {
         ratingContainerView.addSubview(ratingTitleLabel)
         
         NSLayoutConstraint.activate([
-            doctorImage.topAnchor.constraint(equalTo: view.topAnchor),
-            doctorImage.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            doctorImage.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            
+            doctorImage.topAnchor.constraint(equalTo: contentView.topAnchor),
+            doctorImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            doctorImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             doctorImage.heightAnchor.constraint(equalToConstant: 342),
             
-            doctorDetailContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.955),
-            doctorDetailContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            doctorDetailContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 309),
+            doctorDetailContainerView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.955),
+            doctorDetailContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            doctorDetailContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 309),
             doctorDetailContainerView.heightAnchor.constraint(equalToConstant: 114),
             
             ratingView.topAnchor.constraint(equalTo: doctorName.bottomAnchor, constant: 20),
@@ -302,6 +330,7 @@ class DoctorDetailController: BaseController {
             ratingContainerView.leadingAnchor.constraint(equalTo: bookContainerView.leadingAnchor),
             ratingContainerView.heightAnchor.constraint(equalToConstant: 86),
             ratingContainerView.topAnchor.constraint(equalTo: yearsContainerView.bottomAnchor, constant: 12),
+            ratingContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50),
             
             ratingLabel.topAnchor.constraint(equalTo: ratingContainerView.topAnchor, constant: 14),
             ratingLabel.leadingAnchor.constraint(equalTo: yearsLabel.leadingAnchor),
@@ -349,7 +378,6 @@ class DoctorDetailController: BaseController {
     }
     
     @objc private func tappedBookButton() {
-        let controller = FirstBookingController(viewModel: BookingViewModel(doctor: vm.doctorDetail, manager: BookingManager(), builder: BookingBuilder()))
-        show(controller, sender: nil)
+        vm.coordinator.showPersonalInformationScreen()
     }
 }

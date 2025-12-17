@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ThirdBookingController: BaseController {
+class BookingCalendarController: BaseController {
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
@@ -91,15 +91,13 @@ class ThirdBookingController: BaseController {
     }()
     
     private var freeSlots: [String] = []
-    var onSelect: ((String) -> Void)?
-    private let vm: BookingViewModel
+    private var onSelect: ((String) -> Void)?
+    private let vm: BookingCalendarViewModel
     private var containerBottomConstraint: NSLayoutConstraint!
-    
-    
     private var selectedDay: Date?
     private var selectedTime: String?
     
-    init(viewModel: BookingViewModel) {
+    init(viewModel: BookingCalendarViewModel) {
         vm = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -154,9 +152,7 @@ class ThirdBookingController: BaseController {
             calendarView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             calendarView.topAnchor.constraint(equalTo: doctorDetailContainerView.bottomAnchor, constant: 32),
             calendarView.heightAnchor.constraint(equalToConstant: 300),
-            
-            contentView.heightAnchor.constraint(equalToConstant: 800),
-            
+                        
             doctorDetailContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.914),
             doctorDetailContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.128),
             doctorDetailContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -166,6 +162,7 @@ class ThirdBookingController: BaseController {
             bookButton.topAnchor.constraint(equalTo: timeButton.bottomAnchor, constant: 32),
             bookButton.leadingAnchor.constraint(equalTo: timeButton.leadingAnchor),
             bookButton.trailingAnchor.constraint(equalTo: timeButton.trailingAnchor),
+            bookButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -80)
         ])
     }
     
@@ -185,9 +182,14 @@ class ThirdBookingController: BaseController {
             switch viewState {
             case .error(let error):
                 print(error)
-            case .success:
-                self.freeSlots = self.vm.availabilityModel?.freeSlots ?? []
-                self.picker.reloadAllComponents()
+            case .success(let isBooked):
+                if isBooked {
+                    let coordinator = StatusCoordinator(navigationController: self.navigationController ?? UINavigationController(), configFor: .success)
+                    coordinator.start()
+                } else {
+                    self.freeSlots = self.vm.availabilityModel?.freeSlots ?? []
+                    self.picker.reloadAllComponents()
+                }
             }
         }
     }
@@ -251,7 +253,7 @@ class ThirdBookingController: BaseController {
     
 }
 
-extension ThirdBookingController: UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate {
+extension BookingCalendarController: UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate {
     func dateSelection(_ selection: UICalendarSelectionSingleDate, didSelectDate dateComponents: DateComponents?) {
         if let date = dateComponents?.date {
             selectedDay = date
@@ -278,7 +280,7 @@ extension ThirdBookingController: UICalendarViewDelegate, UICalendarSelectionSin
     }
 }
 
-extension ThirdBookingController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension BookingCalendarController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int { 1 }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int { freeSlots.count }
     

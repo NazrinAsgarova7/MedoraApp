@@ -20,11 +20,7 @@ class NetworkingAdapter {
                              encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers,
                              completion:  @escaping ((CoreModel<T>?, String?)-> Void)) {
-        
-        if NetworkMonitor.shared.isConnected {
-            print("Internet var, API çağrısı edə bilərsən")
-        } else {
-            print("Internet yoxdur")
+        if !NetworkMonitor.shared.isConnected {
             completion(nil, nil)
             return
         }
@@ -50,9 +46,7 @@ class NetworkingAdapter {
                                          encoding: Encoding = .url,
                                          header: HTTPHeaders? = NetworkingHelper.shared.headers,
                                          completion:  @escaping ((T?,Y?)-> Void)) {
-        if NetworkMonitor.shared.isConnected {
-            print("Internet var, API çağrısı edə bilərsən")
-        } else {
+        if !NetworkMonitor.shared.isConnected {
             print("Internet yoxdur")
             completion(nil, nil)
             return
@@ -96,16 +90,14 @@ class NetworkingAdapter {
                              parameters: Parameters? = nil,
                              encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers) async throws -> CoreModel<T>?{
-        if NetworkMonitor.shared.isConnected {
-            print("Internet var, API çağrısı edə bilərsən")
-        } else {
+        if !NetworkMonitor.shared.isConnected {
             print("Internet yoxdur")
             return nil
         }
         return try await AF.request(url,
                                     method: method,
                                     parameters: parameters,
-                                    encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header).cURLDescription { print($0) }
+                                    encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header)
 .serializingDecodable(CoreModel<T>.self).value
     }
     

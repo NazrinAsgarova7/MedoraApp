@@ -126,6 +126,10 @@ class LoginController: BaseController {
         googleContainerView.layer.cornerRadius = 24
         googleContainerView.layer.borderColor = UIColor(named: "textBorderColor")?.cgColor
         googleContainerView.layer.borderWidth = 1
+        googleContainerView.isUserInteractionEnabled = true
+
+                let tap = UITapGestureRecognizer(target: self, action: #selector(myViewTapped))
+        googleContainerView.addGestureRecognizer(tap)
         googleContainerView.translatesAutoresizingMaskIntoConstraints = false
         return googleContainerView
     }()
@@ -317,4 +321,11 @@ class LoginController: BaseController {
         passwordTextField.isSecureTextEntry.toggle()
         passwordTextField.isSecureTextEntry ? visibilityButton.setImage(UIImage(systemName: "eye.slash"), for: .normal) : visibilityButton.setImage(UIImage(systemName: "eye"), for: .normal)
     }
+    
+    @objc private func myViewTapped() {
+        // burda istədiyin func çağır
+        print("Tapped!")
+        vm.loginWithGoogle()
+    }
+
 }

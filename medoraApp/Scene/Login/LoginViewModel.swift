@@ -10,7 +10,8 @@ import Foundation
 class LoginViewModel {
     let manager: AuthUseCase
     var completion: ((ViewState) -> Void)?
-
+    let adapter = LoginAdapter()
+    
     enum ViewState{
         case success(AuthResult)
         case error(String)
@@ -18,6 +19,9 @@ class LoginViewModel {
     
     init(manager: AuthUseCase) {
         self.manager = manager
+        adapter.completion = { viewstate in
+            print("success")
+        }
     }
     
     func login(email: String, password: String){
@@ -38,5 +42,9 @@ class LoginViewModel {
     
     func saveUser(user: AuthResult){
         UserDefaultManager.shared.saveUser(user: user)
+    }
+    
+    func loginWithGoogle() {
+        adapter.login(controller: LoginController(viewModel: self), method: .google)
     }
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF5D4CC32EF353840080E526 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D4CC22EF353840080E526 /* GoogleSignIn */; };
+		FF5D4CC52EF353840080E526 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D4CC42EF353840080E526 /* GoogleSignInSwift */; };
 		FF6103E32EC60CBD00A81139 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF6103E22EC60CBD00A81139 /* Alamofire */; };
 		FF6B00B52EE1977F0068540D /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = FF6B00B42EE1977F0068540D /* Cosmos */; };
 /* End PBXBuildFile section */
@@ -43,6 +45,8 @@
 			files = (
 				FF6B00B52EE1977F0068540D /* Cosmos in Frameworks */,
 				FF6103E32EC60CBD00A81139 /* Alamofire in Frameworks */,
+				FF5D4CC32EF353840080E526 /* GoogleSignIn in Frameworks */,
+				FF5D4CC52EF353840080E526 /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +91,8 @@
 			packageProductDependencies = (
 				FF6103E22EC60CBD00A81139 /* Alamofire */,
 				FF6B00B42EE1977F0068540D /* Cosmos */,
+				FF5D4CC22EF353840080E526 /* GoogleSignIn */,
+				FF5D4CC42EF353840080E526 /* GoogleSignInSwift */,
 			);
 			productName = medoraApp;
 			productReference = FF70C36F2EBE190C004CFC77 /* medoraApp.app */;
@@ -119,6 +125,7 @@
 			packageReferences = (
 				FF6103E12EC60CBD00A81139 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				FF6B00B32EE1977F0068540D /* XCRemoteSwiftPackageReference "Cosmos" */,
+				FF5D4CC12EF353840080E526 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FF70C3702EBE190C004CFC77 /* Products */;
@@ -348,6 +355,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		FF5D4CC12EF353840080E526 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		FF6103E12EC60CBD00A81139 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -367,6 +382,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FF5D4CC22EF353840080E526 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D4CC12EF353840080E526 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		FF5D4CC42EF353840080E526 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D4CC12EF353840080E526 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		FF6103E22EC60CBD00A81139 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF6103E12EC60CBD00A81139 /* XCRemoteSwiftPackageReference "Alamofire" */;

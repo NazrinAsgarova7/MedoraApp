@@ -72,6 +72,12 @@ class HomeController: BaseController {
     }()
     private let vm: HomeViewModel
     private let refreshControl = UIRefreshControl()
+    private let emptyView: EmptyView = {
+        let view = EmptyView()
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,7 +123,7 @@ class HomeController: BaseController {
     }
     
     override func configConstraint() {
-        [collectionView, searchContainerView, titleLabel, bellButton].forEach { view.addSubview($0) }
+        [collectionView, searchContainerView, titleLabel, bellButton, emptyView].forEach { view.addSubview($0) }
         [searchImage, searchTextField].forEach {
             searchContainerView.addSubview($0)
         }
@@ -134,6 +140,11 @@ class HomeController: BaseController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            emptyView.topAnchor.constraint(equalTo: searchContainerView.bottomAnchor, constant: 156),
+            emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             searchContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             searchContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -158,6 +169,13 @@ class HomeController: BaseController {
         vm.completion = { [weak self] viewState in
             switch viewState {
             case .success:
+                if self?.vm.doctors?.count == 0 {
+                    self?.emptyView.isHidden = false
+                    self?.emptyView.configUI(message: "Try adjusting your search to find what you are looking for", img: .searchEmptyState)
+                } else {
+                    self?.collectionView.isHidden = false
+                    self?.emptyView.isHidden = true
+                }
                 self?.refreshControl.endRefreshing()
                 self?.collectionView.allowsSelection = true
                 self?.collectionView.reloadData()

@@ -172,11 +172,7 @@ class BookingCalendarController: BaseController {
     }
     
     override func configVM() {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = .current
-        formatter.dateFormat = "yyyy-MM-dd"
-        vm.checkAvailability(date: formatter.string(from: Date()))
+        vm.checkAvailability(date: Date().yyMMddDateFormat())
         
         vm.completion = { viewState in
             switch viewState {
@@ -257,11 +253,7 @@ extension BookingCalendarController: UICalendarViewDelegate, UICalendarSelection
     func dateSelection(_ selection: UICalendarSelectionSingleDate, didSelectDate dateComponents: DateComponents?) {
         if let date = dateComponents?.date {
             selectedDay = date
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = .current
-            formatter.dateFormat = "yyyy-MM-dd"
-            vm.checkAvailability(date: formatter.string(from: date))
+            vm.checkAvailability(date: date.yyMMddDateFormat())
         }
     }
     

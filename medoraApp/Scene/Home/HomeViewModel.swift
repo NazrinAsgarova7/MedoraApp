@@ -25,9 +25,9 @@ class HomeViewModel {
    //MARK: Category
     func getCategories() {
         manager.getAllCategories(endpoint: .getAllCategory) { [weak self] data, error in
-            if let data{
-                self?.completion?(.success)
+            if let data {
                 self?.categories = data.data ?? []
+                self?.completion?(.success)
             } else if let error {
                 self?.completion?(.error(error))
             } else {
@@ -39,8 +39,8 @@ class HomeViewModel {
     func getAllDoctors() {
         manager.getAllDoctors(endpoint: .doctor, parameters: nil) { [weak self] data, error in
             if let data {
-                self?.completion?(.success)
                 self?.doctors = data.data ?? []
+                self?.completion?(.success)
             } else if let error {
                 self?.completion?(.error(error))
             } else {
@@ -57,8 +57,8 @@ class HomeViewModel {
             selectedCategoryId = index
             manager.getAllDoctors(endpoint: .getDoctorByCategoryId(id: id), parameters: nil) { [weak self] data, error in
                 if let data {
-                    self?.completion?(.success)
                     self?.doctors = data.data ?? []
+                    self?.completion?(.success)
                 } else if let error {
                     self?.completion?(.error(error))
                 } else {

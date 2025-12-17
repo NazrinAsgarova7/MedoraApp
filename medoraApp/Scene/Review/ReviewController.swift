@@ -17,6 +17,12 @@ class ReviewController: BaseController {
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
+    private lazy var emptyView: EmptyView = {
+        let view = EmptyView()
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private let refreshControl = UIRefreshControl()
     private var vm: ReviewViewModel
@@ -48,6 +54,14 @@ class ReviewController: BaseController {
         vm.completion = { [weak self] viewState in
             switch viewState {
             case .success:
+                if self?.vm.reviews?.count == 0 {
+                    self?.tableView.isHidden = true
+                    self?.emptyView.isHidden = false
+                    self?.emptyView.configUI(message: "No reviews yet. Be the first to leave a review.", img: .reviewEmptyState)
+                } else {
+                    self?.emptyView.isHidden = true
+                    self?.tableView.isHidden = false
+                }
                 self?.refreshControl.endRefreshing()
                 self?.tableView.reloadData()
             case .error(let error):
@@ -59,12 +73,18 @@ class ReviewController: BaseController {
     }
     
     override func configConstraint() {
+        [tableView, emptyView].forEach { view.addSubview($0)   }
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            emptyView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
     
@@ -73,6 +93,7 @@ class ReviewController: BaseController {
             self?.vm.postReview(rate: rating, comment: comment ?? "")
         }
     }
+    
     @objc private func pullToRefresh() {
         // vm.removeAllData()
         tableView.reloadData()

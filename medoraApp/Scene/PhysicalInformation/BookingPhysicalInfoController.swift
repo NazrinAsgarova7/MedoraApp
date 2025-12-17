@@ -303,9 +303,7 @@ class BookingPhysicalInfoController: BaseController {
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let selectedDate = formatter.string(from: datePicker.date)
+        let selectedDate = datePicker.date.yyMMddDateFormat()
         birthdayButton.setTitle(selectedDate, for: .normal)
         builder.setBirthday(selectedDate)
     }

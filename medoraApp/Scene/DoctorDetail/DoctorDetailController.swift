@@ -26,6 +26,8 @@ class DoctorDetailController: BaseController {
         var img = UIImageView()
         img.contentMode = .scaleAspectFill
         img.image = UIImage(named: "25168-min 1")
+        img.layer.cornerRadius = 16
+        img.layer.masksToBounds = true
         img.translatesAutoresizingMaskIntoConstraints = false
         return img
     }()
@@ -38,7 +40,6 @@ class DoctorDetailController: BaseController {
         view.layer.shadowOpacity = 0.05
         view.layer.shadowRadius = 8
         view.layer.shadowOffset = CGSize(width: 0, height: 4)
-        view.layer.masksToBounds = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -8,10 +8,9 @@
 import UIKit
 import PhotosUI
 
-
 class ProfileController: BaseController {
     
-    private let image: UIImageView = {
+    private lazy var image: UIImageView = {
         let i = UIImageView()
         i.image = UIImage(named: "profile")
         i.translatesAutoresizingMaskIntoConstraints = false
@@ -144,7 +143,7 @@ class ProfileController: BaseController {
         emailLabel.text = vm.getUserData(key: .email)
         loadProfileImage()
     }
-
+    
     @objc func selectPhotoTapped(){
             var config = PHPickerConfiguration()
             config.selectionLimit = 1
@@ -159,6 +158,12 @@ class ProfileController: BaseController {
         if let image = UIImage(data: data) {
             profileImage.image = image
         }
+    }
+    
+    private func showWebView() {
+        navigationController?.config()
+       let controller = PrivacyWebViewController()
+        show(controller, sender: nil)
     }
 }
 
@@ -179,6 +184,9 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        if indexPath.row == 1 {
+            showWebView()
+        }
         if indexPath.row == 2 {
             let bottomSheetVC = HelpBottomSheet(vm: self.vm)
             bottomSheetVC.modalPresentationStyle = .pageSheet

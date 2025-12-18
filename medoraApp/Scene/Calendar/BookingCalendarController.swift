@@ -85,6 +85,8 @@ class BookingCalendarController: BaseController {
         button.startPoint = CGPoint(x: 0, y: 0)
         button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
+        button.alpha = 0.6
+        button.isEnabled = false
         button.addTarget(self, action: #selector(tappedBookButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -96,6 +98,8 @@ class BookingCalendarController: BaseController {
     private var containerBottomConstraint: NSLayoutConstraint!
     private var selectedDay: Date?
     private var selectedTime: String?
+    private var isSelectedDate = false
+    private var isSelectedTime = false
     
     init(viewModel: BookingCalendarViewModel) {
         vm = viewModel
@@ -207,6 +211,8 @@ class BookingCalendarController: BaseController {
         
         let time = freeSlots[row]
         selectedTime = time
+        isSelectedTime = true
+        updateContinueButtonState()
         timeButton.setTitle(time, for: .normal)
     }
     
@@ -240,7 +246,6 @@ class BookingCalendarController: BaseController {
         iso.timeZone = TimeZone(secondsFromGMT: 0)!
         
         let isoString = iso.string(from: utcDateTime)
-        
         vm.builder.setReservDate(date: isoString)
         Task {
             await vm.bookDate()
@@ -253,6 +258,8 @@ extension BookingCalendarController: UICalendarViewDelegate, UICalendarSelection
     func dateSelection(_ selection: UICalendarSelectionSingleDate, didSelectDate dateComponents: DateComponents?) {
         if let date = dateComponents?.date {
             selectedDay = date
+            isSelectedDate = true
+            updateContinueButtonState()
             vm.checkAvailability(date: date.yyMMddDateFormat())
         }
     }
@@ -269,6 +276,16 @@ extension BookingCalendarController: UICalendarViewDelegate, UICalendarSelection
         let oneMonthLater = cal.date(byAdding: .month, value: 1, to: start)!
         let endExclusive = cal.date(byAdding: .day, value: 1, to: oneMonthLater)!
         return (date >= start) && (date < endExclusive)
+    }
+    
+    private func updateContinueButtonState() {
+        if isSelectedDate && isSelectedTime {
+            bookButton.isEnabled = true
+            bookButton.alpha = 1
+        } else {
+            bookButton.isEnabled = false
+            bookButton.alpha = 0.6
+        }
     }
 }
 

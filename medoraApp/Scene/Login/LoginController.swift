@@ -175,16 +175,11 @@ class LoginController: BaseController {
         }
         
         NSLayoutConstraint.activate([
-            emailContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                                       constant: 24),
-            emailContainerView.leadingAnchor.constraint(equalTo:
-                                                            view.leadingAnchor,
-                                                           constant: 24),
-            emailContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                            constant: -24),
+            emailContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            emailContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            emailContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             emailContainerView.heightAnchor.constraint(equalToConstant: 56),
            
-            
             emailImage.centerYAnchor.constraint(equalTo: emailContainerView.centerYAnchor),
             emailImage.leadingAnchor.constraint(equalTo: emailContainerView.leadingAnchor, constant: 24),
             emailImage.widthAnchor.constraint(equalToConstant: 24),
@@ -195,10 +190,8 @@ class LoginController: BaseController {
             emailTextField.bottomAnchor.constraint(equalTo: emailContainerView.bottomAnchor),
             emailTextField.trailingAnchor.constraint(equalTo: emailContainerView.trailingAnchor, constant: -8),
             
-            passwordContainerView.topAnchor.constraint(equalTo: emailContainerView.bottomAnchor,
-                                                       constant: 16),
-            passwordContainerView.leadingAnchor.constraint(equalTo:
-                                                            emailContainerView.leadingAnchor),
+            passwordContainerView.topAnchor.constraint(equalTo: emailContainerView.bottomAnchor, constant: 16),
+            passwordContainerView.leadingAnchor.constraint(equalTo: emailContainerView.leadingAnchor),
             passwordContainerView.trailingAnchor.constraint(equalTo: emailContainerView.trailingAnchor),
             passwordContainerView.heightAnchor.constraint(equalToConstant: 56),
             
@@ -262,7 +255,6 @@ class LoginController: BaseController {
                 print("success")
             }
         }
-
     }
     
     override func configVM() {
@@ -333,10 +325,6 @@ class LoginController: BaseController {
     }
     
     @objc private func myViewTapped() {
-        // burda istədiyin func çağır
-        print("Tapped!")
         adapter.login(controller: self, method: .google)
-      //  vm.loginWithGoogle()
     }
-
 }

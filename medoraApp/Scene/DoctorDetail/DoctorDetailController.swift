@@ -261,7 +261,7 @@ class DoctorDetailController: BaseController {
             doctorImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             doctorImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             doctorImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            doctorImage.heightAnchor.constraint(equalToConstant: 342),
+            doctorImage.heightAnchor.constraint(equalToConstant: 370),
             
             doctorDetailContainerView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.955),
             doctorDetailContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

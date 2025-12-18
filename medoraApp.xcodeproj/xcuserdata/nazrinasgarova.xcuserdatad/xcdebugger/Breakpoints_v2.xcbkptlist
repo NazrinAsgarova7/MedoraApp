@@ -34,6 +34,36 @@
             endingLineNumber = "58"
             landmarkName = "getDoctorByCategoryId(id:index:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3E970DD2-9CC0-4E25-BF92-E895FACB8806 - f8029511402fef9d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "medoraApp.HomeViewModel.getDoctorByCategoryId(id: Swift.String, index: Swift.Int) -&gt; ()"
+                  moduleName = "medoraApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nazrinasgarova/Documents/GitHub/MedoraApp/medoraApp/Scene/Home/HomeViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58">
+               </Location>
+               <Location
+                  uuid = "3E970DD2-9CC0-4E25-BF92-E895FACB8806 - d3bb692bfe26eac9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;medoraApp.CoreModel&lt;Swift.Array&lt;medoraApp.Doctor&gt;&gt;&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in medoraApp.HomeViewModel.getDoctorByCategoryId(id: Swift.String, index: Swift.Int) -&gt; ()"
+                  moduleName = "medoraApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nazrinasgarova/Documents/GitHub/MedoraApp/medoraApp/Scene/Home/HomeViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -48,8 +78,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "37"
             endingLineNumber = "37"
-            landmarkName = "LoginAdapter"
-            landmarkType = "3">
+            landmarkName = "loginWithGoogle(controller:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

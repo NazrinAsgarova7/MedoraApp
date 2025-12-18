@@ -76,6 +76,8 @@ class BookingPhysicalInfoController: BaseController {
         button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
         button.addTarget(self, action: #selector(tappedContinueButton), for: .touchUpInside)
+        button.alpha = 0.6
+        button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -174,6 +176,8 @@ class BookingPhysicalInfoController: BaseController {
     private let doctor: Doctor
     private let builder: BookingBuilder
     private var containerBottomConstraint: NSLayoutConstraint!
+    private var isSelectedBirthday = false
+    private var isSelectedGender = false
     
     init(coordinator: DoctorDetailCoordinator, builder: BookingBuilder, doctor: Doctor) {
         self.coordinator = coordinator
@@ -304,25 +308,33 @@ class BookingPhysicalInfoController: BaseController {
             self.view.layoutIfNeeded()
         }
         let selectedDate = datePicker.date.yyMMddDateFormat()
+        isSelectedBirthday = true
+        updateContinueButtonState()
         birthdayButton.setTitle(selectedDate, for: .normal)
         builder.setBirthday(selectedDate)
     }
     
     @objc private func tappedGenderButton(_ sender: UIButton) {
         if sender.isSelected {
+            isSelectedGender = false
             sender.isSelected = false
+            updateContinueButtonState()
             sender.setTitleColor(.black, for: .normal)
             sender.backgroundColor = .textBackground
             sender.layer.borderWidth = 0
         } else {
             if sender.titleLabel?.text == " Male" {
                 femaleButton.isSelected = false
+                isSelectedGender = true
+                updateContinueButtonState()
                 femaleButton.setTitleColor(.black, for: .normal)
                 femaleButton.backgroundColor = .textBackground
                 femaleButton.layer.borderWidth = 0
             } else {
                 maleButton.isSelected = false
                 maleButton.setTitleColor(.black, for: .normal)
+                isSelectedGender = true
+                updateContinueButtonState()
                 maleButton.backgroundColor = .textBackground
                 maleButton.layer.borderWidth = 0
             }
@@ -354,5 +366,15 @@ extension BookingPhysicalInfoController: UITextViewDelegate {
         }
         builder.setComment(textView.text)
         return textView.text.count + text.count - range.length <= 200
+    }
+    
+    private func updateContinueButtonState() {
+        if isSelectedGender && isSelectedBirthday {
+            continueButton.isEnabled = true
+            continueButton.alpha = 1
+        } else {
+            continueButton.isEnabled = false
+            continueButton.alpha = 0.6
+        }
     }
 }

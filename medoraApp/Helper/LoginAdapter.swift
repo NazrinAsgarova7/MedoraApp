@@ -9,17 +9,10 @@ import Foundation
 import GoogleSignIn
 
 enum LoginMethod {
-    case apple, google, facebook
+    case google
 }
 
 class LoginAdapter {
-//    var controller: UIViewController?
-//
-//    init(controller: UIViewController?) {
-//        self.controller = controller
-//    }
-    
-//    var controller = UIViewController()
     
     enum ViewState {
         case error(message: String)
@@ -33,21 +26,9 @@ class LoginAdapter {
     
     func login(controller: UIViewController, method: LoginMethod) {
         switch method {
-        case .apple:
-            loginWithApple(controller: controller)
-        case .facebook:
-            loginWithFacebook()
         case .google:
             loginWithGoogle(controller: controller)
         }
-    }
-    
-    private func loginWithApple(controller: UIViewController) {
-        
-    }
-    
-    private func loginWithFacebook() {
-        
     }
     
     private func loginWithGoogle(controller: UIViewController) {
@@ -57,7 +38,7 @@ class LoginAdapter {
 //                self.errorCompletion?(error.localizedDescription)
                 self.completion?(.error(message: error.localizedDescription))
             } else if let result {
-                //                self.successCompletion?(user)
+                print(result.user.profile?.name)
                 self.completion?(.success)
             }
         }

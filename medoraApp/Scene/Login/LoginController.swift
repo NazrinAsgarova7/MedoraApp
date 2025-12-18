@@ -148,6 +148,7 @@ class LoginController: BaseController {
     var callback: (() ->Void)?
     
     private let vm: LoginViewModel
+    let adapter = LoginAdapter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -253,6 +254,15 @@ class LoginController: BaseController {
     override func configUI() {
         self.title = "Login"
         view.backgroundColor = .systemBackground
+        adapter.completion = { [weak self] state in
+            switch state {
+            case .error(let message):
+                print(message)
+            case .success:
+                print("success")
+            }
+        }
+
     }
     
     override func configVM() {
@@ -325,7 +335,8 @@ class LoginController: BaseController {
     @objc private func myViewTapped() {
         // burda istədiyin func çağır
         print("Tapped!")
-        vm.loginWithGoogle()
+        adapter.login(controller: self, method: .google)
+      //  vm.loginWithGoogle()
     }
 
 }

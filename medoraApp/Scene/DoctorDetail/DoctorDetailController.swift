@@ -364,6 +364,7 @@ class DoctorDetailController: BaseController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.config()
         doctorName.text = vm.doctorDetail?.name
+        doctorImage.loadImage(image: vm.doctorDetail?.photoURL ?? "") 
         ratingView.configUI(image: "Star", title: String(vm.doctorDetail?.ratingAverage ?? 0))
         locationView.configUI(image: "Location", title: String(vm.doctorDetail?.distanceM ?? 0) + "m")
         specializationView.configUI(image: "", title: vm.doctorDetail?.specialization)

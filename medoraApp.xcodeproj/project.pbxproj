@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FF5D4CC32EF353840080E526 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D4CC22EF353840080E526 /* GoogleSignIn */; };
 		FF5D4CC52EF353840080E526 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D4CC42EF353840080E526 /* GoogleSignInSwift */; };
+		FF5D4D842EF458DE0080E526 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5D4D832EF458DE0080E526 /* Kingfisher */; };
 		FF6103E32EC60CBD00A81139 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF6103E22EC60CBD00A81139 /* Alamofire */; };
 		FF6B00B52EE1977F0068540D /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = FF6B00B42EE1977F0068540D /* Cosmos */; };
 /* End PBXBuildFile section */
@@ -47,6 +48,7 @@
 				FF6103E32EC60CBD00A81139 /* Alamofire in Frameworks */,
 				FF5D4CC32EF353840080E526 /* GoogleSignIn in Frameworks */,
 				FF5D4CC52EF353840080E526 /* GoogleSignInSwift in Frameworks */,
+				FF5D4D842EF458DE0080E526 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +95,7 @@
 				FF6B00B42EE1977F0068540D /* Cosmos */,
 				FF5D4CC22EF353840080E526 /* GoogleSignIn */,
 				FF5D4CC42EF353840080E526 /* GoogleSignInSwift */,
+				FF5D4D832EF458DE0080E526 /* Kingfisher */,
 			);
 			productName = medoraApp;
 			productReference = FF70C36F2EBE190C004CFC77 /* medoraApp.app */;
@@ -126,6 +129,7 @@
 				FF6103E12EC60CBD00A81139 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				FF6B00B32EE1977F0068540D /* XCRemoteSwiftPackageReference "Cosmos" */,
 				FF5D4CC12EF353840080E526 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				FF5D4D822EF458DE0080E526 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FF70C3702EBE190C004CFC77 /* Products */;
@@ -363,6 +367,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		FF5D4D822EF458DE0080E526 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.6.2;
+			};
+		};
 		FF6103E12EC60CBD00A81139 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -391,6 +403,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF5D4CC12EF353840080E526 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		FF5D4D832EF458DE0080E526 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5D4D822EF458DE0080E526 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		FF6103E22EC60CBD00A81139 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

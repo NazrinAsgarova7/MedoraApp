@@ -12,6 +12,7 @@ class DetailView: UIView {
     private lazy var imageView: UIImageView = {
         let img = UIImageView()
         img.layer.borderWidth = 1
+        img.contentMode = .scaleAspectFill
         img.layer.borderColor = .init(gray: 1, alpha: 1)
         img.layer.cornerRadius = 40
         img.layer.masksToBounds = true
@@ -75,7 +76,7 @@ class DetailView: UIView {
     }
 
     func configUI(doctor: Doctor?) {
-        imageView.image = UIImage(named: "doctor")
+        imageView.loadImage(image: doctor?.photoURL ?? "")
         nameLabel.text = doctor?.name
         spelizationeLabel.text = doctor?.specialization
         ratingView.configUI(image: "Star", title: String(doctor?.ratingAverage ?? 0))

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 extension UILabel {
     func set(line: CGFloat = 0) {
@@ -62,5 +63,10 @@ extension UINavigationController {
         topViewController?.navigationItem.backButtonTitle = ""
         topViewController?.navigationItem.backButtonDisplayMode = .minimal
         navigationBar.tintColor = .black
+    }
+}
+extension UIImageView {
+    func loadImage(image: String) {
+        self.kf.setImage(with: URL(string: image))
     }
 }

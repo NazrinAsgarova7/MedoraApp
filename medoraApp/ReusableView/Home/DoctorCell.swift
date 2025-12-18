@@ -87,6 +87,12 @@ class DoctorCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imageView.layer.cornerRadius = imageView.bounds.height / 2
+        imageView.layer.masksToBounds = true
+    }
+    
     private lazy var containerSkeleton = createSkeleton()
     
     private func configConstraint() {
@@ -145,8 +151,13 @@ class DoctorCell: UICollectionViewCell {
             nameLabel.text = doctor?.name
             specializationLabel.text = doctor?.specialization
             ratingLabel.text = String(doctor?.ratingAverage ?? 0)
+            imageView.layer.cornerRadius = imageView.frame.height / 2
+            if let img = doctor?.photoURL {
+                imageView.loadImage(image: img)
+            } else {
+                imageView.image = UIImage(systemName: "person.circle")
+            }
         }
-        imageView.layer.cornerRadius = imageView.frame.height / 2
     }
 }
 

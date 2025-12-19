@@ -97,19 +97,8 @@ class LoginController: BaseController {
         l.textColor = UIColor(named: "placeholderColor")
         l.numberOfLines = 0
         l.font = .systemFont(ofSize: 15, weight: .regular)
-       // l.text = "Don’t have an account?"
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
-    }()
-    
-    private lazy var signUpButton: UIButton = {
-        let b = UIButton()
-        b.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
-      //  b.setTitle("Sign Up", for: .normal)
-        b.addTarget(self, action: #selector(signUp), for: .touchUpInside)
-      //  b.setTitleColor(UIColor(named: "buttonStart"), for: .normal)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        return b
     }()
     
     private lazy var appleContainerView: ContanierView = {
@@ -164,7 +153,7 @@ class LoginController: BaseController {
     }
     
     override func configConstraint() {
-        [emailContainerView, passwordContainerView, signInButton, questionLabel, signUpButton, divider, googleContainerView, appleContainerView, facebookContainerView].forEach { view in
+        [emailContainerView, passwordContainerView, signInButton, questionLabel, divider, googleContainerView, appleContainerView, facebookContainerView].forEach { view in
             self.view.addSubview(view)
         }
         [emailImage, emailTextField].forEach { view in
@@ -217,10 +206,6 @@ class LoginController: BaseController {
             
             questionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 69),
             questionLabel.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 24),
-            
-            signUpButton.leadingAnchor.constraint(equalTo: questionLabel.trailingAnchor, constant: 5),
-            signUpButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 24),
-            signUpButton.centerYAnchor.constraint(equalTo: questionLabel.centerYAnchor),
             
             divider.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 41),
             divider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),

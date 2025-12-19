@@ -38,7 +38,6 @@ class LoginAdapter {
 //                self.errorCompletion?(error.localizedDescription)
                 self.completion?(.error(message: error.localizedDescription))
             } else if let result {
-                print(result.user.profile?.name)
                 self.completion?(.success)
             }
         }

@@ -23,7 +23,7 @@ class PrivacyWebViewController: BaseController {
     override func configUI() {
         self.title = "Privacy & Security"
         view.addSubview(webView)
-        if let url = URL(string: "https://gist.githubusercontent.com/NazrinAsgarova7/ef7440cd0a8c01254a07bcbc2e7cd452/raw/9133e8294c101922044eaeccbe16332f810a47ff/privacy.html") {
+        if let url = URL(string: "https://gist.githubusercontent.com/NazrinAsgarova7/ef7440cd0a8c01254a07bcbc2e7cd452/raw/d9761b1426c7df8bcd3e65824a2bfbf86dfcc116/privacy.html") {
             
             URLSession.shared.dataTask(with: url) { data, _, error in
                 guard let data, error == nil else { return }

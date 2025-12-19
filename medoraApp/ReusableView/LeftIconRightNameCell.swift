@@ -8,12 +8,10 @@
 import UIKit
 
 class LeftIconRightNameCell: UITableViewCell {
-
- 
     
     private lazy var iconImageView: UIImageView = {
         let icon = UIImageView()
-        icon.image = UIImage(systemName: "heart")
+     //   icon.image = UIImage(systemName: "heart")
         icon.tintColor = UIColor(named: "buttonStart")
         icon.contentMode = .scaleAspectFit
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -78,4 +76,11 @@ class LeftIconRightNameCell: UITableViewCell {
         iconImageView.image = UIImage(systemName: icon.0)
         nameLabel.text = icon.1
     }
+    
+    func configforAppointment(doctor: Doctor?, appointment: Appointment?) {
+       // iconImageView.loadImage(image: doctor?.photoURL ?? "")
+        iconImageView.image = UIImage(systemName: "text.document")
+        nameLabel.text = (appointment?.date?.changeFormatddMMyyyy() ?? "") + " - " + (doctor?.name ?? "")
+    }
 }
+

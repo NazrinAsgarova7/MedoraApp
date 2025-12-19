@@ -184,6 +184,10 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        if indexPath.row == 0 {
+            let coordinator = AppointmentsCoordinator(navigationController: self.navigationController ?? UINavigationController())
+            coordinator.start()
+        }
         if indexPath.row == 1 {
             showWebView()
         }

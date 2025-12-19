@@ -81,6 +81,7 @@ class HomeController: BaseController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(UserDefaultManager.shared.getData(key: .id))
     }
     
     override func viewWillAppear(_ animated: Bool) {

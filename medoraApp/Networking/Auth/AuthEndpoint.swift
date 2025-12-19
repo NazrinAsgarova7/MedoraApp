@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AuthEndpoint{
+enum AuthEndpoint {
     case register, login
     
     var path: String {

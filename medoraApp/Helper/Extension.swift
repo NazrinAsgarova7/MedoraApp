@@ -55,6 +55,12 @@ extension String {
         }
     }
     
+    func changeFormatddMMyyyy() -> String? {
+        let datePart = self.split(separator: "T").first.map(String.init) ?? self
+        let parts = datePart.split(separator: "-")
+        guard parts.count == 3 else { return nil }
+        return "\(parts[2]).\(parts[1]).\(parts[0])"
+    }
     
 }
 

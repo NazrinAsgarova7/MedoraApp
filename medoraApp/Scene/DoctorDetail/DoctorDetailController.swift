@@ -361,6 +361,7 @@ class DoctorDetailController: BaseController {
     }
     
     override func configUI() {
+        self.title = vm.doctorDetail?.name
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.config()
         doctorName.text = vm.doctorDetail?.name

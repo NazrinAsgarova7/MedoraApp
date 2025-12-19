@@ -39,6 +39,7 @@ class BookingCalendarViewModel {
     }
     
     func bookDate() async {
+        print(builder.build())
         do {
             let result = try await manager.bookDoctor(endpoint: .bookDoctor(id: doctor?.id ?? ""), parameters: builder.build())
             bookingModel = result?.data

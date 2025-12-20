@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func registerRoot() {
         guard let window = window else { return }
         
-        let loginNav = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel(manager: AuthManager())))
+        let loginNav = UINavigationController(rootViewController: RegisterController(vm: RegisterViewModel(manager: AuthManager(), user: nil)))
         
         UIView.transition(with: window,
                           duration: 0.4,
@@ -62,4 +62,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     
 }
-

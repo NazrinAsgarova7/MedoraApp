@@ -236,8 +236,9 @@ class LoginController: BaseController {
             switch state {
             case .error(let message):
                 print(message)
-            case .success:
-                print("success")
+            case .success(let user):
+                let coordinator = RegisterCoordinator(navigationController: self?.navigationController ?? UINavigationController(), user: user)
+                coordinator.start()
             }
         }
     }
@@ -292,16 +293,9 @@ class LoginController: BaseController {
         let email = (emailTextField.text ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .lowercased()
-
         let password = (passwordTextField.text ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
-
         vm.login(email: email, password: password)
-    }
-    
-    @objc func signUp() {
-        let coordinator = RegisterCoordinator(navigationController: self.navigationController ?? UINavigationController())
-        coordinator.start()
     }
     
     @objc func changeVisibility() {

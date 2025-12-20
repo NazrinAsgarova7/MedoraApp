@@ -16,6 +16,13 @@ class AppointmentsController: BaseController {
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
+
+    private let emptyView: EmptyView = {
+        let view = EmptyView()
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private var vm: AppointmentsViewModel
     
@@ -34,12 +41,18 @@ class AppointmentsController: BaseController {
     
     override func configConstraint() {
         view.addSubview(tableView)
+        view.addSubview(emptyView)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            emptyView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
     
@@ -47,10 +60,19 @@ class AppointmentsController: BaseController {
         Task {
             await vm.getUserAppointments()
         }
-        
         vm.completion = { [weak self] viewState in
             switch viewState {
             case .success:
+                if self?.vm.appointments?.count == 0 {
+                    DispatchQueue.main.async {
+                        self?.emptyView.isHidden = false
+                        self?.emptyView.configUI(message: "No appointments found. Book an appointment to get started.", img: .appointmentEmptyState)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self?.emptyView.isHidden = true
+                    }
+                }
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
                 }

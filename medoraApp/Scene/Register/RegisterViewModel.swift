@@ -10,9 +10,11 @@ import Foundation
 class RegisterViewModel{
     let manager: AuthUseCase
     var completion: ((ViewState) -> Void)?
+    var user: [String: String]?
 
-    init(manager: AuthUseCase) {
+    init(manager: AuthUseCase, user: [String: String]?) {
         self.manager = manager
+        self.user = user
     }
     
     enum ViewState{
@@ -45,5 +47,9 @@ class RegisterViewModel{
                 self?.completion?(.error("Internet Error"))
             }
         }
+    }
+    
+    func saveUser(user: AuthResult){
+        UserDefaultManager.shared.saveUser(user: user)
     }
 }

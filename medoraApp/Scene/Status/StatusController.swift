@@ -183,7 +183,7 @@ class StatusController: BaseController {
             imageView.tintColor = UIColor(named: "success")
             descriptionLabel.text = "Your account has been successfully registered"
             descriptionLabel.set(line: 8)
-            button.setTitle("Login", for: .normal)
+            button.setTitle("Go to home", for: .normal)
         case .error(let error):
             titleLabel.text = "Error"
             imageView.image = UIImage(systemName: "xmark")
@@ -207,7 +207,7 @@ class StatusController: BaseController {
             imageView.tintColor = UIColor(named: "success")
             descriptionLabel.text = "Ugurla rezerv edildi! Rezerv saatini qacirtmayin!"
             descriptionLabel.set(line: 8)
-            button.setTitle("Ok", for: .normal)
+            button.setTitle("Done", for: .normal)
         }
     }
     
@@ -224,7 +224,7 @@ class StatusController: BaseController {
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let delegate = scene.delegate as? SceneDelegate else { return }
             delegate.onboardingRoot()
-        case "Ok":
+        case "Done":
             guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let delegate = scene.delegate as? SceneDelegate else { return }
             delegate.tabbarRoot()

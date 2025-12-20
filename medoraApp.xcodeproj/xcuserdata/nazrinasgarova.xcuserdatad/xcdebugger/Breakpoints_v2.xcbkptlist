@@ -39,16 +39,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "126744F8-EADD-4E27-B678-D2274FFD11C7"
+            uuid = "F2C82C03-74D1-4F2F-89FF-B9ACD0FDA84A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "medoraApp/Helper/LoginAdapter.swift"
+            filePath = "medoraApp/Scene/Appointments/AppointmentsController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "loginWithGoogle(controller:)"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "configVM()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3420780D-D754-4F52-807B-178E042B704E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "medoraApp/Scene/Appointments/AppointmentsController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "configVM()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

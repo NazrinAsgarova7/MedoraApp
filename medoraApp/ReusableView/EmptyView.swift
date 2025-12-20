@@ -19,7 +19,7 @@ class EmptyView: UIView {
         l.font = .systemFont(ofSize: 20, weight: .regular)
         l.textAlignment = .center
         l.textColor = .gray
-        l.numberOfLines = 2
+        l.numberOfLines = 10
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()

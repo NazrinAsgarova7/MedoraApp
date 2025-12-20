@@ -175,7 +175,15 @@ class RegisterController: BaseController {
     override func configUI() {
         self.title = "Sign Up"
         view.backgroundColor = .systemBackground
+        if let username = viewModel.user?["username"],
+           let email = viewModel.user?["email"] {
+            usernameTextField.text = username
+            emailTextField.text = email
+            usernameImage.tintColor = UIColor(named: "buttonStart")
+            emailImage.tintColor = UIColor(named: "buttonStart")
+        }
     }
+    
     
     override func configConstraint() {
         [usernameContainerView, emailContainerView, passwordContainerView, checkBox, privacyLabel, signUpButton, questionLabel, signInButton].forEach { view in
@@ -315,7 +323,8 @@ class RegisterController: BaseController {
     override func configVM() {
         viewModel.completion = { [weak self] viewState in
             switch viewState {
-            case .success(_):
+            case .success(let data):
+                self?.viewModel.saveUser(user: data)
                 let coordinator = StatusCoordinator(navigationController: self?.navigationController ?? UINavigationController(), configFor: .register)
                 coordinator.start()
             case .error(let error):
@@ -358,10 +367,14 @@ class RegisterController: BaseController {
             default:
                 break
             }
-            if checkBox.isSelected && !(usernameTextField.text?.isEmpty ?? true) && !(emailTextField.text?.isEmpty ?? true) && !(passwordTextField.text?.isEmpty ?? true) {
-                signUpButton.isEnabled = true
-                signUpButton.alpha = 1
-            }
+        }
+        updateButton()
+    }
+    
+    private func updateButton() {
+        if checkBox.isSelected && !(usernameTextField.text?.isEmpty ?? true) && !(emailTextField.text?.isEmpty ?? true) && !(passwordTextField.text?.isEmpty ?? true) {
+            signUpButton.isEnabled = true
+            signUpButton.alpha = 1
         }
     }
 }

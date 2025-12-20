@@ -16,7 +16,7 @@ class LoginAdapter {
     
     enum ViewState {
         case error(message: String)
-        case success
+        case success(user: [String: String])
     }
     
     var errorCompletion: ((String) -> Void)?
@@ -38,7 +38,8 @@ class LoginAdapter {
 //                self.errorCompletion?(error.localizedDescription)
                 self.completion?(.error(message: error.localizedDescription))
             } else if let result {
-                self.completion?(.success)
+                self.completion?(.success(user: ["username": result.user.profile?.name ?? "",
+                                                 "email": result.user.profile?.email ?? "" ]))
             }
         }
     }

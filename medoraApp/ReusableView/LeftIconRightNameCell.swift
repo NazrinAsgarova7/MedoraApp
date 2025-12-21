@@ -77,10 +77,10 @@ class LeftIconRightNameCell: UITableViewCell {
         nameLabel.text = icon.1
     }
     
-    func configforAppointment(doctor: Doctor?, appointment: Appointment?) {
+    func configforAppointment(appointment: Appointment?) {
        // iconImageView.loadImage(image: doctor?.photoURL ?? "")
         iconImageView.image = UIImage(systemName: "text.document")
-        nameLabel.text = (appointment?.date?.changeFormatddMMyyyy() ?? "") + " - " + (doctor?.name ?? "")
+        nameLabel.text = (appointment?.date?.changeFormatddMMyyyy() ?? "") + " - " + (appointment?.doctor?.name ?? "")
     }
 }
 

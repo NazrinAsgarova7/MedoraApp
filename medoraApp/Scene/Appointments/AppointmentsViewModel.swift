@@ -25,25 +25,11 @@ class AppointmentsViewModel {
         do {
             let result =  try await manager.getAppointments(endpoint: .getAppointments(userId: UserDefaultManager.shared.getData(key: .id)))
             appointments = result?.data
-            Task {
+            Task { @MainActor in
                 completion?(.success)
             }
         } catch {
-            Task {
-                completion?(.error(error: error.localizedDescription))
-            }
-        }
-    }
-    
-    func getDoctorById(doctorId: String) async {
-        do {
-            let result =  try await manager.getDoctorById(endpoint: .getDoctorById(doctorId: doctorId))
-            doctor = result?.data
-            Task {
-                completion?(.success)
-            }
-        } catch {
-            Task {
+            Task { @MainActor in
                 completion?(.error(error: error.localizedDescription))
             }
         }

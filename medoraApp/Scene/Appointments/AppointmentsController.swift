@@ -63,19 +63,19 @@ class AppointmentsController: BaseController {
         vm.completion = { [weak self] viewState in
             switch viewState {
             case .success:
-                if self?.vm.appointments?.count == 0 {
-                    DispatchQueue.main.async {
-                        self?.emptyView.isHidden = false
-                        self?.emptyView.configUI(message: "No appointments found. Book an appointment to get started.", img: .appointmentEmptyState)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self?.emptyView.isHidden = true
-                    }
+                if let appointments = self?.vm.appointments {
+                    self?.emptyView.isHidden = appointments.count != 0
+                    self?.emptyView.configUI(message: "No appointments found. Book an appointment to get started.",
+                                             img: .appointmentEmptyState)
                 }
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
+//                if self?.vm.appointments?.count == 0 {
+//                    self?.emptyView.isHidden = false
+//                    self?.emptyView.configUI(message: "No appointments found. Book an appointment to get started.", img: .appointmentEmptyState)
+//                } else {
+//                    self?.emptyView.isHidden = true
+//                }
+                self?.tableView.reloadData()
+                
             case .error(error: let error):
                 print(error)
             }
@@ -96,10 +96,7 @@ extension AppointmentsController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LeftIconRightNameCell") as? LeftIconRightNameCell else { return UITableViewCell() }
         cell.selectionStyle = .none
-        Task {
-            await vm.getDoctorById(doctorId: vm.appointments?[indexPath.row].doctorID ?? "")
-        }
-        cell.configforAppointment(doctor: vm.doctor, appointment: vm.appointments?[indexPath.row])
+        cell.configforAppointment(appointment: vm.appointments?[indexPath.row])
         return cell
     }
     

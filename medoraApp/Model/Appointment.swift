@@ -11,11 +11,17 @@ struct Appointment: Codable {
     let id, date, notes, gender: String?
     let birthDate, userID, doctorID, status: String?
     let createdAt: String?
+    let doctor: Doctor?
 
     enum CodingKeys: String, CodingKey {
         case id, date, notes, gender, birthDate
         case userID = "userId"
         case doctorID = "doctorId"
-        case status, createdAt
+        case status, createdAt, doctor
     }
+}
+
+// MARK: - Doctor
+struct DoctorForAppointment: Codable {
+    let id, name: String?
 }

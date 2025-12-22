@@ -11,7 +11,6 @@ class LeftIconRightNameCell: UITableViewCell {
     
     private lazy var iconImageView: UIImageView = {
         let icon = UIImageView()
-     //   icon.image = UIImage(systemName: "heart")
         icon.tintColor = UIColor(named: "buttonStart")
         icon.contentMode = .scaleAspectFit
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -34,9 +33,13 @@ class LeftIconRightNameCell: UITableViewCell {
         return view
     }()
     
+    private lazy var iconSkeleton = createSkeleton()
+    private lazy var titleSkeleton = createSkeleton()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configConstraint()
+        setupSkeletonViews()
     }
     
     required init?(coder: NSCoder) {
@@ -78,9 +81,67 @@ class LeftIconRightNameCell: UITableViewCell {
     }
     
     func configforAppointment(appointment: Appointment?) {
-       // iconImageView.loadImage(image: doctor?.photoURL ?? "")
+        guard let appointment else {
+            showSkeleton()
+            return
+        }
+        hideSkeleton()
         iconImageView.image = UIImage(systemName: "text.document")
-        nameLabel.text = (appointment?.date?.changeFormatddMMyyyy() ?? "") + " - " + (appointment?.doctor?.name ?? "")
+        nameLabel.text = (appointment.date?.changeFormatddMMyyyy() ?? "") + " - " + (appointment.doctor?.name ?? "")
     }
 }
 
+extension LeftIconRightNameCell {
+    private func createSkeleton() -> ShimmerView {
+        let v = ShimmerView()
+        v.isHidden = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }
+    
+    private func setupSkeletonViews() {
+        [titleSkeleton, iconSkeleton].forEach { contentView.addSubview($0) }
+        
+        titleSkeleton.translatesAutoresizingMaskIntoConstraints = false
+        iconSkeleton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            iconSkeleton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            iconSkeleton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            iconSkeleton.heightAnchor.constraint(equalToConstant: 43),
+            iconSkeleton.widthAnchor.constraint(equalToConstant: 43),
+            
+            titleSkeleton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            titleSkeleton.leadingAnchor.constraint(equalTo: iconSkeleton.trailingAnchor, constant: 18),
+            titleSkeleton.widthAnchor.constraint(equalToConstant: 160),
+            titleSkeleton.heightAnchor.constraint(equalToConstant: 20)
+        ])
+        iconSkeleton.layer.cornerRadius = 21.5
+
+        hideSkeleton()
+    }
+    
+    private func showSkeleton() {
+        iconContainerView.isHidden = true
+        iconImageView.isHidden = true
+        nameLabel.isHidden = true
+        
+        iconSkeleton.isHidden = false
+        titleSkeleton.isHidden = false
+        
+        iconSkeleton.startShimmering()
+        titleSkeleton.startShimmering()
+    }
+    
+    private func hideSkeleton() {
+        iconContainerView.isHidden = false
+        iconImageView.isHidden = false
+        nameLabel.isHidden = false
+        
+        iconSkeleton.stopShimmering()
+        titleSkeleton.stopShimmering()
+        
+        iconSkeleton.isHidden = true
+        titleSkeleton.isHidden = true
+    }
+}

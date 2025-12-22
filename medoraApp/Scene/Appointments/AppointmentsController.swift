@@ -68,14 +68,7 @@ class AppointmentsController: BaseController {
                     self?.emptyView.configUI(message: "No appointments found. Book an appointment to get started.",
                                              img: .appointmentEmptyState)
                 }
-//                if self?.vm.appointments?.count == 0 {
-//                    self?.emptyView.isHidden = false
-//                    self?.emptyView.configUI(message: "No appointments found. Book an appointment to get started.", img: .appointmentEmptyState)
-//                } else {
-//                    self?.emptyView.isHidden = true
-//                }
                 self?.tableView.reloadData()
-                
             case .error(error: let error):
                 print(error)
             }
@@ -90,13 +83,17 @@ class AppointmentsController: BaseController {
 extension AppointmentsController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        vm.appointments?.count ?? 0
+        vm.appointments?.count ?? 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LeftIconRightNameCell") as? LeftIconRightNameCell else { return UITableViewCell() }
+        if vm.appointments?.count == 0 {
+            cell.configforAppointment(appointment: nil)
+        } else {
+            cell.configforAppointment(appointment: vm.appointments?[indexPath.row])
+        }
         cell.selectionStyle = .none
-        cell.configforAppointment(appointment: vm.appointments?[indexPath.row])
         return cell
     }
     

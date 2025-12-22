@@ -154,10 +154,8 @@ class ProfileController: BaseController {
     }
    
     private func loadProfileImage() {
-        let data = vm.getProfileImage()
-        if let image = UIImage(data: data) {
-            profileImage.image = image
-        }
+        let url = vm.getProfileImage()
+        profileImage.setImage(dataUrl: url)
     }
     
     private func showWebView() {
@@ -216,21 +214,23 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ProfileController: PHPickerViewControllerDelegate{
+    
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
 
-        guard let provider = results.first?.itemProvider,
-              provider.canLoadObject(ofClass: UIImage.self) else { return }
+        guard let provider = results.first?.itemProvider else { return }
 
-        provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-            guard let self,
-                  let uiImage = image as? UIImage else { return }
+        provider.loadDataRepresentation(forTypeIdentifier: "public.image") { [weak self] data, error in
+            guard let self, let data else { return }
 
             DispatchQueue.main.async {
-                self.profileImage.image = uiImage
+                self.profileImage.image = UIImage(data: data)
             }
-            vm.saveProfilePhoto(image: uiImage)
+            Task{
+                await  self.vm.saveProfilePhoto(data: data)
+            }
         }
     }
-
 }
+
+

@@ -21,6 +21,7 @@ class UserDefaultManager {
         UserDefaults.standard.set(user.user?.email, forKey: UserDefaultEnum.email.rawValue)
         UserDefaults.standard.set(user.user?.name, forKey: UserDefaultEnum.name.rawValue)
         UserDefaults.standard.set(user.user?.id, forKey: UserDefaultEnum.id.rawValue)
+        UserDefaults.standard.set(user.user?.photoURL, forKey: UserDefaultEnum.profile.rawValue)
     }
     
     func isLogged() -> Bool {
@@ -39,12 +40,11 @@ class UserDefaultManager {
         return UserDefaults.standard.string(forKey: key.rawValue) ?? ""
     }
     
-    func saveProfileImage(_ image: UIImage) {
-           guard let data = image.jpegData(compressionQuality: 0.8) else { return }
-        UserDefaults.standard.set(data, forKey: UserDefaultEnum.profile.rawValue)
+    func saveProfileImage(_ imgUrl: String?) {
+        UserDefaults.standard.set(imgUrl, forKey: UserDefaultEnum.profile.rawValue)
        }
     
-    func getImage() -> Data {
-        return UserDefaults.standard.data(forKey: UserDefaultEnum.profile.rawValue) ?? Data()
+    func getImage() -> String {
+        return UserDefaults.standard.string(forKey: UserDefaultEnum.profile.rawValue) ?? ""
     }
 }

@@ -101,4 +101,38 @@ class NetworkingAdapter {
 .serializingDecodable(CoreModel<T>.self).value
     }
     
+    func uploadPhoto<T: Codable>(
+            url: String,
+            model: T.Type,
+            data: Data,
+            fieldName: String = "photo",
+            fileName: String = "profile.jpg",
+            mimeType: String = "image/jpeg",
+            header: HTTPHeaders? = NetworkingHelper.shared.headers
+        ) async throws -> CoreModel<T>? {
+
+            if !NetworkMonitor.shared.isConnected {
+                print("Internet yoxdur")
+                return nil
+            }
+            let maxBytes = 10 * 1024 * 1024
+            guard data.count <= maxBytes else {
+                throw AFError.responseValidationFailed(reason: .dataFileNil)
+            }
+
+
+            return try await AF.upload(
+                multipartFormData: { formData in
+                    formData.append(data,
+                                    withName: fieldName,     // "photo"
+                                    fileName: fileName,
+                                    mimeType: mimeType)
+                },
+                to: url,
+                method: .put,
+                headers: header
+            )
+            .validate(statusCode: 200..<300).serializingDecodable(CoreModel<T>.self).value
+        }
+    
 }

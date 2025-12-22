@@ -15,5 +15,10 @@ struct AuthResult: Codable {
 
 // MARK: - User
 struct User: Codable {
-    let id, name, email: String?
+    let id, name, email, photoURL: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, email
+        case photoURL = "photoUrl"
+    }
 }

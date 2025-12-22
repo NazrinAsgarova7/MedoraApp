@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HomeEndpoint{
+enum HomeEndpoint {
     case doctor, getAllCategory
     case getDoctorByCategoryId(id: String)
     case search(query: String)

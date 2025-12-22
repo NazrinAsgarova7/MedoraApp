@@ -61,7 +61,6 @@ extension String {
         guard parts.count == 3 else { return nil }
         return "\(parts[2]).\(parts[1]).\(parts[0])"
     }
-    
 }
 
 extension UINavigationController {
@@ -75,4 +74,15 @@ extension UIImageView {
     func loadImage(image: String) {
         self.kf.setImage(with: URL(string: image))
     }
+    
+    func setImage(dataUrl: String) {
+        guard let commaIndex = dataUrl.firstIndex(of: ",") else { return }
+        let base64Part = String(dataUrl[dataUrl.index(after: commaIndex)...])
+
+        guard let data = Data(base64Encoded: base64Part, options: [.ignoreUnknownCharacters]) else {
+            return
+        }
+        self.image = UIImage(data: data)
+    }
+    
 }

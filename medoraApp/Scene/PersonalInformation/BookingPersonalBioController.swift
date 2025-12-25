@@ -15,7 +15,7 @@ class BookingPersonalBioController: BaseController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
+    
     private lazy var contentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -81,6 +81,8 @@ class BookingPersonalBioController: BaseController {
         button.startPoint = CGPoint(x: 0, y: 0)
         button.endPoint = CGPoint(x: 1, y: 1)
         button.corner = 30
+        button.isEnabled = false
+        button.alpha = 0.6
         button.addTarget(self, action: #selector(tappedContinueButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -88,6 +90,9 @@ class BookingPersonalBioController: BaseController {
     
     let coordinator: DoctorDetailCoordinator
     let doctor: Doctor
+    var fullnameFieldIsEmpty: Bool?
+    var emailFieldIsEmpty: Bool?
+    var phoneFieldIsEmpty: Bool?
     
     init(coordinator: DoctorDetailCoordinator, doctor: Doctor) {
         self.coordinator = coordinator
@@ -95,7 +100,7 @@ class BookingPersonalBioController: BaseController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    @MainActor required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -154,7 +159,7 @@ class BookingPersonalBioController: BaseController {
     
     override func configUI() {
         navigationController?.config()
-
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -164,14 +169,26 @@ class BookingPersonalBioController: BaseController {
         emailTextFieldView.configUI(image: "envelope.fill", placeholder: "Enter email")
         phoneTextFieldView.configUI(image: "phone.fill", placeholder: "Enter phone", keyboardType: .digital)
         
-        fullnameTextFieldView.callback = { [weak self] in
+        fullnameTextFieldView.callback = { [weak self] isEmpty in
+            self?.fullnameFieldIsEmpty = isEmpty
+            self?.changeStateContinueButton()
+        }
+        emailTextFieldView.callback = { [weak self] isEmpty in
+            self?.emailFieldIsEmpty = isEmpty
+            self?.changeStateContinueButton()
+        }
+        phoneTextFieldView.callback = { [weak self] isEmpty in
+            self?.phoneFieldIsEmpty = isEmpty
+            self?.changeStateContinueButton()
+        }
+        
+        fullnameTextFieldView.returnCallback = { [weak self] in
             self?.emailTextFieldView.becomeFirstResponder()
         }
-        emailTextFieldView.callback = { [weak self] in
+        emailTextFieldView.returnCallback = { [weak self] in
             self?.phoneTextFieldView.becomeFirstResponder()
-            
         }
-        phoneTextFieldView.callback = { [weak self] in
+        phoneTextFieldView.returnCallback = { [weak self] in
             self?.view.endEditing(true)
         }
         doctorDetailContainerView.configUI(doctor: doctor)
@@ -183,5 +200,19 @@ class BookingPersonalBioController: BaseController {
     
     @objc private func tappedContinueButton() {
         coordinator.showPyhsicalInformationScreen()
+    }
+    
+    private func changeStateContinueButton() {
+        guard let fullnameFieldIsEmpty,
+              let emailFieldIsEmpty,
+              let phoneFieldIsEmpty else { return }
+        
+        if !fullnameFieldIsEmpty && !emailFieldIsEmpty && !phoneFieldIsEmpty {
+            continueButton.isEnabled = true
+            continueButton.alpha = 1
+        } else {
+            continueButton.isEnabled = false
+            continueButton.alpha = 0.6
+        }
     }
 }

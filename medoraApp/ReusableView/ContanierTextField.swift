@@ -19,6 +19,7 @@ class ContanierTextField: UIView {
         let t = UITextField()
         t.placeholder = "Enter your name"
         t.delegate = self
+        t.addTarget(self, action: #selector(typing), for: .editingChanged)
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
@@ -32,7 +33,8 @@ class ContanierTextField: UIView {
         return i
     }()
     
-    var callback: (() -> Void)?
+    var callback: ((Bool) -> Void)?
+    var returnCallback: (() -> Void)?
     
     init() {
         super.init(frame: .zero)
@@ -71,27 +73,36 @@ class ContanierTextField: UIView {
      
     }
     
-    override var canBecomeFirstResponder: Bool {
-            return true
-        }
-
-        override func becomeFirstResponder() -> Bool {
-            return textField.becomeFirstResponder()
-        }
-
-        override var isFirstResponder: Bool {
-            return textField.isFirstResponder
-        }
-
-        override func resignFirstResponder() -> Bool {
-            return textField.resignFirstResponder()
-        }
+//    override var canBecomeFirstResponder: Bool {
+//        return true
+//    }
     
+    override func becomeFirstResponder() -> Bool {
+        return textField.becomeFirstResponder()
+    }
+//    
+//    override var isFirstResponder: Bool {
+//        return textField.isFirstResponder
+//    }
+    
+//    override func resignFirstResponder() -> Bool {
+//        return textField.resignFirstResponder()
+//    }
+    
+    @objc private func typing() {
+        let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if text.isEmpty {
+            iconImage.tintColor = UIColor(named: "placeholderColor")
+        } else {
+            iconImage.tintColor = UIColor(named: "buttonStart")
+        }
+        callback?(text.isEmpty)
+    }
 }
 
 extension ContanierTextField: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        callback?()
+        returnCallback?()
         return true
     }
 }

@@ -13,10 +13,11 @@ class TabbarController: UITabBarController {
         super.viewDidLoad()
         let homevc = UINavigationController(rootViewController: HomeController(vm: HomeViewModel()))
         let profileVC = UINavigationController(rootViewController: ProfileController(vm: ProfileViewModel(manager: ProfileManager())))
-        
+        let aboutVC = UINavigationController(rootViewController: AboutController())
         homevc.tabBarItem = .init(title: nil, image: UIImage(systemName: "house.fill"), tag: 0)
-        profileVC.tabBarItem = .init(title: nil, image: UIImage(systemName: "person.fill"), tag: 1)
-        viewControllers = [homevc, profileVC]
+        profileVC.tabBarItem = .init(title: nil, image: UIImage(systemName: "person.fill"), tag: 2)
+        aboutVC.tabBarItem = .init(title: nil, image: UIImage(systemName: "info"), tag: 1)
+        viewControllers = [homevc, aboutVC, profileVC]
         tabBar.tintColor = UIColor(named: "buttonStart")
         tabBar.unselectedItemTintColor = .lightGray
     }

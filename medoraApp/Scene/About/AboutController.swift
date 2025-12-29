@@ -50,7 +50,7 @@ class AboutController: BaseController {
     
     override func configUI() {
         view.backgroundColor = .systemBackground
-        title = "About Medora"
+        self.title = "Medora Hospital"
         heroHeader.configure(appName: "Medora",
                              subtitle: "Healthcare, Simplified.",
                              icon: "waveform.path.ecg")
@@ -141,5 +141,3 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 }
-
-

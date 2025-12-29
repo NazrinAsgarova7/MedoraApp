@@ -8,14 +8,14 @@
 import Foundation
 
 enum HomeEndpoint {
-    case doctor, getAllCategory
+    case doctor(page: Int, limit: Int), getAllCategory
     case getDoctorByCategoryId(id: String)
     case search(query: String)
     
     var path: String {
         switch self {
-        case .doctor:
-            NetworkingHelper.shared.configUrl(endpoint: "/catalog/doctors")
+        case .doctor(let page, let limit):
+            NetworkingHelper.shared.configUrl(endpoint: "/catalog/doctors?page=\(page)&limit=\(limit)")
         case .search(let query):
             NetworkingHelper.shared.configUrl(endpoint: "/catalog/doctors?q=\(query)")
         case .getAllCategory:

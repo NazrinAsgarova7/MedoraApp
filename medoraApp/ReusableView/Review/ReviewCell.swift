@@ -56,6 +56,8 @@ class ReviewCell: UITableViewCell {
         return img
     }()
     
+    private lazy var containerSkeleton = createSkeleton()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configConstraint()
@@ -94,16 +96,63 @@ class ReviewCell: UITableViewCell {
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            
         ])
     }
     
     func configUI(review: Review?) {
-        usernameLabel.text = review?.user?.name
-        ratingView.configUI(image: "Star", title: String(review?.rating ?? 0))
-        createdDateLabel.text = review?.createdAt?.timeAgo()
-        reviewLabel.text = review?.comment
-        profileImage.image = UIImage(named: "doctor")
+        guard let review else {
+            showSkeleton()
+            return
+        }
+        hideSkeleton()
+        usernameLabel.text = review.user?.name
+        ratingView.configUI(image: "Star", title: String(review.rating ?? 0))
+        createdDateLabel.text = review.createdAt?.timeAgo()
+        reviewLabel.text = review.comment
+        profileImage.setImage(dataUrl: review.user?.photoURL ?? "")
     }
+}
 
+extension ReviewCell {
+    private func createSkeleton() -> ShimmerView {
+        let v = ShimmerView()
+        v.isHidden = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }
+    
+    private func setupSkeletonViews() {
+        [containerSkeleton].forEach { contentView.addSubview($0) }
+        
+        containerSkeleton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            containerSkeleton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            containerSkeleton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            containerSkeleton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            containerSkeleton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+        ])
+        containerSkeleton.layer.cornerRadius = 12
+
+        hideSkeleton()
+    }
+    
+    private func showSkeleton() {
+        containerSkeleton.isHidden = false
+        profileImage.isHidden = true
+        reviewLabel.isHidden = true
+        ratingView.isHidden = true
+        
+        containerSkeleton.startShimmering()
+    }
+    
+    private func hideSkeleton() {
+        containerView.isHidden = false
+        profileImage.isHidden = false
+        reviewLabel.isHidden = false
+        ratingView.isHidden = false
+        containerSkeleton.stopShimmering()
+        
+        containerSkeleton.isHidden = true
+    }
 }

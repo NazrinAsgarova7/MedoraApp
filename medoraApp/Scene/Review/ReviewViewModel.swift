@@ -14,8 +14,9 @@ class ReviewViewModel {
     
     let manager: ReviewUseCase
     let id: String
-    var reviews: [Review]?
+    var reviews = [Review]()
     var completion: ((ViewState) -> Void)?
+    var data: CoreModel<[Review]>?
     
     init(manager: ReviewUseCase, id: String) {
         self.manager = manager
@@ -23,11 +24,12 @@ class ReviewViewModel {
     }
     
     func getDoctorReviews() {
-        manager.getReviews(endpoint: .getReviews(doctorId: id)) { [weak self] data, error in
+        let page = (data?.pagination?.page ?? 0) + 1
+        manager.getReviews(endpoint: .getReviews(doctorId: id, page: page, limit: 10)) { [weak self] data, error in
             if let data {
-                self?.reviews = data.data
+                self?.data = data
+                self?.reviews.append(contentsOf: data.data ?? [])
                 self?.completion?(.success)
-
             } else if let error {
                 self?.completion?(.error(error))
             }
@@ -41,7 +43,7 @@ class ReviewViewModel {
             "userId": UserDefaultManager.shared.getData(key: .id)
         ]
         
-        manager.postReview(endpoint: .getReviews(doctorId: id), parameters: parameters) { [weak self] data, error in
+        manager.postReview(endpoint: .postReview(doctorId: id), parameters: parameters) { [weak self] data, error in
             if let data {
                 self?.getDoctorReviews()
             } else if let error {
@@ -50,5 +52,20 @@ class ReviewViewModel {
                 self?.completion?(.error("Internet Error"))
             }
         }
+    }
+    
+    //MARK: Pagination
+    func pagination(index: Int) {
+        guard let page = data?.pagination?.page else { return }
+        guard let totalPage = data?.pagination?.totalPages else { return }
+        
+        if index == reviews.count - 2 && page < totalPage {
+            getDoctorReviews()
+        }
+    }
+    
+    func removeAllData() {
+        data = nil
+        reviews.removeAll()
     }
 }

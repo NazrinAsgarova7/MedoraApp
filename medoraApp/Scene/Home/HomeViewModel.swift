@@ -9,13 +9,15 @@ import Foundation
 
 class HomeViewModel {
     enum ViewState {
-        case success
+        case success(isCategoryResponse: Bool)
         case error(String)
     }
     let manager: HomeUseCase
     var categories: [Category]?
-    var doctors: [Doctor]?
+    var doctors = [Doctor]()
     var completion: ((ViewState) -> Void)?
+    var data: CoreModel<[Doctor]>?
+    
     var selectedCategoryId = -1
     
     init(manager: HomeUseCase = HomeManager()) {
@@ -27,7 +29,7 @@ class HomeViewModel {
         manager.getAllCategories(endpoint: .getAllCategory) { [weak self] data, error in
             if let data {
                 self?.categories = data.data ?? []
-                self?.completion?(.success)
+                self?.completion?(.success(isCategoryResponse: true))
             } else if let error {
                 self?.completion?(.error(error))
             } else {
@@ -37,10 +39,12 @@ class HomeViewModel {
     }
     //MARK: Doctors
     func getAllDoctors() {
-        manager.getAllDoctors(endpoint: .doctor, parameters: nil) { [weak self] data, error in
+        let page = (data?.pagination?.page ?? 0) + 1
+        manager.getAllDoctors(endpoint: .doctor(page: page, limit: 6), parameters: nil) { [weak self] data, error in
             if let data {
-                self?.doctors = data.data ?? []
-                self?.completion?(.success)
+                self?.data = data
+                self?.doctors.append(contentsOf: data.data ?? [])
+                self?.completion?(.success(isCategoryResponse: false))
             } else if let error {
                 self?.completion?(.error(error))
             } else {
@@ -58,7 +62,7 @@ class HomeViewModel {
             manager.getAllDoctors(endpoint: .getDoctorByCategoryId(id: id), parameters: nil) { [weak self] data, error in
                 if let data {
                     self?.doctors = data.data ?? []
-                    self?.completion?(.success)
+                    self?.completion?(.success(isCategoryResponse: false))
                 } else if let error {
                     self?.completion?(.error(error))
                 } else {
@@ -74,7 +78,7 @@ class HomeViewModel {
         manager.getAllDoctors(endpoint: .search(query: query), parameters: nil) { [weak self] data, error in
             if let data {
                 self?.doctors = data.data ?? []
-                self?.completion?(.success)
+                self?.completion?(.success(isCategoryResponse: false))
             } else if let error {
                 self?.completion?(.error(error))
             } else {
@@ -83,4 +87,18 @@ class HomeViewModel {
         }
     }
     
+    //MARK: Pagination
+    func pagination(index: Int) {
+        guard let page = data?.pagination?.page else { return }
+        guard let totalPage = data?.pagination?.totalPages else { return }
+        
+        if index == doctors.count - 2 && page < totalPage {
+            getAllDoctors()
+        }
+    }
+    
+    func removeAllData() {
+        data = nil
+        doctors.removeAll()
+    }
 }

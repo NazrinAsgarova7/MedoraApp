@@ -18,6 +18,7 @@ class HomeController: BaseController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
     private lazy var searchTextField: UITextField = {
         let t = UITextField()
         t.placeholder = "Search doctor, drugs, articles..."
@@ -26,6 +27,7 @@ class HomeController: BaseController {
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
+    
     private lazy var searchImage: UIImageView = {
         let i = UIImageView()
         i.image = UIImage(named: "search")
@@ -34,6 +36,7 @@ class HomeController: BaseController {
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -54,6 +57,7 @@ class HomeController: BaseController {
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
+    
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Find your desire\nhealt solution"
@@ -63,13 +67,16 @@ class HomeController: BaseController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         return titleLabel
     }()
+    
     private lazy var bellButton: UIButton = {
         let b = UIButton()
-        b.setImage(UIImage(named: "notification"), for: .normal)
+        b.setImage(UIImage(systemName: "info.circle"), for: .normal)
         b.tintColor = .black
+        b.addTarget(self, action: #selector(tappedInfoButton), for: .touchUpInside)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
+    
     private let emptyView: EmptyView = {
         let view = EmptyView()
         view.isHidden = true
@@ -109,7 +116,7 @@ class HomeController: BaseController {
     }
     
     @objc private func pullToRefresh() {
-       // vm.removeAllData()
+        vm.removeAllData()
         collectionView.reloadData()
         vm.getCategories()
         vm.getAllDoctors()
@@ -170,13 +177,15 @@ class HomeController: BaseController {
         vm.getCategories()
         vm.completion = { [weak self] viewState in
             switch viewState {
-            case .success:
-                if self?.vm.doctors?.count == 0 {
-                    self?.emptyView.isHidden = false
-                    self?.emptyView.configUI(message: "Try adjusting your search to find what you are looking for", img: .searchEmptyState)
-                } else {
-                    self?.collectionView.isHidden = false
-                    self?.emptyView.isHidden = true
+            case .success(let isCategoryResponse):
+                if !isCategoryResponse {
+                    if self?.vm.doctors.count == 0 {
+                        self?.emptyView.isHidden = false
+                        self?.emptyView.configUI(message: "Try adjusting your search to find what you are looking for", img: .searchEmptyState)
+                    } else {
+                        self?.collectionView.isHidden = false
+                        self?.emptyView.isHidden = true
+                    }
                 }
                 self?.refreshControl.endRefreshing()
                 self?.collectionView.allowsSelection = true
@@ -192,6 +201,11 @@ class HomeController: BaseController {
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    @objc private func tappedInfoButton() {
+        let coordinator = AboutCoordinator(navigationController: self.navigationController ?? UINavigationController())
+        coordinator.start()
+    }
 }
 
 extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -204,20 +218,24 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
         case 0:
             return 1
         case 1:
-            return vm.doctors?.count ?? 4
+            return vm.doctors.count == 0 ? 4 : vm.doctors.count
         default:
-            return vm.doctors?.count ?? 4
+            return vm.doctors.count == 0 ? 4 : vm.doctors.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section{
+        switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(InformationCell.self)", for: indexPath)
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(DoctorCell.self)", for: indexPath) as! DoctorCell
-            cell.config(doctor: vm.doctors?[indexPath.row])
+            if vm.doctors.count == 0 {
+                cell.config(doctor: nil)
+            } else {
+                cell.config(doctor: vm.doctors[indexPath.row])
+            }
             return cell
         default:
             return UICollectionViewCell()
@@ -256,15 +274,18 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
             return .init(width: view.frame.size.width * 0.89, height: 135)
         case 1:
             return .init(width: view.frame.width * 0.41, height: view.frame.height * 0.275)
-            
         default:
             return .init(width: view.frame.width * 0.41, height: view.frame.height * 0.275)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let coordinator = DoctorDetailCoordinator(navigationController: self.navigationController ?? UINavigationController(), doctor: (vm.doctors?[indexPath.row])!, builder: BookingBuilder())
+        let coordinator = DoctorDetailCoordinator(navigationController: self.navigationController ?? UINavigationController(), doctor: (vm.doctors[indexPath.row]), builder: BookingBuilder())
         coordinator.start()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        vm.pagination(index: indexPath.row)
     }
 }
 

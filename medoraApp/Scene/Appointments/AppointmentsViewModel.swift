@@ -14,17 +14,21 @@ class AppointmentsViewModel {
     }
     let manager: AppointmentUseCase
     var completion: ((ViewState) -> Void)?
-    var appointments: [Appointment]?
+    var appointments = [Appointment]()
     var doctor: Doctor?
+    var data: CoreModel<[Appointment]>?
+
     
     init(manager: AppointmentUseCase) {
         self.manager = manager
     }
     
     func getUserAppointments() async {
+        let page = (data?.pagination?.page ?? 0) + 1
         do {
-            let result =  try await manager.getAppointments(endpoint: .getAppointments(userId: UserDefaultManager.shared.getData(key: .id)))
-            appointments = result?.data
+            let data =  try await manager.getAppointments(endpoint: .getAppointments(userId: UserDefaultManager.shared.getData(key: .id), page: page, limit: 12))
+            self.data = data
+            self.appointments.append(contentsOf: data?.data ?? [])
             Task { @MainActor in
                 completion?(.success)
             }
@@ -33,5 +37,22 @@ class AppointmentsViewModel {
                 completion?(.error(error: error.localizedDescription))
             }
         }
+    }
+    
+    //MARK: Pagination
+    func pagination(index: Int) {
+        guard let page = data?.pagination?.page else { return }
+        guard let totalPage = data?.pagination?.totalPages else { return }
+        
+        if index == appointments.count - 2 && page < totalPage {
+            Task {
+                await getUserAppointments()
+            }
+        }
+    }
+    
+    func removeAllData() {
+        data = nil
+        appointments.removeAll()
     }
 }

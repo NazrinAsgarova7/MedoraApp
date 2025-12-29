@@ -24,6 +24,7 @@ class AppointmentsController: BaseController {
         return view
     }()
     
+    private let refreshControl = UIRefreshControl()
     private var vm: AppointmentsViewModel
     
     override func viewDidLoad() {
@@ -68,6 +69,7 @@ class AppointmentsController: BaseController {
                     self?.emptyView.configUI(message: "No appointments found. Book an appointment to get started.",
                                              img: .appointmentEmptyState)
                 }
+                self?.refreshControl.endRefreshing()
                 self?.tableView.reloadData()
             case .error(error: let error):
                 print(error)
@@ -77,21 +79,31 @@ class AppointmentsController: BaseController {
     
     override func configUI() {
         self.title = "Appointments"
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+    
+    @objc private func pullToRefresh() {
+        vm.removeAllData()
+        tableView.reloadData()
+        Task {
+            await vm.getUserAppointments()
+        }
     }
 }
 
 extension AppointmentsController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        vm.appointments?.count ?? 4
+        vm.appointments.count == 0 ? 4 : vm.appointments.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LeftIconRightNameCell") as? LeftIconRightNameCell else { return UITableViewCell() }
-        if vm.appointments?.count == 0 {
+        if vm.appointments.count == 0 {
             cell.configforAppointment(appointment: nil)
         } else {
-            cell.configforAppointment(appointment: vm.appointments?[indexPath.row])
+            cell.configforAppointment(appointment: vm.appointments[indexPath.row])
         }
         cell.selectionStyle = .none
         return cell
@@ -99,5 +111,9 @@ extension AppointmentsController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         60
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        vm.pagination(index: indexPath.row)
     }
 }

@@ -21,7 +21,6 @@ struct Appointment: Codable {
     }
 }
 
-// MARK: - Doctor
 struct DoctorForAppointment: Codable {
     let id, name: String?
 }

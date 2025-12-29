@@ -54,7 +54,7 @@ class ReviewController: BaseController {
         vm.completion = { [weak self] viewState in
             switch viewState {
             case .success:
-                if self?.vm.reviews?.count == 0 {
+                if self?.vm.reviews.count == 0 {
                     self?.tableView.isHidden = true
                     self?.emptyView.isHidden = false
                     self?.emptyView.configUI(message: "No reviews yet. Be the first to leave a review.", img: .reviewEmptyState)
@@ -95,7 +95,7 @@ class ReviewController: BaseController {
     }
     
     @objc private func pullToRefresh() {
-        // vm.removeAllData()
+        vm.removeAllData()
         tableView.reloadData()
         vm.getDoctorReviews()
     }
@@ -103,16 +103,24 @@ class ReviewController: BaseController {
 
 extension ReviewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        vm.reviews?.count ?? 0
+        vm.reviews.count == 0 ? 4 : vm.reviews.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell") as! ReviewCell
-        cell.configUI(review: vm.reviews?[indexPath.row])
+        if vm.reviews.count == 0 {
+            cell.configUI(review: nil)
+        } else {
+            cell.configUI(review: vm.reviews[indexPath.row])
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         view.frame.height * 0.19
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        vm.pagination(index: indexPath.row)
     }
 }

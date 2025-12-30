@@ -27,18 +27,18 @@ class AboutController: BaseController {
         case features
     }
     
-    private let missionText =
-    "We believe accessing healthcare should be simple. Medora helps you find trusted specialists and book appointments quickly."
-    
-    private let features: [(icon: String, title: String, subtitle: String)] = [
-        ("checkmark.seal.fill", "Verified Specialists", "Doctors are reviewed for quality care."),
-        ("calendar", "Instant Booking", "Book appointments in seconds."),
-        ("lock.fill", "Secure Records", "Your data stays private and protected.")
-        ]
-    
-    
     private let heroHeader = AboutHeaderView()
-
+    var vm: AboutViewModel
+    
+    init(vm: AboutViewModel) {
+        self.vm = vm
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -49,12 +49,12 @@ class AboutController: BaseController {
     }
     
     override func configUI() {
+        tableView.tableHeaderView = heroHeader
         view.backgroundColor = .systemBackground
         self.title = "Medora Hospital"
-        heroHeader.configure(appName: "Medora",
-                             subtitle: "Healthcare, Simplified.",
-                             icon: "waveform.path.ecg")
-        tableView.tableHeaderView = heroHeader
+        self.heroHeader.configure(appName:  "Medora",
+                                  subtitle:  "Healthcare, Simplified.",
+                                  icon:  "waveform.path.ecg")
     }
     
     override func configConstraint() {
@@ -65,6 +65,24 @@ class AboutController: BaseController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    override func configVM() {
+        vm.completion = { [weak self] viewState in
+            switch viewState {
+            case .success:
+                self?.tableView.reloadData()
+                self?.heroHeader.configure(appName:  self?.vm.info?.hero?.title ?? "",
+                                           subtitle:  self?.vm.info?.hero?.subtitle ?? "",
+                                           icon:  self?.vm.info?.hero?.leftIcon ?? "")
+
+            case .error(error: let err):
+                print(err)
+            }
+        }
+        Task {
+            await vm.getAboutScreen()
+        }
     }
 
     private func updateTableHeaderHeight() {
@@ -87,6 +105,7 @@ class AboutController: BaseController {
             tableView.tableHeaderView = header
         }
     }
+    
 }
 
 
@@ -99,19 +118,18 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .mission: return 1
-        case .features: return features.count
+        case .features: return vm.info?.why?.items?.count ?? 0
         }
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
-        case .mission: return "Our Mission"
-        case .features: return "Why Medora?"
+        case .mission: return vm.info?.mission?.title
+        case .features: return vm.info?.why?.title
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 
@@ -121,7 +139,7 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
         
         switch section {
         case .mission:
-            content.text = missionText
+            content.text = vm.info?.mission?.text
             content.textProperties.font = .systemFont(ofSize: 15)
             content.textProperties.color = .secondaryLabel
             content.image = nil
@@ -129,15 +147,16 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
 
         case .features:
-            let item = features[indexPath.row]
-            content.text = item.title
-            content.secondaryText = item.subtitle
-            content.image = UIImage(systemName: item.icon)
-            content.imageProperties.tintColor = .systemBlue
+            let item = vm.info?.why?.items?[indexPath.row]
+            content.text = item?.title
+            content.secondaryText = item?.subtitle
+            content.image = UIImage(systemName: item?.icon ?? "")
+            content.imageProperties.tintColor = .buttonStart
             cell.selectionStyle = .none
         }
-
         cell.contentConfiguration = content
         return cell
     }
+    
+    
 }

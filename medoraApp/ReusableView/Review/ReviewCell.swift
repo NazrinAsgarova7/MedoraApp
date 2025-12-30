@@ -142,7 +142,6 @@ extension ReviewCell {
         profileImage.isHidden = true
         reviewLabel.isHidden = true
         ratingView.isHidden = true
-        
         containerSkeleton.startShimmering()
     }
     
@@ -152,7 +151,6 @@ extension ReviewCell {
         reviewLabel.isHidden = false
         ratingView.isHidden = false
         containerSkeleton.stopShimmering()
-        
         containerSkeleton.isHidden = true
     }
 }

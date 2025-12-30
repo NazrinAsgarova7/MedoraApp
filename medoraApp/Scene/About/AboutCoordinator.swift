@@ -18,7 +18,7 @@ class AboutCoordinator: Coordinator {
     func start() {
         navigationController.config()
         navigationController.setNavigationBarHidden(false, animated: false)
-        let controller = AboutController()
+        let controller = AboutController(vm: AboutViewModel(manager: AboutManager()))
         controller.hidesBottomBarWhenPushed = true
         navigationController.show(controller, sender: nil)
     }

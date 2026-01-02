@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import UIKit
-import Alamofire
 
 class ProfileViewModel {
     enum ViewState {

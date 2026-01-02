@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class ProfileManager: ProfileUseCase {
     let adapter = NetworkingAdapter()

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class ReviewManager: ReviewUseCase {
     let adapter = NetworkingAdapter()
@@ -15,7 +14,7 @@ class ReviewManager: ReviewUseCase {
         adapter.request(url: endpoint.path, model: [Review].self, method: .get, completion: completion)
     }
     
-    func postReview(endpoint: ReviewEndpoint, parameters: Parameters, completion: @escaping ((CoreModel<Review>?, String?) -> Void)) {
+    func postReview(endpoint: ReviewEndpoint, parameters: [String: Any], completion: @escaping ((CoreModel<Review>?, String?) -> Void)) {
         adapter.request(url: endpoint.path, model: Review.self, method: .post, parameters: parameters, encoding: .json, completion: completion)
     }
 }

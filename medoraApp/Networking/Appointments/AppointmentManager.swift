@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class AppointmentManager: AppointmentUseCase {
     let adapter = NetworkingAdapter()

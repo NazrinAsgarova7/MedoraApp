@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 protocol AboutUseCase {
     func getAboutScreenInfo(endpoint: AboutEndpoint) async throws -> CoreModel<AboutModel>?

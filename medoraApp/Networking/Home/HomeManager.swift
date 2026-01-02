@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class HomeManager: HomeUseCase {
     let adapter = NetworkingAdapter()
@@ -17,7 +16,7 @@ class HomeManager: HomeUseCase {
     }
     
     // MARK: Doctor
-    func getAllDoctors(endpoint: HomeEndpoint, parameters: Parameters? ,completion: @escaping ((CoreModel<[Doctor]>?, String?) -> Void)) {
+    func getAllDoctors(endpoint: HomeEndpoint, parameters: [String: String]? ,completion: @escaping ((CoreModel<[Doctor]>?, String?) -> Void)) {
         adapter.request(url: endpoint.path, model: [Doctor].self, method: .get, parameters: parameters, encoding: .json, completion:  completion)
     }
 }

@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import Alamofire
 
 protocol BookingUseCase {
     func checkAvailability(endpoint: BookingEndpoint, completion: @escaping ((AvailabilityModel?, Error?) -> Void))
-    func bookDoctor(endpoint: BookingEndpoint, parameters: Parameters) async throws -> CoreModel<Booking>?
+    func bookDoctor(endpoint: BookingEndpoint, parameters: [String: Any]) async throws -> CoreModel<Booking>? 
 }

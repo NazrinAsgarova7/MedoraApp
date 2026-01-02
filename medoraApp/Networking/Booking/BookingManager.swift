@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class BookingManager: BookingUseCase {
     let adapter = NetworkingAdapter()
@@ -15,7 +14,7 @@ class BookingManager: BookingUseCase {
         adapter.request(url: endpoint.path, successModel: AvailabilityModel.self, errorModel: nil, method: .get, completion: completion)
     }
     
-    func bookDoctor(endpoint: BookingEndpoint, parameters: Parameters) async throws -> CoreModel<Booking>? {
+    func bookDoctor(endpoint: BookingEndpoint, parameters: [String: Any]) async throws -> CoreModel<Booking>? {
         return try await adapter.request(url: endpoint.path, model: Booking.self, method: .post, parameters: parameters, encoding: .json)
     }
 }

@@ -5,8 +5,8 @@
 //  Created by Nazrin Asgarova on 02.12.25.
 //
 
-import Alamofire
+import Foundation
 
 protocol DoctorDetailUseCase {
-    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: Parameters?) async throws -> CoreModel<Doctor>?
+    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: [String: String]?) async throws -> CoreModel<Doctor>?
 }

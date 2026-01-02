@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 class AboutManager: AboutUseCase {
     let adapter = NetworkingAdapter()

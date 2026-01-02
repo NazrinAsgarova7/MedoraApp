@@ -9,10 +9,10 @@ import Foundation
 
 struct CoreModel<T: Codable>: Codable {
     let data: T?
-    let pagination: Pagination?
+    var pagination: Pagination?
 }
 
 // MARK: - Pagination
 struct Pagination: Codable {
-    let page, limit, total, totalPages: Int?
+    var page, limit, total, totalPages: Int?
 }

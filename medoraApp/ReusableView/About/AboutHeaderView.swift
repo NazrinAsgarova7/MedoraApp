@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class AboutHeaderView: UIView {
+final class AboutHeaderView: UITableViewHeaderFooterView {
 
     private lazy var card: UIView = {
         let view = UIView()
@@ -52,25 +52,26 @@ final class AboutHeaderView: UIView {
         return i
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configUI()
-    }
-    
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    override init(reuseIdentifier: String?) {
+           super.init(reuseIdentifier: reuseIdentifier)
+           configUI()
+       }
+       
+       required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
 
     private func configUI() {
         backgroundColor = .clear
-        addSubview(card)
+        contentView.addSubview(card)
         [ image].forEach { card.addSubview($0) }
         
         [iconView, titleLabel, subtitleLabel].forEach { image.addSubview($0) }
 
         NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: topAnchor, constant: 12),
-            card.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            card.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            card.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            card.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             
             image.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             image.trailingAnchor.constraint(equalTo: card.trailingAnchor),
@@ -93,10 +94,10 @@ final class AboutHeaderView: UIView {
         ])
     }
 
-    func configure(appName: String, subtitle: String, icon: String) {
+    func configure(appName: String, subtitle: String, icon: String, imageUrl: String) {
         titleLabel.text = appName
         subtitleLabel.text = subtitle
         iconView.image = UIImage(systemName: icon)
-        image.loadImage(image: "https://i.pinimg.com/1200x/9b/e2/12/9be212df4fc8537ddc31c3f7fa147b42.jpg")
+        image.loadImage(image: imageUrl)
     }
 }

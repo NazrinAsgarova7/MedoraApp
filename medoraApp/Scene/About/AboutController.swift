@@ -17,6 +17,7 @@ class AboutController: BaseController {
         t.rowHeight = UITableView.automaticDimension
         t.estimatedRowHeight = 56
         t.separatorInset = UIEdgeInsets(top: 0, left: 56, bottom: 0, right: 16)
+        t.register(AboutHeaderView.self, forHeaderFooterViewReuseIdentifier: "AboutHeaderView")
         t.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
@@ -27,7 +28,6 @@ class AboutController: BaseController {
         case features
     }
     
-    private let heroHeader = AboutHeaderView()
     var vm: AboutViewModel
     
     init(vm: AboutViewModel) {
@@ -42,19 +42,10 @@ class AboutController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateTableHeaderHeight()
-    }
     
     override func configUI() {
-        tableView.tableHeaderView = heroHeader
         view.backgroundColor = .systemBackground
         self.title = "Medora Hospital"
-        self.heroHeader.configure(appName:  "Medora",
-                                  subtitle:  "Healthcare, Simplified.",
-                                  icon:  "waveform.path.ecg")
     }
     
     override func configConstraint() {
@@ -72,10 +63,6 @@ class AboutController: BaseController {
             switch viewState {
             case .success:
                 self?.tableView.reloadData()
-                self?.heroHeader.configure(appName:  self?.vm.info?.hero?.title ?? "",
-                                           subtitle:  self?.vm.info?.hero?.subtitle ?? "",
-                                           icon:  self?.vm.info?.hero?.leftIcon ?? "")
-
             case .error(error: let err):
                 print(err)
             }
@@ -84,55 +71,33 @@ class AboutController: BaseController {
             await vm.getAboutScreen()
         }
     }
-
-    private func updateTableHeaderHeight() {
-        guard let header = tableView.tableHeaderView else { return }
-
-        header.frame.size.width = tableView.bounds.width
-
-        header.setNeedsLayout()
-        header.layoutIfNeeded()
-
-        let targetSize = CGSize(width: tableView.bounds.width, height: 0)
-        let size = header.systemLayoutSizeFitting(
-            targetSize,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-
-        if header.frame.height != size.height {
-            header.frame.size.height = size.height
-            tableView.tableHeaderView = header
-        }
-    }
-    
 }
 
 
 extension AboutController: UITableViewDelegate, UITableViewDataSource {
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         Section.allCases.count
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .mission: return 1
         case .features: return vm.info?.why?.items?.count ?? 0
         }
     }
-
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
-        case .mission: return vm.info?.mission?.title
+        case .mission: return nil
         case .features: return vm.info?.why?.title
         }
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-
+        
         var content = cell.defaultContentConfiguration()
         content.textProperties.numberOfLines = 0
         content.secondaryTextProperties.numberOfLines = 0
@@ -145,7 +110,7 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
             content.image = nil
             content.secondaryText = nil
             cell.selectionStyle = .none
-
+            
         case .features:
             let item = vm.info?.why?.items?[indexPath.row]
             content.text = item?.title
@@ -158,5 +123,20 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch Section(rawValue: section)! {
+        case .mission:
+            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AboutHeaderView") as! AboutHeaderView
+            view.configure(appName: vm.info?.hero?.title ?? "", subtitle: vm.info?.hero?.subtitle ?? "", icon: vm.info?.hero?.leftIcon ?? "", imageUrl: vm.info?.hero?.imageURL ?? "")
+            return view
+        case .features: return nil
+        }
+    }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch Section(rawValue: section)! {
+        case .mission: return 150
+        case .features: return 20
+        }
+    }
 }

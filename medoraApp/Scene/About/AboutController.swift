@@ -28,6 +28,9 @@ class AboutController: BaseController {
         case features
     }
     
+    private var sections: [Section] = [.mission, .features]
+   
+    
     var vm: AboutViewModel
     
     init(vm: AboutViewModel) {
@@ -77,32 +80,31 @@ class AboutController: BaseController {
 extension AboutController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        Section.allCases.count
+        sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch Section(rawValue: section)! {
+        switch sections[section] {
         case .mission: return 1
         case .features: return vm.info?.why?.items?.count ?? 0
         }
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch Section(rawValue: section)! {
-        case .mission: return nil
+        switch sections[section] {
+        case .mission: return vm.info?.mission?.title
         case .features: return vm.info?.why?.title
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
         content.textProperties.numberOfLines = 0
         content.secondaryTextProperties.numberOfLines = 0
         
-        switch section {
+        switch sections[indexPath.section] {
         case .mission:
             content.text = vm.info?.mission?.text
             content.textProperties.font = .systemFont(ofSize: 15)
@@ -124,7 +126,7 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch Section(rawValue: section)! {
+        switch sections[section] {
         case .mission:
             let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AboutHeaderView") as! AboutHeaderView
             view.configure(appName: vm.info?.hero?.title ?? "", subtitle: vm.info?.hero?.subtitle ?? "", icon: vm.info?.hero?.leftIcon ?? "", imageUrl: vm.info?.hero?.imageURL ?? "")
@@ -134,8 +136,8 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch Section(rawValue: section)! {
-        case .mission: return 150
+        switch sections[section] {
+        case .mission: return 200
         case .features: return 20
         }
     }

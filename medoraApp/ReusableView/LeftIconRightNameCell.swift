@@ -87,7 +87,11 @@ class LeftIconRightNameCell: UITableViewCell {
         }
         hideSkeleton()
         iconImageView.image = UIImage(systemName: "text.document")
-        nameLabel.text = (appointment.date?.changeFormatddMMyyyy() ?? "") + " - " + (appointment.doctor?.name ?? "")
+        let dateText = appointment.date?.changeFormatddMMyyyy() ?? ""
+        let timeText = appointment.date?.changeFormatHHmm() ?? ""
+        let doctorName = appointment.doctor?.name ?? ""
+
+        nameLabel.text = "\(dateText) - \(timeText) - \(doctorName)"
     }
 }
 

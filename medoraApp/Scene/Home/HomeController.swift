@@ -83,7 +83,12 @@ class HomeController: BaseController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    private enum Section: Int, CaseIterable {
+        case information
+        case doctor
+    }
     
+    private var sections: [Section] = [.information, .doctor]
     private let vm: HomeViewModel
     private let refreshControl = UIRefreshControl()
     
@@ -210,26 +215,24 @@ class HomeController: BaseController {
 
 extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        2
+        sections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section{
-        case 0:
+        switch sections[section] {
+        case .information:
             return 1
-        case 1:
-            return vm.doctors.count == 0 ? 4 : vm.doctors.count
-        default:
+        case .doctor:
             return vm.doctors.count == 0 ? 4 : vm.doctors.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case 0:
+        switch sections[indexPath.section] {
+        case .information:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(InformationCell.self)", for: indexPath)
             return cell
-        case 1:
+        case .doctor:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(DoctorCell.self)", for: indexPath) as! DoctorCell
             if vm.doctors.count == 0 {
                 cell.config(doctor: nil)
@@ -237,8 +240,6 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
                 cell.config(doctor: vm.doctors[indexPath.row])
             }
             return cell
-        default:
-            return UICollectionViewCell()
         }
     }
     
@@ -260,7 +261,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if section == 1 {
+        if sections[section] == .doctor {
             return CGSize(width: 0, height: 20)
         }
         return CGSize(width: collectionView.bounds.width, height: 100)
@@ -269,12 +270,10 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ cv: UICollectionView,
                         layout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch indexPath.section{
-        case 0:
+        switch sections[indexPath.section] {
+        case .information:
             return .init(width: view.frame.size.width * 0.89, height: 135)
-        case 1:
-            return .init(width: view.frame.width * 0.41, height: view.frame.height * 0.275)
-        default:
+        case .doctor:
             return .init(width: view.frame.width * 0.41, height: view.frame.height * 0.275)
         }
     }

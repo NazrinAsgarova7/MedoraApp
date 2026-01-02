@@ -205,7 +205,7 @@ class StatusController: BaseController {
             titleLabel.text = "Yeay! Successfully Booked "
             imageView.image = UIImage(systemName: "checkmark")
             imageView.tintColor = UIColor(named: "success")
-            descriptionLabel.text = "Ugurla rezerv edildi! Rezerv saatini qacirtmayin!"
+            descriptionLabel.text = "Your appointment was successfully booked! Please make sure not to miss your appointment time."
             descriptionLabel.set(line: 8)
             button.setTitle("Done", for: .normal)
         }

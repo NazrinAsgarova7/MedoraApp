@@ -39,7 +39,6 @@ class HomeViewModel {
     }
     //MARK: Doctors
     func getAllDoctors() {
-        print(data?.pagination?.page)
         let page = (data?.pagination?.page ?? 0) + 1
         manager.getAllDoctors(endpoint: .doctor(page: page, limit: 6), parameters: nil) { [weak self] data, error in
             if let data {

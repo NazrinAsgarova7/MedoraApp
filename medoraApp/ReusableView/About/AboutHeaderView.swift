@@ -71,7 +71,7 @@ final class AboutHeaderView: UITableViewHeaderFooterView {
             card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            card.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            card.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
             
             image.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             image.trailingAnchor.constraint(equalTo: card.trailingAnchor),

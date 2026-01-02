@@ -61,6 +61,15 @@ extension String {
         guard parts.count == 3 else { return nil }
         return "\(parts[2]).\(parts[1]).\(parts[0])"
     }
+    
+    func changeFormatHHmm() -> String? {
+           let timePart = self.split(separator: "T").dropFirst().first.map(String.init)
+           guard let timePart else { return nil }
+           let hhmmss = timePart.split(separator: ".").first.map(String.init) ?? timePart
+           let parts = hhmmss.split(separator: ":")
+           guard parts.count >= 2 else { return nil }
+           return "\(parts[0]):\(parts[1])"
+       }
 }
 
 extension UINavigationController {

@@ -79,6 +79,14 @@ class ProfileController: BaseController {
         return l
     }()
     
+    private enum Section: Int, CaseIterable {
+        case appointment
+        case privacy
+        case help
+        case logout
+    }
+    
+    private let sections: [Section] = [.appointment, .privacy, .help, .logout]
     private let vm: ProfileViewModel
     
     init(vm: ProfileViewModel) {
@@ -174,22 +182,22 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        4
+        sections.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         69
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        if indexPath.row == 0 {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch sections[indexPath.row] {
+        case .appointment:
             let coordinator = AppointmentsCoordinator(navigationController: self.navigationController ?? UINavigationController())
             coordinator.start()
-        }
-        if indexPath.row == 1 {
+        
+        case .privacy:
             showWebView()
-        }
-        if indexPath.row == 2 {
+        case .help:
             let bottomSheetVC = HelpBottomSheet(vm: self.vm)
             bottomSheetVC.modalPresentationStyle = .pageSheet
             bottomSheetVC.isModalInPresentation = false
@@ -205,16 +213,14 @@ extension ProfileController: UITableViewDelegate, UITableViewDataSource {
                 sheet.selectedDetentIdentifier = customDetent.identifier
             }
             present(bottomSheetVC, animated: true)
-        }
-        if indexPath.row == 3 {
+        case .logout:
             let coordinator = StatusCoordinator(navigationController: self.navigationController ?? UINavigationController(), configFor: .logout)
             coordinator.start()
         }
     }
 }
 
-extension ProfileController: PHPickerViewControllerDelegate{
-    
+extension ProfileController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
 

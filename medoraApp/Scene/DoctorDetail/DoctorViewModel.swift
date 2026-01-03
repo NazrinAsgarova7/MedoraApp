@@ -26,7 +26,7 @@ class DoctorViewModel {
     
     func getDoctorDetail() async {
         do {
-            let result = try await manager.getDoctorDetail(endpoint: .getDetail(id: id), parameters: nil)
+            let result = try await manager.getDoctorDetail(endpoint: .getDetail(id: id))
             doctorDetail = result?.data
             Task { @MainActor in
                 completion?(.success)

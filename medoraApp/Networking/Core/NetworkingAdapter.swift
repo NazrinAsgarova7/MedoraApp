@@ -15,7 +15,7 @@ enum Encoding {
 class NetworkingAdapter {
     func request<T: Codable>(url: String,
                              model: T.Type,
-                             method: HTTPMethod,
+                             method: HTTPMethod = .get,
                              parameters: Parameters? = nil,
                              encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers,
@@ -41,7 +41,7 @@ class NetworkingAdapter {
     func request<T: Codable, Y: Codable>(url: String,
                                          successModel: T.Type,
                                          errorModel: Y.Type?,
-                                         method: HTTPMethod,
+                                         method: HTTPMethod = .get,
                                          parameters: Parameters? = nil,
                                          encoding: Encoding = .url,
                                          header: HTTPHeaders? = NetworkingHelper.shared.headers,
@@ -86,7 +86,7 @@ class NetworkingAdapter {
     
     func request<T: Codable>(url: String,
                              model: T.Type,
-                             method: HTTPMethod,
+                             method: HTTPMethod = .get,
                              parameters: Parameters? = nil,
                              encoding: Encoding = .url,
                              header: HTTPHeaders? = NetworkingHelper.shared.headers) async throws -> CoreModel<T>?{
@@ -98,7 +98,7 @@ class NetworkingAdapter {
                                     method: method,
                                     parameters: parameters,
                                     encoding: encoding == .url ? URLEncoding.default : JSONEncoding.default, headers: header)
-.serializingDecodable(CoreModel<T>.self).value
+        .serializingDecodable(CoreModel<T>.self).value
     }
     
     func uploadPhoto<T: Codable>(
@@ -124,7 +124,7 @@ class NetworkingAdapter {
             return try await AF.upload(
                 multipartFormData: { formData in
                     formData.append(data,
-                                    withName: fieldName,     // "photo"
+                                    withName: fieldName,
                                     fileName: fileName,
                                     mimeType: mimeType)
                 },
@@ -134,5 +134,4 @@ class NetworkingAdapter {
             )
             .validate(statusCode: 200..<300).serializingDecodable(CoreModel<T>.self).value
         }
-    
 }

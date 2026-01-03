@@ -40,7 +40,7 @@ class HomeViewModel {
     //MARK: Doctors
     func getAllDoctors() {
         let page = (data?.pagination?.page ?? 0) + 1
-        manager.getAllDoctors(endpoint: .doctor(page: page, limit: 6), parameters: nil) { [weak self] data, error in
+        manager.getAllDoctors(endpoint: .doctor(page: page, limit: 6)) { [weak self] data, error in
             if let data {
                 self?.data = data
                 self?.doctors.append(contentsOf: data.data ?? [])
@@ -61,7 +61,7 @@ class HomeViewModel {
             getAllDoctors()
         } else {
             selectedCategoryId = index
-            manager.getAllDoctors(endpoint: .getDoctorByCategoryId(id: id), parameters: nil) { [weak self] data, error in
+            manager.getAllDoctors(endpoint: .getDoctorByCategoryId(id: id)) { [weak self] data, error in
                 if let data {
                     self?.doctors = data.data ?? []
                     self?.completion?(.success(isCategoryResponse: false))
@@ -77,7 +77,7 @@ class HomeViewModel {
     
     //MARK: Search
     func search(query: String) {
-        manager.getAllDoctors(endpoint: .search(query: query), parameters: nil) { [weak self] data, error in
+        manager.getAllDoctors(endpoint: .search(query: query)) { [weak self] data, error in
             if let data {
                 self?.doctors = data.data ?? []
                 self?.completion?(.success(isCategoryResponse: false))

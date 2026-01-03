@@ -8,5 +8,5 @@
 import Foundation
 
 protocol DoctorDetailUseCase {
-    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: [String: String]?) async throws -> CoreModel<Doctor>?
+    func getDoctorDetail(endpoint: DoctorEndpoint) async throws -> CoreModel<Doctor>?
 }

@@ -11,6 +11,6 @@ class AboutManager: AboutUseCase {
     let adapter = NetworkingAdapter()
     
     func getAboutScreenInfo(endpoint: AboutEndpoint) async throws -> CoreModel<AboutModel>? {
-        return try await adapter.request(url: endpoint.path, model: AboutModel.self, method: .get)
+        return try await adapter.request(url: endpoint.path, model: AboutModel.self)
     }
 }

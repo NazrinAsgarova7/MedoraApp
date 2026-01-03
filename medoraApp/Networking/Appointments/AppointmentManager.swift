@@ -11,12 +11,10 @@ class AppointmentManager: AppointmentUseCase {
     let adapter = NetworkingAdapter()
     
     func getAppointments(endpoint: AppointmentEndoint) async throws -> CoreModel<[Appointment]>? {
-        return try await adapter.request(url: endpoint.path, model: [Appointment].self, method: .get)
+        return try await adapter.request(url: endpoint.path, model: [Appointment].self)
     }
     
     func getDoctorById(endpoint: AppointmentEndoint) async throws -> CoreModel<Doctor>? {
-        return try await adapter.request(url: endpoint.path, model: Doctor.self, method: .get)
+        return try await adapter.request(url: endpoint.path, model: Doctor.self)
     }
-    
-    
 }

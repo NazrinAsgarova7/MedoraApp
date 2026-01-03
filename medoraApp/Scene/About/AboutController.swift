@@ -22,16 +22,8 @@ class AboutController: BaseController {
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
-    
-    private enum Section: Int, CaseIterable {
-        case mission
-        case features
-    }
-    
-    private var sections: [Section] = [.mission, .features]
-   
-    
-    var vm: AboutViewModel
+       
+    private var vm: AboutViewModel
     
     init(vm: AboutViewModel) {
         self.vm = vm
@@ -78,23 +70,16 @@ class AboutController: BaseController {
 
 
 extension AboutController: UITableViewDelegate, UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        sections.count
+        vm.data.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch sections[section] {
-        case .mission: return 1
-        case .features: return vm.info?.why?.items?.count ?? 0
-        }
+        vm.data[section].items.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch sections[section] {
-        case .mission: return vm.info?.mission?.title
-        case .features: return vm.info?.why?.title
-        }
+        vm.data[section].sectionTitle
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -104,7 +89,7 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
         content.textProperties.numberOfLines = 0
         content.secondaryTextProperties.numberOfLines = 0
         
-        switch sections[indexPath.section] {
+        switch vm.data[indexPath.section].sectionType {
         case .mission:
             content.text = vm.info?.mission?.text
             content.textProperties.font = .systemFont(ofSize: 15)
@@ -113,7 +98,7 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
             content.secondaryText = nil
             cell.selectionStyle = .none
             
-        case .features:
+        case .feature:
             let item = vm.info?.why?.items?[indexPath.row]
             content.text = item?.title
             content.secondaryText = item?.subtitle
@@ -126,19 +111,15 @@ extension AboutController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch sections[section] {
-        case .mission:
+        if vm.data[section].sectionType == .mission {
             let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AboutHeaderView") as! AboutHeaderView
             view.configure(appName: vm.info?.hero?.title ?? "", subtitle: vm.info?.hero?.subtitle ?? "", icon: vm.info?.hero?.leftIcon ?? "", imageUrl: vm.info?.hero?.imageURL ?? "")
             return view
-        case .features: return nil
         }
+        return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch sections[section] {
-        case .mission: return 200
-        case .features: return 20
-        }
+        vm.data[section].sectionHeaderHeight
     }
 }

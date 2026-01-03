@@ -11,7 +11,7 @@ class BookingManager: BookingUseCase {
     let adapter = NetworkingAdapter()
     
     func checkAvailability(endpoint: BookingEndpoint, completion: @escaping ((AvailabilityModel?, Error?) -> Void)) {
-        adapter.request(url: endpoint.path, successModel: AvailabilityModel.self, errorModel: nil, method: .get, completion: completion)
+        adapter.request(url: endpoint.path, successModel: AvailabilityModel.self, errorModel: nil, completion: completion)
     }
     
     func bookDoctor(endpoint: BookingEndpoint, parameters: [String: Any]) async throws -> CoreModel<Booking>? {

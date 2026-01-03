@@ -238,5 +238,3 @@ extension ProfileController: PHPickerViewControllerDelegate {
         }
     }
 }
-
-

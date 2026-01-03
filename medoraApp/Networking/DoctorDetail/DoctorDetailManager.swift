@@ -10,7 +10,7 @@ import Foundation
 class DoctorDetailManager: DoctorDetailUseCase {
     let adapter = NetworkingAdapter()
     
-    func getDoctorDetail(endpoint: DoctorEndpoint, parameters: [String: String]?) async throws -> CoreModel<Doctor>? {
-        return try await adapter.request(url: endpoint.path, model: Doctor.self, method: .get)
+    func getDoctorDetail(endpoint: DoctorEndpoint) async throws -> CoreModel<Doctor>? {
+        return try await adapter.request(url: endpoint.path, model: Doctor.self)
     }
 }

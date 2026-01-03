@@ -35,7 +35,6 @@ class LoginAdapter {
         GIDSignIn.sharedInstance.signIn(withPresenting: controller) { [weak self] result, error in
             guard let self else { return }
             if let error {
-//                self.errorCompletion?(error.localizedDescription)
                 self.completion?(.error(message: error.localizedDescription))
             } else if let result {
                 self.completion?(.success(user: ["username": result.user.profile?.name ?? "",

@@ -18,8 +18,19 @@
 		FF6B00B52EE1977F0068540D /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = FF6B00B42EE1977F0068540D /* Cosmos */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		FF71475C2F0D71150091FBA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF70C3672EBE190C004CFC77 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF70C36E2EBE190C004CFC77;
+			remoteInfo = medoraApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		FF70C36F2EBE190C004CFC77 /* medoraApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = medoraApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF7147582F0D71150091FBA8 /* medoraAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = medoraAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -41,6 +52,11 @@
 			path = medoraApp;
 			sourceTree = "<group>";
 		};
+		FF7147592F0D71150091FBA8 /* medoraAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = medoraAppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +76,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF7147552F0D71150091FBA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -67,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				FF70C3712EBE190C004CFC77 /* medoraApp */,
+				FF7147592F0D71150091FBA8 /* medoraAppTests */,
 				FF70C3702EBE190C004CFC77 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -75,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				FF70C36F2EBE190C004CFC77 /* medoraApp.app */,
+				FF7147582F0D71150091FBA8 /* medoraAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,6 +138,29 @@
 			productReference = FF70C36F2EBE190C004CFC77 /* medoraApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FF7147572F0D71150091FBA8 /* medoraAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF71475E2F0D71150091FBA8 /* Build configuration list for PBXNativeTarget "medoraAppTests" */;
+			buildPhases = (
+				FF7147542F0D71150091FBA8 /* Sources */,
+				FF7147552F0D71150091FBA8 /* Frameworks */,
+				FF7147562F0D71150091FBA8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF71475D2F0D71150091FBA8 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FF7147592F0D71150091FBA8 /* medoraAppTests */,
+			);
+			name = medoraAppTests;
+			packageProductDependencies = (
+			);
+			productName = medoraAppTests;
+			productReference = FF7147582F0D71150091FBA8 /* medoraAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -125,6 +173,10 @@
 				TargetAttributes = {
 					FF70C36E2EBE190C004CFC77 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					FF7147572F0D71150091FBA8 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = FF70C36E2EBE190C004CFC77;
 					};
 				};
 			};
@@ -150,12 +202,20 @@
 			projectRoot = "";
 			targets = (
 				FF70C36E2EBE190C004CFC77 /* medoraApp */,
+				FF7147572F0D71150091FBA8 /* medoraAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		FF70C36D2EBE190C004CFC77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF7147562F0D71150091FBA8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -172,7 +232,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF7147542F0D71150091FBA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FF71475D2F0D71150091FBA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF70C36E2EBE190C004CFC77 /* medoraApp */;
+			targetProxy = FF71475C2F0D71150091FBA8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		FF70C3832EBE190D004CFC77 /* Debug */ = {
@@ -348,6 +423,40 @@
 			};
 			name = Release;
 		};
+		FF71475F2F0D71150091FBA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = co.nazrin.medoraAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/medoraApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/medoraApp";
+			};
+			name = Debug;
+		};
+		FF7147602F0D71150091FBA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = co.nazrin.medoraAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/medoraApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/medoraApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -365,6 +474,15 @@
 			buildConfigurations = (
 				FF70C3832EBE190D004CFC77 /* Debug */,
 				FF70C3842EBE190D004CFC77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF71475E2F0D71150091FBA8 /* Build configuration list for PBXNativeTarget "medoraAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF71475F2F0D71150091FBA8 /* Debug */,
+				FF7147602F0D71150091FBA8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
